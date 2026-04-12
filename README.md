@@ -1,4 +1,4 @@
-# context-bazaar
+# Skillforge and the context-bazaar
 
 Knowledge artifacts for AI coding assistants. Author once, compile to every harness.
 
