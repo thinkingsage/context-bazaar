@@ -1,6 +1,6 @@
 # Claude Code Plugin Usage
 
-context-bazaar is available as a [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins). Once installed, the catalog is exposed to your assistant via MCP tools — no manual file management required.
+context-bazaar is available as a [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code/plugins). Once installed, the artifact catalog is exposed to your assistant via MCP tools.
 
 ## Install
 
@@ -23,4 +23,4 @@ Ask the assistant: *"what's in the neon-caravan collection?"* or *"show me the c
 
 ## How It Works
 
-The plugin ships a pre-compiled MCP bridge (`skill-forge/bridge/mcp-server.cjs`) that reads from `skill-forge/catalog.json`. No build step is needed — the bridge and catalog are committed to the repository so the plugin works immediately after installation.
+The plugin ships a pre-compiled MCP bridge (`skill-forge/bridge/mcp-server.cjs`) that reads from `skill-forge/catalog.json`. Both the bridge and catalog are committed to the repository, so no build step is needed after installation.

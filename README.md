@@ -1,22 +1,22 @@
 # context-bazaar
 
-A typed, discoverable knowledge bazaar for AI coding assistants. Write skills, powers, workflows, prompts, and agents once — compile them to every major harness from a single source.
+Knowledge artifacts for AI coding assistants. Author once, compile to every harness.
 
 ## What is this?
 
-AI coding assistants (Claude Code, Kiro, Copilot, Cursor, Windsurf, Cline, Q Developer) each use a different format for configuration, rules, and context files. context-bazaar solves the fragmentation problem: you author a **knowledge artifact** once, and the **Skill Forge** CLI compiles it into the native format for every supported harness.
+AI coding assistants (Claude Code, Kiro, Copilot, Cursor, Windsurf, Cline, Q Developer) each use a different format for rules, context, and configuration. context-bazaar lets you author a **knowledge artifact** in a single canonical format and compile it to any supported harness with the **Skill Forge** CLI.
 
-The repository contains both the **forge tool** and a growing catalog of **ready-to-use artifacts** organized into themed **collections**.
+This repository contains the forge tool and a catalog of artifacts organized into themed collections.
 
 ## Key Concepts
 
 | Concept | Description |
 |---|---|
-| **Knowledge artifact** | A single unit of guidance — a skill, prompt, workflow, power, agent, rule, template, or reference pack. Lives in `skill-forge/knowledge/<name>/`. |
-| **Harness** | An AI coding assistant target. Each harness has its own file format, conventions, and capabilities. |
-| **Collection** | A themed group of artifacts. Membership is declared in each artifact's frontmatter, not in the collection manifest. |
-| **Catalog** | A machine-readable index (`catalog.json`) of all artifacts, used by the browse UI and the MCP bridge. |
-| **Skill Forge** | The CLI tool that validates, builds, catalogs, imports, and publishes artifacts. |
+| **Knowledge artifact** | A skill, prompt, workflow, power, agent, rule, template, or reference pack. Lives in `skill-forge/knowledge/<name>/`. |
+| **Harness** | An AI coding assistant target (e.g. Kiro, Claude Code, Copilot). Each has its own file format and conventions. |
+| **Collection** | A group of related artifacts. Membership is declared in each artifact's frontmatter, not in the collection manifest. |
+| **Catalog** | Machine-readable index (`catalog.json`) of all artifacts. Used by the browse UI and the MCP bridge. |
+| **Skill Forge** | The CLI that validates, builds, catalogs, imports, and publishes artifacts. |
 
 ## Supported Harnesses
 
@@ -71,7 +71,7 @@ Literary and publishing workflow powers.
 | Artifact | Type | Description |
 |---|---|---|
 | `book-agent-publicist` | power | Finding agents, deals, contracts, publicity, career strategy |
-| `novelist` | power | Complete novel-writing companion across creative and professional tracks |
+| `novelist` | power | Novel-writing companion across creative and professional tracks |
 | `technical-author` | power | Technical book writing in the O'Reilly/Pragmatic/Manning style |
 | `proofreader-review-checklist` | power | Structured checklists for manuscripts, proposals, queries, and synopses |
 
