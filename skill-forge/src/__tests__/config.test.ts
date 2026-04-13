@@ -1,21 +1,46 @@
 import { describe, test, expect, beforeEach, afterEach } from "bun:test";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { loadForgeConfig, resolveBackendConfigs, type ForgeConfig } from "../config";
 
 let tempDir: string;
 let originalCwd: string;
+let originalHome: string | undefined;
+let originalUserProfile: string | undefined;
 
 beforeEach(async () => {
   tempDir = await mkdtemp(join(tmpdir(), "config-test-"));
   originalCwd = process.cwd();
+  originalHome = process.env.HOME;
+  originalUserProfile = process.env.USERPROFILE;
+
+  const fakeHomeDir = join(tempDir, "home");
+  const fakeForgeDir = join(fakeHomeDir, ".forge");
+  await mkdir(fakeForgeDir, { recursive: true });
+  await writeFile(join(fakeForgeDir, "config.yaml"), "");
+
+  process.env.HOME = fakeHomeDir;
+  process.env.USERPROFILE = fakeHomeDir;
+
   // Run each test in its own temp dir so forge.config.yaml lookups use it
   process.chdir(tempDir);
 });
 
 afterEach(async () => {
   process.chdir(originalCwd);
+
+  if (originalHome === undefined) {
+    delete process.env.HOME;
+  } else {
+    process.env.HOME = originalHome;
+  }
+
+  if (originalUserProfile === undefined) {
+    delete process.env.USERPROFILE;
+  } else {
+    process.env.USERPROFILE = originalUserProfile;
+  }
   await rm(tempDir, { recursive: true, force: true });
 });
 
