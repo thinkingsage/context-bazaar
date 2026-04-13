@@ -88,7 +88,7 @@ describe("LocalBackend", () => {
 	test("fetchArtifact throws when artifact directory is missing", async () => {
 		const backend = new LocalBackend(localBackendTempDir);
 
-		expect(backend.fetchArtifact("missing", "kiro")).rejects.toThrow(
+		await expect(backend.fetchArtifact("missing", "kiro")).rejects.toThrow(
 			`Artifact "missing" for harness "kiro" not found at ${join(localBackendTempDir, "dist", "kiro", "missing")}`,
 		);
 	});
