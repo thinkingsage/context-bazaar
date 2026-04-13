@@ -70,15 +70,15 @@ The Creative Track covers the craft of writing a novel from first idea to comple
 ### Creative Track Steering Files
 
 - **concept-and-premise** — Develop your core idea into a compelling premise with stakes, conflict, and thematic resonance
-- **character-creation** — Build multi-dimensional characters with backstories, motivations, arcs, and authentic voices
+- **character-creation** — Build multi-dimensional characters with backstories, motivations, arcs, authentic voices, and character POV Seeds for multi-POV novels
 - **world-building** — Construct your setting with the right level of detail, from physical geography to social systems and rules
-- **style-and-tone** — Define and maintain a consistent narrative voice, prose style, pacing rhythm, and emotional register
-- **fiction-seeds** — Create and manage Fiction Seeds: reusable style generators that capture a voice and reproduce it on demand
-- **seed-library** — Organize Seeds across projects, genres, and registers into a professional library with cataloging, versioning, and maintenance workflows
+- **style-and-tone** — Define and maintain a consistent narrative voice, prose style, pacing rhythm, and emotional register. Write a style sample that becomes the source passage for your first Fiction Seed.
+- **fiction-seeds** — Create and manage Fiction Seeds: reusable style generators with structured frontmatter (quality metrics, compatibility mapping, lineage tracking) that capture a voice and reproduce it on demand. Seeds are library-ready from creation.
+- **seed-library** — Organize Seeds across projects, genres, and registers into a professional library with structured metadata, agent-driven search and recommendation, formalized blend recipes, borrowed Seed graduation paths, client/ghostwriting conventions, series continuity integration, and maintenance workflows
 - **dialogue** — Craft authentic conversations with distinct character voices, subtext, and narrative purpose
 - **plot-structure** — Shape your narrative arc using proven structural frameworks, from three-act to hero's journey and beyond
 - **multi-pov-and-timeline** — Manage multiple viewpoint characters, non-linear timelines, information asymmetry, and thread convergence
-- **scene-drafting** — Write scene by scene with attention to purpose, tension, dialogue, and forward momentum
+- **scene-drafting** — Write scene by scene with attention to purpose, tension, dialogue, forward momentum, and Seed-guided voice consistency
 
 ## Professional Track
 
@@ -94,7 +94,7 @@ The Professional Track covers everything after the draft is written — analysis
 ### Professional Track Steering Files
 
 - **manuscript-diagnostics** — Analyze a completed draft for pacing, tension, emotional arc, character consistency, information flow, tonal drift, and structural balance
-- **revision-and-editing** — Systematically revise for structure, character consistency, prose quality, and polish
+- **revision-and-editing** — Systematically revise for structure, character consistency, prose quality, voice consistency (via Seed Diffing), and polish
 - **market-and-genre** — Research genre conventions, competitive landscape, trends, comp titles, and market positioning
 - **submission-and-query** — Craft query letters, synopses, comp titles, and manage the agent submission process
 

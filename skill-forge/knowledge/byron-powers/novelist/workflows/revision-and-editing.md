@@ -99,6 +99,7 @@ Now focus on prose quality, paragraph by paragraph:
 - Does the narrative voice stay consistent throughout?
 - Are there passages where the style shifts unintentionally?
 - Does the voice match the tone established in your style guide?
+- **Seed Diffing:** For each chapter or scene, compare the prose against its intended Seed's style profile. Check sentence length, vocabulary register, figurative language density, and emotional distance against the Seed's parameters. If the prose has drifted, the Seed's generation prompt tells you exactly what to correct toward. Update the Seed's `drift_notes` in its frontmatter if you discover consistent patterns — this feeds back into the Seed Library's audit process.
 
 ### Pass 5: Continuity and Polish
 

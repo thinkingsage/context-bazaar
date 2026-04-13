@@ -93,6 +93,8 @@ Before committing to a full manuscript, write 1,000-2,000 words in your chosen s
 
 If it doesn't feel right, adjust and try again. It's much easier to recalibrate now than after 50,000 words.
 
+Once you have a style sample you're happy with, it becomes the source passage for your first Fiction Seed. The **Fiction Seeds** phase walks you through extracting the style profile and writing a generation prompt from this sample. Creating the Seed now — while the style decisions are fresh — means you can reproduce this voice consistently throughout the manuscript.
+
 ## Techniques
 
 ### The Mentor Text Method
@@ -126,4 +128,4 @@ By the end of this phase, you should have:
 
 ## Next Phase
 
-With your voice defined, move to **plot-structure** to outline the narrative arc.
+With your voice defined, move to **fiction-seeds** to capture it as a reusable Seed for consistent generation throughout the manuscript.

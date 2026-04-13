@@ -66,6 +66,9 @@ Each character should sound distinct in dialogue and internal thought. Consider:
 
 Write a short monologue from each major character's perspective to test their voice.
 
+**Creating Character POV Seeds:**
+If your novel uses multiple POV characters, each one's narrative voice should be captured as a Fiction Seed. A character POV Seed defines not just how the character speaks (that's dialogue) but how the narrative sounds when filtered through their perception — what they notice, how they process information, the rhythm of their thoughts. Use the monologue you just wrote as the sample passage for the Seed. See the **Fiction Seeds** phase for the Seed creation workflow and the **Seed Library** phase for organizing character Seeds within your project manifest.
+
 ### Step 5: Validate Against the Premise
 
 Check that your characters serve the story:

@@ -32,6 +32,12 @@ Pick a target you can sustain. Consistency beats intensity.
 
 Before writing a scene, spend 5 minutes answering:
 
+**Load the right Seed:**
+- Check the project manifest's Seed Recommendation Map for this chapter/scene
+- If a specific Seed or blend recipe is mapped, load its generation prompt
+- If no Seed is mapped, consider the scene's needs: Which POV character? What register (action, interiority, exposition)? What tonal direction?
+- The agent should proactively suggest the appropriate Seed based on scene context — see the **Seed Library** phase for the full recommendation workflow
+
 **Purpose:**
 - Why does this scene exist? What does it accomplish?
 - What changes between the beginning and end of this scene?
@@ -97,6 +103,7 @@ Dialogue does multiple jobs simultaneously:
 - Note which scenes/chapters are drafted
 - Mark scenes that need significant revision (but don't revise yet)
 - Track continuity notes (character details, timeline, plot threads)
+- After drafting each scene, compare the output against the loaded Seed's style profile — if the prose has drifted from the intended voice (sentence length, vocabulary register, emotional distance), note it for revision. This is Seed Diffing applied during drafting rather than waiting for the revision phase.
 
 **When you get stuck:**
 - Skip the scene and write the next one you're excited about
@@ -136,10 +143,17 @@ Before writing a scene, note the POV character's emotional state at the start an
 
 By the end of this phase, you should have:
 - A complete first draft (or substantial progress toward one)
-- A scene-by-scene log of what's been written
+- A scene-by-scene log of what's been written, including which Seed was used for each scene
 - Continuity notes for revision
 - A list of known issues to address in revision (but not yet fixed)
+- Seed drift notes for any scenes where the prose diverged from the intended voice
+
+## Connection to Other Phases
+
+- **Fiction Seeds / Seed Library** — Load the appropriate Seed or blend recipe before each drafting session. The project manifest's Seed Recommendation Map automates this. Update Seed compatibility data (`compatible_with`, `conflicts_with`) based on what you learn during drafting.
+- **Revision & Editing** — Seed drift notes from drafting feed directly into the revision process. Use Seed Diffing in Pass 4 to diagnose and correct voice inconsistencies.
+- **Series Continuity** — For series writers, ensure you're loading the correct Seed version for the current book's timeline position. Character POV Seeds should match the character's state at this point in the series arc.
 
 ## Next Phase
 
-Once the draft is complete, move to **revision-and-editing** to shape the raw material into a polished manuscript.
+Once the draft is complete, move to **manuscript-diagnostics** to analyze the raw material before revision.
