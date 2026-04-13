@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	spyOn,
+	test,
+} from "bun:test";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -8,6 +16,10 @@ import { HttpBackend } from "../backends/http";
 import { LocalBackend } from "../backends/local";
 import { S3Backend } from "../backends/s3";
 import { makeCatalogEntry } from "./test-helpers";
+
+afterEach(() => {
+	mock.restore();
+});
 
 describe("backends/resolveBackend", () => {
 	test("resolves each backend type to the expected class", () => {
@@ -38,51 +50,51 @@ describe("backends/resolveBackend", () => {
 });
 
 describe("LocalBackend", () => {
-	let tempDir = "";
+	let localBackendTempDir = "";
 
 	beforeEach(async () => {
-		tempDir = await mkdtemp(join(tmpdir(), "backend-local-"));
+		localBackendTempDir = await mkdtemp(join(tmpdir(), "backend-local-"));
 	});
 
 	afterEach(async () => {
-		await rm(tempDir, { recursive: true, force: true });
+		await rm(localBackendTempDir, { recursive: true, force: true });
 	});
 
 	test("fetchCatalog reads catalog.json when present", async () => {
 		const entries = [makeCatalogEntry({ name: "from-catalog" })];
 		await writeFile(
-			join(tempDir, "catalog.json"),
+			join(localBackendTempDir, "catalog.json"),
 			JSON.stringify(entries, null, 2),
 			"utf8",
 		);
 
-		const backend = new LocalBackend(tempDir);
+		const backend = new LocalBackend(localBackendTempDir);
 		const result = await backend.fetchCatalog();
 
 		expect(result).toEqual(entries);
-		expect(backend.label).toBe(`local:${tempDir}`);
+		expect(backend.label).toBe(`local:${localBackendTempDir}`);
 	});
 
 	test("fetchArtifact returns dist path when present", async () => {
-		const artifactDir = join(tempDir, "dist", "kiro", "sample");
+		const artifactDir = join(localBackendTempDir, "dist", "kiro", "sample");
 		await mkdir(artifactDir, { recursive: true });
 
-		const backend = new LocalBackend(tempDir);
+		const backend = new LocalBackend(localBackendTempDir);
 		const path = await backend.fetchArtifact("sample", "kiro");
 
 		expect(path).toBe(artifactDir);
 	});
 
 	test("fetchArtifact throws when artifact directory is missing", async () => {
-		const backend = new LocalBackend(tempDir);
+		const backend = new LocalBackend(localBackendTempDir);
 
 		expect(backend.fetchArtifact("missing", "kiro")).rejects.toThrow(
-			`Artifact "missing" for harness "kiro" not found at ${join(tempDir, "dist", "kiro", "missing")}`,
+			`Artifact "missing" for harness "kiro" not found at ${join(localBackendTempDir, "dist", "kiro", "missing")}`,
 		);
 	});
 
 	test("listVersions returns local pseudo-version", async () => {
-		const backend = new LocalBackend(tempDir);
+		const backend = new LocalBackend(localBackendTempDir);
 		expect(await backend.listVersions()).toEqual(["local"]);
 	});
 });
@@ -102,6 +114,7 @@ describe("HttpBackend", () => {
 
 	test("fetchCatalog uses versioned URL and bearer token from env variable", async () => {
 		process.env.HTTP_BACKEND_TOKEN = "secret-token";
+		const tokenEnvVarPlaceholder = `${"${"}HTTP_BACKEND_TOKEN}`;
 		const fetchSpy = spyOn(globalThis, "fetch").mockResolvedValue(
 			new Response(JSON.stringify([makeCatalogEntry({ name: "http-entry" })]), {
 				status: 200,
@@ -112,7 +125,7 @@ describe("HttpBackend", () => {
 			{
 				type: "http",
 				baseUrl: "https://artifacts.example.test/forge",
-				token: `$` + "{HTTP_BACKEND_TOKEN}",
+				token: tokenEnvVarPlaceholder,
 			},
 			"v9.9.9",
 		);
