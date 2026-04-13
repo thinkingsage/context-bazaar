@@ -319,7 +319,11 @@ describe("S3Backend", () => {
 	});
 
 	afterEach(() => {
-		process.env.HOME = originalHome;
+		if (originalHome === undefined) {
+			delete process.env.HOME;
+		} else {
+			process.env.HOME = originalHome;
+		}
 	});
 
 	test("fetchCatalog uses expected key and parses JSON", async () => {
