@@ -8,7 +8,7 @@ keywords:
   - madr
   - architecture
   - decision-log
-author: Steven Murawski
+author: Steven J. Miklovic
 version: 0.1.0
 harnesses:
   - kiro
@@ -26,6 +26,9 @@ model-assumptions: []
 collections:
   - neon-caravan
 inherit-hooks: false
+harness-config:
+  kiro:
+    format: power
 ---
 # ADR Power
 
