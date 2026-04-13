@@ -3,11 +3,11 @@ name: CI
 on:
   pull_request:
     paths:
-      - "skill-forge/knowledge/**"
-      - "skill-forge/templates/**"
-      - "skill-forge/evals/**"
-      - "skill-forge/src/**"
-      - "skill-forge/scripts/**"
+      - "knowledge/**"
+      - "templates/**"
+      - "evals/**"
+      - "src/**"
+      - "scripts/**"
   workflow_dispatch:
     inputs:
       skip-lint:
@@ -63,12 +63,8 @@ jobs:
         run: bun x tsc --noEmit
 
       - name: Test
+        if: ${{ !inputs.skip-test }}
         run: bun test --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Validate artifacts
         if: ${{ !inputs.skip-validate }}
@@ -84,7 +80,7 @@ jobs:
 
       - name: Verify dist is up to date
         if: ${{ !inputs.skip-build }}
-        run: git diff --exit-code -- dist/
+        run: git diff --exit-code dist/
 
   eval:
     runs-on: ubuntu-latest
@@ -95,9 +91,9 @@ jobs:
     if: >
       !inputs.skip-eval &&
       (github.event_name == 'workflow_dispatch' ||
-      contains(github.event.pull_request.changed_files_names || '', 'skill-forge/knowledge/') ||
-      contains(github.event.pull_request.changed_files_names || '', 'skill-forge/templates/') ||
-      contains(github.event.pull_request.changed_files_names || '', 'skill-forge/evals/'))
+      contains(github.event.pull_request.changed_files_names || '', 'knowledge/') ||
+      contains(github.event.pull_request.changed_files_names || '', 'templates/') ||
+      contains(github.event.pull_request.changed_files_names || '', 'evals/'))
     env:
       OPENAI_API_KEY: ${{ secrets.GITHUB_TOKEN }}
       OPENAI_BASE_URL: https://models.github.ai/inference
