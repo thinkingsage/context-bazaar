@@ -193,7 +193,9 @@ describe("HttpBackend", () => {
 			baseUrl: "https://artifacts.example.test/forge",
 		});
 
-		expect(backend.fetchArtifact("my-skill", "kiro", "v1.0.0")).rejects.toThrow(
+		await expect(
+			backend.fetchArtifact("my-skill", "kiro", "v1.0.0"),
+		).rejects.toThrow(
 			"HTTP 404 downloading https://artifacts.example.test/forge/v1.0.0/dist-kiro.tar.gz",
 		);
 
