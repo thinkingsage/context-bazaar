@@ -184,7 +184,7 @@ describe("validateArtifactSecurity — obfuscation warnings", () => {
   });
 
   test("warns on a suspiciously long base64-like string in body", async () => {
-    // Construct a 90-character base64-looking string
+    // Construct an 80+ character base64-looking string
     const base64Like = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTU==";
     const dir = await writeArtifact(tempDir, {
       name: "base64-body",
