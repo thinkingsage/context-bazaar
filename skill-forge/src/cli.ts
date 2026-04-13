@@ -15,6 +15,7 @@ import { renderRootHelp, renderCommandHelp, renderVersion, type RootCommand } fr
 import { commandMetaRegistry } from "./help/metadata";
 import { suggestCommand } from "./help/typo-suggester";
 import { tutorialCommand } from "./tutorial";
+import { registerGuildCommands } from "./guild/cli";
 
 // Banner lines — stored without trailing padding; printBanner normalises widths.
 const bannerLines = [
@@ -137,6 +138,7 @@ program
   .option("--source <path>", "Path to skill-forge repository")
   .option("--from-release <tag>", "Download from GitHub release")
   .option("--backend <name>", "Named backend from forge.config.yaml")
+  .option("--global", "Install artifact into the global cache")
   .action(installCommand);
 
 program
@@ -219,6 +221,9 @@ program
   .option("--no-context", "Skip harness context wrapping")
   .option("--init <artifact>", "Scaffold eval suite for an artifact")
   .action(evalCommand);
+
+  // Register guild commands
+  registerGuildCommands(program);
 
   // Register `forge help [command]` subcommand
   program
