@@ -117,18 +117,14 @@ if (!useColor) {
 
 // Rewrite trailing "help" to "--help" so `forge build help` shows the help screen
 // instead of erroring with "too many arguments".
-if (
-	process.argv.length >= 3 &&
-	process.argv[process.argv.length - 1] === "help"
-) {
-	// Only rewrite when "help" isn't the registered subcommand itself (argv[2])
-	if (process.argv[2] !== "help") {
-		process.argv[process.argv.length - 1] = "--help";
-	}
+if (process.argv.length >= 3 && process.argv[process.argv.length - 1] === "help") {
+  // Only rewrite when "help" isn't the registered subcommand itself (argv[2])
+  if (process.argv[2] !== "help") {
+    process.argv[process.argv.length - 1] = "--help";
+  }
 }
 
-const hasHelpFlag =
-	process.argv.includes("--help") || process.argv.includes("-h");
+const hasHelpFlag = process.argv.includes("--help") || process.argv.includes("-h");
 const hasHelpCommand = process.argv[2] === "help";
 if (process.argv.length <= 2 && !hasHelpFlag && !hasHelpCommand) {
 	printBanner();
