@@ -310,10 +310,6 @@ describe("validateArtifactSecurity — dangerous MCP server patterns", () => {
   });
 
   test("does NOT warn when MCP server uses a specific script path", async () => {
-    const dir = await writeArtifact(tempDir, {
-      name: "specific-script-mcp",
-      mcpYaml: mcpYaml("node"),
-    });
     // The specific command 'node' still triggers a warning — but a script like
     // '/usr/local/bin/my-mcp-server' should NOT:
     const dir2 = await writeArtifact(tempDir, {
