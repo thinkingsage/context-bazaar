@@ -24,7 +24,7 @@ import { installCommand } from "./install";
 import { newCommand } from "./new";
 import { publishCommand } from "./publish";
 import { tutorialCommand } from "./tutorial";
-import { validateCommand } from "./validate";
+import { registerGuildCommands } from "./guild/cli";
 
 // Banner lines — stored without trailing padding; printBanner normalises widths.
 const bannerLines = [
@@ -145,18 +145,18 @@ if (import.meta.main !== false) {
 		.option("--strict", "Treat compatibility warnings as errors")
 		.action(buildCommand);
 
-	program
-		.command("install [artifact]")
-		.description("Install compiled artifacts into the current project")
-		.option("--harness <name>", "Install for a specific harness")
-		.option("--all", "Install for all harnesses")
-		.option("--force", "Overwrite without confirmation")
-		.option("--dry-run", "Show what would be installed without writing files")
-		.option("--source <path>", "Path to skill-forge repository")
-		.option("--from-release <tag>", "Download from GitHub release")
-		.option("--backend <name>", "Named backend from forge.config.yaml")
-		.option("--global", "Install artifact into the global cache")
-		.action(installCommand);
+program
+  .command("install [artifact]")
+  .description("Install compiled artifacts into the current project")
+  .option("--harness <name>", "Install for a specific harness")
+  .option("--all", "Install for all harnesses")
+  .option("--force", "Overwrite without confirmation")
+  .option("--dry-run", "Show what would be installed without writing files")
+  .option("--source <path>", "Path to skill-forge repository")
+  .option("--from-release <tag>", "Download from GitHub release")
+  .option("--backend <name>", "Named backend from forge.config.yaml")
+  .option("--global", "Install artifact into the global cache")
+  .action(installCommand);
 
 	program
 		.command("new <artifact-name>")
@@ -264,8 +264,26 @@ if (import.meta.main !== false) {
 		.option("--init <artifact>", "Scaffold eval suite for an artifact")
 		.action(evalCommand);
 
-	// Register guild commands
-	registerGuildCommands(program);
+  // Register guild commands
+  registerGuildCommands(program);
+
+  // Register `forge help [command]` subcommand
+  program
+    .command("help [command]")
+    .description("Show help for a command")
+    .action((cmdName?: string) => {
+      if (!cmdName) {
+        // No argument — show root help
+        const commands = program.commands
+          .filter((c) => c.name() !== "help")
+          .map((cmd) => ({
+            name: cmd.name() + (cmd.usage() ? ` ${cmd.usage()}` : ""),
+            description: cmd.description(),
+          }));
+        commands.push({ name: "help [command]", description: "Show help for a command" });
+        console.log(renderRootHelp(commands, { useColor }));
+        return;
+      }
 
 	// Register `forge help [command]` subcommand
 	program
