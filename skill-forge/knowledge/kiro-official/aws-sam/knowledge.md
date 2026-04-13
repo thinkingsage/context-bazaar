@@ -16,9 +16,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [aws, sam, lambda]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

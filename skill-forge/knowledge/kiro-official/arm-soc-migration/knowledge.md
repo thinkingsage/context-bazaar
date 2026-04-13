@@ -20,9 +20,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [arm, embedded]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

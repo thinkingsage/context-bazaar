@@ -19,10 +19,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-  - debugging
-  - performance
-ecosystem: [dynatrace]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

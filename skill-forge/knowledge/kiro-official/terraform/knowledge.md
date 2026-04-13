@@ -18,9 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [terraform, hashicorp]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

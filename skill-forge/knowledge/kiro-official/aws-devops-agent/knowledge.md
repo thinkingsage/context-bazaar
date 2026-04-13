@@ -28,9 +28,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-  - debugging
-ecosystem: [aws]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

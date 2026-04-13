@@ -17,9 +17,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - testing
-  - devops
-ecosystem: [postman]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

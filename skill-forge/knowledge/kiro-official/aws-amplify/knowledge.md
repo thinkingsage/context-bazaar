@@ -39,9 +39,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [aws, amplify]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

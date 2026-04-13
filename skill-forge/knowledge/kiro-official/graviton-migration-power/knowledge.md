@@ -19,10 +19,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-  - performance
-ecosystem: [aws, graviton, arm]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

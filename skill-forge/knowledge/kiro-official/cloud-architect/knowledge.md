@@ -18,9 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [aws, cdk, python]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

@@ -18,9 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-  - security
-ecosystem: [stripe]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

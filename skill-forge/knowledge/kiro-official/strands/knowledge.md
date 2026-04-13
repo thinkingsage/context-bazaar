@@ -19,9 +19,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [aws, strands, bedrock]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

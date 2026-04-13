@@ -18,9 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-ecosystem: [aws, gcp, terraform]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

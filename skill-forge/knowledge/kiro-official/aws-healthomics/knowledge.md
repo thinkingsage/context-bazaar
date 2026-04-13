@@ -18,8 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-ecosystem: [aws, healthomics]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

@@ -18,8 +18,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-ecosystem: [figma]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

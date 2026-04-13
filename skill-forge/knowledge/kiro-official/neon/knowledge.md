@@ -17,8 +17,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-ecosystem: [neon, postgres]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

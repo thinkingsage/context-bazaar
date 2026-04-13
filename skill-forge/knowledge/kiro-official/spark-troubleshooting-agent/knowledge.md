@@ -20,10 +20,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - debugging
-  - devops
-  - performance
-ecosystem: [aws, spark, emr]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

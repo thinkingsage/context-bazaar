@@ -19,9 +19,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-  - performance
-ecosystem: [aws, cloudwatch]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

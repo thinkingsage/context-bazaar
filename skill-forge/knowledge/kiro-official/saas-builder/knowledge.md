@@ -20,10 +20,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - architecture
-  - devops
-  - security
-ecosystem: [aws, lambda, dynamodb, stripe, react]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable

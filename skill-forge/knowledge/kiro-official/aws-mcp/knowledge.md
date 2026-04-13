@@ -28,8 +28,8 @@ harnesses:
 type: power
 inclusion: manual
 categories:
-  - devops
-ecosystem: [aws]
+  - documentation
+ecosystem: []
 depends: []
 enhances: []
 maturity: stable
