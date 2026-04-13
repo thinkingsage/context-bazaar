@@ -271,7 +271,7 @@ describe("GitHubBackend", () => {
 			{ type: "github", repo: "org/repo" },
 			"v1.0.0",
 		);
-		expect(backend.fetchCatalog()).rejects.toThrow(
+		await expect(backend.fetchCatalog()).rejects.toThrow(
 			"Failed to fetch catalog from GitHub release v1.0.0: api failed",
 		);
 
