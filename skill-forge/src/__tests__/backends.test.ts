@@ -108,7 +108,11 @@ describe("HttpBackend", () => {
 	});
 
 	afterEach(() => {
-		process.env.HOME = originalHome;
+		if (originalHome === undefined) {
+			delete process.env.HOME;
+		} else {
+			process.env.HOME = originalHome;
+		}
 		delete process.env.HTTP_BACKEND_TOKEN;
 	});
 
