@@ -72,31 +72,31 @@ async function importKiroPower(
 		};
 	}
 
-	// Build skill-forge frontmatter
-	const fm: Frontmatter = {
-		name,
-		displayName: String(sourceFm.displayName || name),
-		description: String(sourceFm.description || ""),
-		keywords: Array.isArray(sourceFm.keywords)
-			? sourceFm.keywords.map(String)
-			: [],
-		author: String(sourceFm.author || ""),
-		version: "0.1.0",
-		harnesses: ["kiro"],
-		type: "power",
-		inclusion: "manual",
-		categories: ["documentation"],
-		ecosystem: [],
-		depends: [],
-		enhances: [],
-		maturity: "stable",
-		trust: "community",
-		audience: "intermediate",
-		"model-assumptions": [],
-		collections: opts.collections ?? [],
-		"inherit-hooks": false,
-		"harness-config": { kiro: { format: "power" } },
-	};
+  // Build skill-forge frontmatter
+  const fm: Frontmatter = {
+    name,
+    displayName: String(sourceFm.displayName || name),
+    description: String(sourceFm.description || ""),
+    keywords: Array.isArray(sourceFm.keywords)
+      ? sourceFm.keywords.map(String)
+      : [],
+    author: String(sourceFm.author || ""),
+    version: "0.1.0",
+    harnesses: ["kiro"],
+    type: "power",
+    inclusion: "manual",
+    categories: ["documentation"],
+    ecosystem: [],
+    depends: [],
+    enhances: [],
+    maturity: "stable",
+    trust: "community",
+    audience: "intermediate",
+    "model-assumptions": [],
+    collections: opts.collections ?? [],
+    "inherit-hooks": false,
+    "harness-config": { kiro: { format: "power" } },
+  };
 
 	const frontmatterYaml = yaml.dump(fm, { lineWidth: -1 });
 	const body = parsed.content.trim();
@@ -247,14 +247,40 @@ async function importOne(
 	sourceDir: string,
 	opts: ImportOptions & { dryRun: boolean; knowledgeDir: string },
 ): Promise<ImportResult> {
-	const entries = await readdir(sourceDir);
+  const entries = await readdir(sourceDir);
 
-	// Always verify the expected file exists — even when format is explicitly set.
-	// This prevents crashes on non-artifact directories (e.g. .github, .kiro).
-	const detectedFormat =
-		opts.format === "auto" || !opts.format
-			? detectFormat(sourceDir, entries)
-			: opts.format;
+  // Always verify the expected file exists — even when format is explicitly set.
+  // This prevents crashes on non-artifact directories (e.g. .github, .kiro).
+  const detectedFormat = opts.format === "auto" || !opts.format
+    ? detectFormat(sourceDir, entries)
+    : opts.format;
+
+  if (detectedFormat === "kiro-power") {
+    if (!entries.includes("POWER.md")) {
+      return {
+        name: basename(sourceDir),
+        sourcePath: sourceDir,
+        targetPath: "",
+        filesWritten: [],
+        workflowsCopied: 0,
+        skipped: `No POWER.md found in ${sourceDir}`,
+      };
+    }
+    return importKiroPower(sourceDir, opts);
+  }
+  if (detectedFormat === "kiro-skill") {
+    if (!entries.includes("SKILL.md")) {
+      return {
+        name: basename(sourceDir),
+        sourcePath: sourceDir,
+        targetPath: "",
+        filesWritten: [],
+        workflowsCopied: 0,
+        skipped: `No SKILL.md found in ${sourceDir}`,
+      };
+    }
+    return importKiroSkill(sourceDir, opts);
+  }
 
 	if (detectedFormat === "kiro-power") {
 		if (!entries.includes("POWER.md")) {
@@ -319,20 +345,20 @@ export async function importCommand(
 
 	let sources: string[];
 
-	if (all) {
-		// Scan sourcePath for subdirectories
-		if (!(await exists(resolved))) {
-			console.error(chalk.red(`Error: Path not found: ${resolved}`));
-			process.exit(1);
-		}
-		const entries = await readdir(resolved, { withFileTypes: true });
-		sources = entries
-			.filter((e) => e.isDirectory() && !e.name.startsWith("."))
-			.map((e) => join(resolved, e.name))
-			.sort();
-	} else {
-		sources = [resolved];
-	}
+  if (all) {
+    // Scan sourcePath for subdirectories
+    if (!(await exists(resolved))) {
+      console.error(chalk.red(`Error: Path not found: ${resolved}`));
+      process.exit(1);
+    }
+    const entries = await readdir(resolved, { withFileTypes: true });
+    sources = entries
+      .filter((e) => e.isDirectory() && !e.name.startsWith("."))
+      .map((e) => join(resolved, e.name))
+      .sort();
+  } else {
+    sources = [resolved];
+  }
 
 	if (sources.length === 0) {
 		console.error(chalk.yellow("No source directories found."));
