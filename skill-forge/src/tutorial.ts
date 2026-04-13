@@ -2,7 +2,11 @@ import { exists, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import * as p from "@clack/prompts";
 import chalk from "chalk";
-import { buildCommand } from "./build";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { exists } from "node:fs/promises";
+import { rm } from "node:fs/promises";
+import { handleCancel, runWizard } from "./wizard";
 import { writeWizardResult } from "./file-writer";
 import { newCommand } from "./new";
 import { handleCancel, runWizard } from "./wizard";
@@ -218,10 +222,10 @@ export async function resolveArtifactName(
 	});
 	handleCancel(overwrite);
 
-	if (overwrite) {
-		await rm(artifactDir, { recursive: true, force: true });
-		return defaultName;
-	}
+  if (overwrite) {
+    await rm(artifactDir, { recursive: true, force: true });
+    return defaultName;
+  }
 
 	const newName = await p.text({
 		message: "Choose a different name for the sample artifact",
