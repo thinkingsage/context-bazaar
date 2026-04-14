@@ -103,8 +103,7 @@ jobs:
         working-directory: skill-forge
     if: ${{ !inputs.skip-eval }}
     env:
-      OPENAI_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-      OPENAI_BASE_URL: https://models.github.ai/inference
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v6
 
@@ -118,7 +117,7 @@ jobs:
         run: bun run dev build
 
       - name: Run evals
-        run: bun run dev eval --ci --provider openai:gpt-4o --output eval-results.json
+        run: bun run dev eval --ci --provider github:openai/gpt-4o --output eval-results.json
 
       - name: Upload eval results
         if: always()
