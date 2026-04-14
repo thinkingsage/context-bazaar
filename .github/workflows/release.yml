@@ -18,6 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -58,6 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -85,6 +93,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # full history for changelog context
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -159,6 +171,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - uses: oven-sh/setup-bun@v2
         with:
