@@ -1,6 +1,6 @@
 export interface WorkspaceFile {
-  path: string;
-  content: string;
+	path: string;
+	content: string;
 }
 
 /**
@@ -10,57 +10,57 @@ export interface WorkspaceFile {
  * The output is deterministic — the same input files always produce the same string.
  */
 export function generateWorkspaceDescription(files: WorkspaceFile[]): string {
-  const parts: string[] = [];
+	const parts: string[] = [];
 
-  for (const file of files) {
-    if (file.path.endsWith("package.json")) {
-      try {
-        const pkg = JSON.parse(file.content);
-        if (pkg.name) parts.push(`Project: ${pkg.name}`);
-        if (pkg.dependencies) {
-          parts.push(
-            `Dependencies: ${Object.keys(pkg.dependencies).join(", ")}`,
-          );
-        }
-        if (pkg.devDependencies) {
-          parts.push(
-            `Dev dependencies: ${Object.keys(pkg.devDependencies).join(", ")}`,
-          );
-        }
-        if (pkg.scripts) {
-          parts.push(`Scripts: ${Object.keys(pkg.scripts).join(", ")}`);
-        }
-      } catch {
-        /* ignore parse errors */
-      }
-    } else if (file.path.endsWith("tsconfig.json")) {
-      parts.push("TypeScript project");
-    } else if (file.path.endsWith("biome.json")) {
-      parts.push("Uses Biome for linting/formatting");
-    } else if (
-      file.path.endsWith(".eslintrc") ||
-      file.path.endsWith(".eslintrc.json")
-    ) {
-      parts.push("Uses ESLint");
-    } else if (file.path.endsWith("README.md")) {
-      // Extract first paragraph as project description
-      const firstPara = file.content
-        .split("\n\n")[0]
-        ?.replace(/^#.*\n/, "")
-        .trim();
-      if (firstPara) parts.push(`Description: ${firstPara.slice(0, 200)}`);
-    }
+	for (const file of files) {
+		if (file.path.endsWith("package.json")) {
+			try {
+				const pkg = JSON.parse(file.content);
+				if (pkg.name) parts.push(`Project: ${pkg.name}`);
+				if (pkg.dependencies) {
+					parts.push(
+						`Dependencies: ${Object.keys(pkg.dependencies).join(", ")}`,
+					);
+				}
+				if (pkg.devDependencies) {
+					parts.push(
+						`Dev dependencies: ${Object.keys(pkg.devDependencies).join(", ")}`,
+					);
+				}
+				if (pkg.scripts) {
+					parts.push(`Scripts: ${Object.keys(pkg.scripts).join(", ")}`);
+				}
+			} catch {
+				/* ignore parse errors */
+			}
+		} else if (file.path.endsWith("tsconfig.json")) {
+			parts.push("TypeScript project");
+		} else if (file.path.endsWith("biome.json")) {
+			parts.push("Uses Biome for linting/formatting");
+		} else if (
+			file.path.endsWith(".eslintrc") ||
+			file.path.endsWith(".eslintrc.json")
+		) {
+			parts.push("Uses ESLint");
+		} else if (file.path.endsWith("README.md")) {
+			// Extract first paragraph as project description
+			const firstPara = file.content
+				.split("\n\n")[0]
+				?.replace(/^#.*\n/, "")
+				.trim();
+			if (firstPara) parts.push(`Description: ${firstPara.slice(0, 200)}`);
+		}
 
-    // Detect languages from file extensions
-    const ext = file.path.split(".").pop();
-    if (ext === "ts" || ext === "tsx") parts.push("TypeScript");
-    else if (ext === "py") parts.push("Python");
-    else if (ext === "rs") parts.push("Rust");
-    else if (ext === "go") parts.push("Go");
-  }
+		// Detect languages from file extensions
+		const ext = file.path.split(".").pop();
+		if (ext === "ts" || ext === "tsx") parts.push("TypeScript");
+		else if (ext === "py") parts.push("Python");
+		else if (ext === "rs") parts.push("Rust");
+		else if (ext === "go") parts.push("Go");
+	}
 
-  // Deduplicate
-  return [...new Set(parts)].join(". ");
+	// Deduplicate
+	return [...new Set(parts)].join(". ");
 }
 
 /**
@@ -68,27 +68,27 @@ export function generateWorkspaceDescription(files: WorkspaceFile[]): string {
  * Checks for keyword overlap between the workspace description and artifact keywords/description.
  */
 export function generateMatchReason(
-  workspaceDescription: string,
-  artifactKeywords: string[],
-  artifactDescription: string,
+	workspaceDescription: string,
+	artifactKeywords: string[],
+	artifactDescription: string,
 ): string {
-  const descLower = workspaceDescription.toLowerCase();
-  const matchingKeywords = artifactKeywords.filter((kw) =>
-    descLower.includes(kw.toLowerCase()),
-  );
+	const descLower = workspaceDescription.toLowerCase();
+	const matchingKeywords = artifactKeywords.filter((kw) =>
+		descLower.includes(kw.toLowerCase()),
+	);
 
-  if (matchingKeywords.length > 0) {
-    return `Matches workspace: ${matchingKeywords.join(", ")}`;
-  }
+	if (matchingKeywords.length > 0) {
+		return `Matches workspace: ${matchingKeywords.join(", ")}`;
+	}
 
-  // Check for overlap between workspace description and artifact description
-  const artifactWords = artifactDescription.toLowerCase().split(/\s+/);
-  const descWords = new Set(descLower.split(/\s+/));
-  const overlap = artifactWords.filter((w) => w.length > 3 && descWords.has(w));
+	// Check for overlap between workspace description and artifact description
+	const artifactWords = artifactDescription.toLowerCase().split(/\s+/);
+	const descWords = new Set(descLower.split(/\s+/));
+	const overlap = artifactWords.filter((w) => w.length > 3 && descWords.has(w));
 
-  if (overlap.length > 0) {
-    return `Related to: ${[...new Set(overlap)].slice(0, 5).join(", ")}`;
-  }
+	if (overlap.length > 0) {
+		return `Related to: ${[...new Set(overlap)].slice(0, 5).join(", ")}`;
+	}
 
-  return "Semantically similar to workspace profile";
+	return "Semantically similar to workspace profile";
 }

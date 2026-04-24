@@ -1,74 +1,80 @@
 import type { EmbeddingProvider } from "../embedding-provider.js";
-import { SoukCompassError, ErrorCodes } from "../errors.js";
+import { ErrorCodes, SoukCompassError } from "../errors.js";
 
 const MAX_INPUT_LENGTH = 32_000; // ~8k tokens rough estimate
 
 export class LocalEmbeddingProvider implements EmbeddingProvider {
-  readonly name = "transformers-local";
-  readonly dimensions: number;
-  private readonly apiUrl?: string;
+	readonly name = "transformers-local";
+	readonly dimensions: number;
+	private readonly apiUrl?: string;
 
-  constructor(config: { dimensions: number; apiUrl?: string }) {
-    this.dimensions = config.dimensions;
-    this.apiUrl = config.apiUrl ?? process.env.SOUK_COMPASS_LOCAL_EMBED_URL;
-  }
+	constructor(config: { dimensions: number; apiUrl?: string }) {
+		this.dimensions = config.dimensions;
+		this.apiUrl = config.apiUrl ?? process.env.SOUK_COMPASS_LOCAL_EMBED_URL;
+	}
 
-  async embed(text: string): Promise<number[]> {
-    const truncated = text.slice(0, MAX_INPUT_LENGTH);
+	async embed(text: string): Promise<number[]> {
+		const truncated = text.slice(0, MAX_INPUT_LENGTH);
 
-    if (this.apiUrl) {
-      return this.embedViaHttp(truncated);
-    }
+		if (this.apiUrl) {
+			return this.embedViaHttp(truncated);
+		}
 
-    return this.embedViaTransformers(truncated);
-  }
+		return this.embedViaTransformers(truncated);
+	}
 
-  async batchEmbed(texts: string[]): Promise<number[][]> {
-    // Process sequentially to avoid overwhelming local resources
-    return Promise.all(texts.map((t) => this.embed(t)));
-  }
+	async batchEmbed(texts: string[]): Promise<number[][]> {
+		// Process sequentially to avoid overwhelming local resources
+		return Promise.all(texts.map((t) => this.embed(t)));
+	}
 
-  private async embedViaHttp(text: string): Promise<number[]> {
-    try {
-      const response = await fetch(this.apiUrl!, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, dimensions: this.dimensions }),
-      });
+	private async embedViaHttp(text: string): Promise<number[]> {
+		try {
+			const response = await fetch(this.apiUrl as string, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ text, dimensions: this.dimensions }),
+			});
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+			}
 
-      const body = (await response.json()) as { embedding: number[] };
-      return body.embedding;
-    } catch (err) {
-      throw new SoukCompassError(
-        `Local embedding HTTP API failed: ${err instanceof Error ? err.message : String(err)}`,
-        ErrorCodes.EMBED_FAILURE,
-        { cause: err },
-      );
-    }
-  }
+			const body = (await response.json()) as { embedding: number[] };
+			return body.embedding;
+		} catch (err) {
+			throw new SoukCompassError(
+				`Local embedding HTTP API failed: ${err instanceof Error ? err.message : String(err)}`,
+				ErrorCodes.EMBED_FAILURE,
+				{ cause: err },
+			);
+		}
+	}
 
-  private async embedViaTransformers(text: string): Promise<number[]> {
-    try {
-      const { pipeline } = await import("@xenova/transformers");
-      const extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
-      const output = await extractor(text, { pooling: "mean", normalize: true });
-      const raw = Array.from(output.data as Float32Array) as number[];
+	private async embedViaTransformers(text: string): Promise<number[]> {
+		try {
+			const { pipeline } = await import("@xenova/transformers");
+			const extractor = await pipeline(
+				"feature-extraction",
+				"Xenova/all-MiniLM-L6-v2",
+			);
+			const output = await extractor(text, {
+				pooling: "mean",
+				normalize: true,
+			});
+			const raw = Array.from(output.data as Float32Array) as number[];
 
-      // Pad or truncate to match configured dimensions
-      if (raw.length >= this.dimensions) {
-        return raw.slice(0, this.dimensions);
-      }
-      return [...raw, ...new Array(this.dimensions - raw.length).fill(0)];
-    } catch (err) {
-      throw new SoukCompassError(
-        `Local transformers embedding failed: ${err instanceof Error ? err.message : String(err)}`,
-        ErrorCodes.EMBED_FAILURE,
-        { cause: err },
-      );
-    }
-  }
+			// Pad or truncate to match configured dimensions
+			if (raw.length >= this.dimensions) {
+				return raw.slice(0, this.dimensions);
+			}
+			return [...raw, ...new Array(this.dimensions - raw.length).fill(0)];
+		} catch (err) {
+			throw new SoukCompassError(
+				`Local transformers embedding failed: ${err instanceof Error ? err.message : String(err)}`,
+				ErrorCodes.EMBED_FAILURE,
+				{ cause: err },
+			);
+		}
+	}
 }
