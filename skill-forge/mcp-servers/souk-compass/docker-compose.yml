@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  solr:
+    image: solr:9
+    container_name: souk-compass-solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - ./solr/schema.xml:/opt/solr/server/solr/configsets/_default/conf/schema.xml
+      - solr-data:/var/solr
+    command: ["solr-precreate", "context-bazaar"]
+
+volumes:
+  solr-data:
