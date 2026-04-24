@@ -1,9 +1,15 @@
 import { exec } from "node:child_process";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import type { CompassSetupInput } from "../schemas.js";
 import type { ToolContext, ToolResult } from "./types.js";
 
 const execAsync = promisify(exec);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const COMPOSE_DIR = resolve(__dirname, "..", "..");
 
 export async function handleCompassSetup(
 	input: CompassSetupInput,
@@ -64,12 +70,36 @@ async function startSolr(ctx: ToolContext): Promise<ToolResult> {
 
 	try {
 		const { stdout } = await execAsync("docker compose up -d", {
-			cwd: ctx.pluginRoot,
+			cwd: COMPOSE_DIR,
 		});
+
+		// Wait for Solr to be ready before uploading configset
+		const ready = await waitForSolr(ctx, 30);
+		if (!ready) {
+			return jsonResult({
+				action: "start",
+				success: true,
+				message:
+					"Solr containers started but Solr is not yet responding. Run compass_setup with action 'create_collections' once it is ready.",
+				output: stdout.trim(),
+			});
+		}
+
+		// Upload configset to ZooKeeper
+		try {
+			await execAsync(
+				"docker exec souk-compass-solr solr zk upconfig -n souk-compass -d /opt/solr/server/solr/configsets/souk-compass/conf -z zoo:2181",
+				{ timeout: 15000 },
+			);
+		} catch {
+			// Configset may already exist — not fatal
+		}
+
 		return jsonResult({
 			action: "start",
 			success: true,
-			message: "Solr container started successfully.",
+			message:
+				"SolrCloud started and configset uploaded. Run compass_setup with action 'create_collections' to create collections.",
 			output: stdout.trim(),
 		});
 	} catch (err) {
@@ -99,7 +129,7 @@ async function createCollections(ctx: ToolContext): Promise<ToolResult> {
 
 	for (const name of [ctx.config.solrCollection, ctx.config.userCollection]) {
 		try {
-			const url = `${ctx.config.solrUrl}/solr/admin/collections?action=CREATE&name=${encodeURIComponent(name)}&numShards=1&replicationFactor=1&wt=json`;
+			const url = `${ctx.config.solrUrl}/solr/admin/collections?action=CREATE&name=${encodeURIComponent(name)}&numShards=1&replicationFactor=1&collection.configName=souk-compass&wt=json`;
 			const response = await fetch(url);
 			if (!response.ok) {
 				const body = await response.text();
@@ -138,7 +168,7 @@ async function stopSolr(ctx: ToolContext): Promise<ToolResult> {
 
 	try {
 		const { stdout } = await execAsync("docker compose down", {
-			cwd: ctx.pluginRoot,
+			cwd: COMPOSE_DIR,
 		});
 		return jsonResult({
 			action: "stop",
@@ -162,6 +192,25 @@ async function isDockerAvailable(): Promise<boolean> {
 	} catch {
 		return false;
 	}
+}
+
+async function waitForSolr(
+	ctx: ToolContext,
+	timeoutSeconds: number,
+): Promise<boolean> {
+	const deadline = Date.now() + timeoutSeconds * 1000;
+	while (Date.now() < deadline) {
+		try {
+			const res = await fetch(
+				`${ctx.config.solrUrl}/solr/admin/info/system?wt=json`,
+			);
+			if (res.ok) return true;
+		} catch {
+			// not ready yet
+		}
+		await new Promise((r) => setTimeout(r, 2000));
+	}
+	return false;
 }
 
 async function getCollectionInfo(

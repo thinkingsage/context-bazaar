@@ -6,39 +6,68 @@ Local and remote Solr setup for the Souk Compass semantic search server.
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 
+## Architecture
+
+Souk Compass runs Solr 9 in **SolrCloud mode** (single node) backed by ZooKeeper. This enables the Collections API for programmatic collection management via the `compass_setup` MCP tool.
+
+Components:
+- **souk-compass-solr** — Solr 9 in SolrCloud mode (port 8983)
+- **souk-compass-zoo** — ZooKeeper 3.9 for cluster coordination (port 2181)
+
 ## Quick Start
 
 From the `skill-forge/mcp-servers/souk-compass/` directory:
 
 ```bash
+# Start SolrCloud + ZooKeeper
 docker compose up -d
+
+# Upload the souk-compass configset to ZooKeeper
+docker exec souk-compass-solr solr zk upconfig \
+  -n souk-compass \
+  -d /opt/solr/server/solr/configsets/souk-compass/conf \
+  -z zoo:2181
+
+# Create collections (via MCP tool or curl)
+compass_setup { "action": "create_collections" }
 ```
 
-This starts a Solr 9.x instance on port 8983 with the `context-bazaar` collection pre-created using the bundled schema.
+Or create collections manually:
+
+```bash
+curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=context-bazaar&numShards=1&replicationFactor=1&collection.configName=souk-compass&wt=json"
+curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=context-bazaar-user-docs&numShards=1&replicationFactor=1&collection.configName=souk-compass&wt=json"
+```
 
 Verify it's running:
 
 ```bash
-curl http://localhost:8983/solr/admin/cores?action=STATUS
+curl "http://localhost:8983/solr/admin/info/system?wt=json" | python3 -c "import sys,json; print(json.load(sys.stdin).get('mode'))"
+# Should print: solrcloud
 ```
 
-## Creating Collections
+## Automated Setup
 
-Use the `compass_setup` MCP tool to create both the artifact and user document collections:
+The `compass_setup` MCP tool handles the full lifecycle:
 
 ```
-compass_setup { "action": "create_collections" }
+compass_setup { "action": "start" }              # Start containers + upload configset
+compass_setup { "action": "create_collections" }  # Create both collections
+compass_setup { "action": "check" }               # Verify status
+compass_setup { "action": "stop" }                # Stop containers
 ```
 
-Or create them manually via the Solr Collections API:
+The `start` action automatically uploads the `souk-compass` configset to ZooKeeper after the containers are healthy.
 
-```bash
-# Artifact collection (pre-created by docker compose)
-curl "http://localhost:8983/solr/admin/cores?action=STATUS&core=context-bazaar"
+## Configset
 
-# User document collection
-curl "http://localhost:8983/solr/admin/cores?action=CREATE&name=context-bazaar-user-docs&configSet=_default"
-```
+The custom schema lives in `solr/configset/conf/`:
+- `schema.xml` — Field definitions including the 1024-dim dense vector field
+- `solrconfig.xml` — Solr configuration (autocommit, request handlers)
+
+A copy of `schema.xml` is also kept at `solr/schema.xml` for reference.
+
+The configset is mounted into the Solr container and uploaded to ZooKeeper on startup. Collections reference it by name (`souk-compass`) via the `collection.configName` parameter.
 
 ## Stopping Solr
 
@@ -54,7 +83,7 @@ docker compose down -v
 
 ## Remote Solr Deployment
 
-For production or shared team use, point Souk Compass at a remote Solr instance by setting environment variables:
+For production or shared team use, point Souk Compass at a remote SolrCloud instance by setting environment variables:
 
 ```bash
 export SOUK_COMPASS_SOLR_URL=https://solr.example.com:8983
@@ -63,9 +92,10 @@ export SOUK_COMPASS_USER_COLLECTION=context-bazaar-user-docs
 ```
 
 Ensure the remote Solr instance has:
-1. The schema from `solr/schema.xml` applied to both collections
-2. Dense vector search enabled (Solr 9.x+)
-3. Network access from the machine running the MCP server
+1. The `souk-compass` configset uploaded
+2. Both collections created with `collection.configName=souk-compass`
+3. Dense vector search enabled (Solr 9.x+)
+4. Network access from the machine running the MCP server
 
 ## Environment Variables
 
@@ -76,7 +106,6 @@ Ensure the remote Solr instance has:
 | `SOUK_COMPASS_USER_COLLECTION` | `context-bazaar-user-docs` | User document collection name |
 | `SOUK_COMPASS_EMBED_PROVIDER` | `local` | Embedding provider (`local`, `bedrock-titan`) |
 | `SOUK_COMPASS_EMBED_DIMENSIONS` | `1024` | Embedding vector dimensions |
-
 
 ## Auto-Reindex Hook
 

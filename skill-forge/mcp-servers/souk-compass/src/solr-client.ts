@@ -221,18 +221,14 @@ export class SoukVectorClient {
 
 	/**
 	 * Health check — verify Solr is reachable and the collection exists.
+	 * Works in both standalone and SolrCloud modes.
 	 * Returns `true` if healthy, `false` otherwise (never throws).
 	 */
 	async health(): Promise<boolean> {
 		try {
-			const url = `${this.baseUrl}/solr/admin/cores?action=STATUS&wt=json`;
+			const url = `${this.baseUrl}/solr/${this.collection}/admin/ping?wt=json`;
 			const response = await fetch(url);
-			if (!response.ok) return false;
-
-			const body = (await response.json()) as {
-				status?: Record<string, unknown>;
-			};
-			return body.status != null && this.collection in body.status;
+			return response.ok;
 		} catch {
 			return false;
 		}
