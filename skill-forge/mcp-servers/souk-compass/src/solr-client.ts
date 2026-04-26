@@ -94,7 +94,7 @@ export class SoukVectorClient {
 		const queryText = options?.queryText ?? "";
 		const snippetLength = options?.snippetLength;
 
-		const params = new URLSearchParams({ wt: "json" });
+		const params = new URLSearchParams({ wt: "json", fl: "*,score" });
 
 		// Build kNN parser params string with earlyTermination and efSearchScaleFactor
 		const knnParams = this.buildKnnParams(topK);
@@ -103,9 +103,13 @@ export class SoukVectorClient {
 			params.set("q", `text:${queryText}`);
 			params.set("rows", String(topK));
 		} else if (mode === "hybrid") {
-			const escapedQueryText = queryText.replace(/'/g, "\\'");
-			const knnClause = `{!knn ${knnParams}}${JSON.stringify(queryEmbedding)}`;
-			const q = `{!func}sum(mul(scale(query({v='text:${escapedQueryText}'}),0,1),${1 - hybridWeight}),mul(scale(query({v='${knnClause}'}),0,1),${hybridWeight}))`;
+			// Use Solr parameter dereferencing ($v1, $v2) to avoid inline vector
+			// in nested function queries, which breaks the query parser.
+			const textQuery = `text:${queryText}`;
+			const knnQuery = `{!knn ${knnParams}}${JSON.stringify(queryEmbedding)}`;
+			params.set("v1", textQuery);
+			params.set("v2", knnQuery);
+			const q = `{!func}sum(mul(scale(query($v1),0,1),${1 - hybridWeight}),mul(scale(query($v2),0,1),${hybridWeight}))`;
 			params.set("q", q);
 			params.set("rows", String(topK));
 		} else {
@@ -125,8 +129,13 @@ export class SoukVectorClient {
 			params.set("hl.fragsize", String(snippetLength));
 		}
 
-		const url = `${this.baseUrl}/solr/${this.collection}/select?${params.toString()}`;
-		const response = await this.solrFetch(url);
+		// Use POST to avoid URI length limits with large vector embeddings
+		const url = `${this.baseUrl}/solr/${this.collection}/select`;
+		const response = await this.solrFetch(url, {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: params.toString(),
+		});
 		return (await response.json()) as SolrSearchResponse;
 	}
 
@@ -154,14 +163,20 @@ export class SoukVectorClient {
 			q: qParser,
 			rows: String(topK),
 			wt: "json",
+			fl: "*,score",
 		});
 
 		if (options?.filterQuery) {
 			params.set("fq", options.filterQuery);
 		}
 
-		const url = `${this.baseUrl}/solr/${this.collection}/select?${params.toString()}`;
-		const response = await this.solrFetch(url);
+		// Use POST to avoid URI length limits with large vector embeddings
+		const url = `${this.baseUrl}/solr/${this.collection}/select`;
+		const response = await this.solrFetch(url, {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: params.toString(),
+		});
 		return (await response.json()) as SolrSearchResponse;
 	}
 

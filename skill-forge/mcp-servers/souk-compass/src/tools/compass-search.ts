@@ -188,7 +188,13 @@ function parseResults(
 					snippet = highlighting[docId].text[0];
 				} else {
 					// Vector mode or no highlighting available: truncate text
-					const text = typeof doc.text === "string" ? doc.text : "";
+					const rawText = doc.text;
+					const text =
+						typeof rawText === "string"
+							? rawText
+							: Array.isArray(rawText) && rawText.length > 0
+								? String(rawText[0])
+								: "";
 					snippet = text.slice(0, snippetLength);
 				}
 

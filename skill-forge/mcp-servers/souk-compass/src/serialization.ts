@@ -53,27 +53,39 @@ export function toSolrDocument(
  * Validates output against SearchResultSchema; throws SoukCompassError on failure.
  */
 export function fromSolrDocument(doc: Record<string, unknown>): SearchResult {
-	const text = typeof doc.text === "string" ? doc.text : "";
-	const collectionNames =
-		typeof doc.collection_names === "string" && doc.collection_names !== ""
-			? doc.collection_names.split(",")
+	// Solr may return text fields as arrays (especially in SolrCloud mode)
+	const rawText = doc.text;
+	const text =
+		typeof rawText === "string"
+			? rawText
+			: Array.isArray(rawText) && rawText.length > 0
+				? String(rawText[0])
+				: "";
+
+	const rawCollections = doc.collection_names;
+	const collectionNames = Array.isArray(rawCollections)
+		? rawCollections.map(String)
+		: typeof rawCollections === "string" && rawCollections !== ""
+			? rawCollections.split(",")
 			: [];
 
 	const result = {
-		id: doc.id as string,
-		artifactName: doc.artifact_name as string | undefined,
-		displayName: doc.display_name as string | undefined,
-		type: doc.artifact_type as string | undefined,
+		id: String(Array.isArray(doc.id) ? doc.id[0] : doc.id),
+		artifactName: extractString(doc.artifact_name),
+		displayName: extractString(doc.display_name),
+		type: extractString(doc.artifact_type),
 		score: typeof doc.score === "number" ? doc.score : 0,
 		description: text.slice(0, 500),
-		maturity: doc.maturity as string | undefined,
+		text,
+		maturity: extractString(doc.maturity),
 		collections: collectionNames,
-		docSource: doc.doc_source as "artifact" | "user" | "memory",
-		snippet: typeof doc.snippet === "string" ? doc.snippet : undefined,
+		docSource: (extractString(doc.doc_source) ?? "artifact") as
+			| "artifact"
+			| "user"
+			| "memory",
 		chunkIndex:
 			typeof doc.chunk_index === "number" ? doc.chunk_index : undefined,
-		parentArtifact:
-			typeof doc.parent_artifact === "string" ? doc.parent_artifact : undefined,
+		parentArtifact: extractString(doc.parent_artifact),
 	};
 
 	try {
@@ -85,6 +97,13 @@ export function fromSolrDocument(doc: Record<string, unknown>): SearchResult {
 			{ cause: err },
 		);
 	}
+}
+
+/** Extract a string from a Solr field that may be a string or single-element array. */
+function extractString(value: unknown): string | undefined {
+	if (typeof value === "string") return value;
+	if (Array.isArray(value) && value.length > 0) return String(value[0]);
+	return undefined;
 }
 
 /**
