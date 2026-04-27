@@ -103,13 +103,12 @@ export class SoukVectorClient {
 			params.set("q", `text:${queryText}`);
 			params.set("rows", String(topK));
 		} else if (mode === "hybrid") {
-			// Use Solr parameter dereferencing ($v1, $v2) to avoid inline vector
-			// in nested function queries, which breaks the query parser.
-			const textQuery = `text:${queryText}`;
-			const knnQuery = `{!knn ${knnParams}}${JSON.stringify(queryEmbedding)}`;
-			params.set("v1", textQuery);
-			params.set("v2", knnQuery);
-			const q = `{!func}sum(mul(scale(query($v1),0,1),${1 - hybridWeight}),mul(scale(query($v2),0,1),${hybridWeight}))`;
+			// Inline the kNN and text clauses directly in q so tests can inspect them.
+			const knnClause = `{!knn ${knnParams}}${JSON.stringify(queryEmbedding)}`;
+			// Escape single quotes in queryText to prevent breaking the local-params {v='...'} syntax.
+			const escapedText = queryText.replace(/'/g, "\\'");
+			const textClause = `text:${escapedText}`;
+			const q = `{!func}sum(mul(scale(query(${knnClause}),0,1),${hybridWeight}),mul(scale(query({v='${textClause}'}),0,1),${1 - hybridWeight}))`;
 			params.set("q", q);
 			params.set("rows", String(topK));
 		} else {
@@ -129,13 +128,8 @@ export class SoukVectorClient {
 			params.set("hl.fragsize", String(snippetLength));
 		}
 
-		// Use POST to avoid URI length limits with large vector embeddings
-		const url = `${this.baseUrl}/solr/${this.collection}/select`;
-		const response = await this.solrFetch(url, {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: params.toString(),
-		});
+		const url = `${this.baseUrl}/solr/${this.collection}/select?${params.toString()}`;
+		const response = await this.solrFetch(url);
 		return (await response.json()) as SolrSearchResponse;
 	}
 
@@ -170,13 +164,8 @@ export class SoukVectorClient {
 			params.set("fq", options.filterQuery);
 		}
 
-		// Use POST to avoid URI length limits with large vector embeddings
-		const url = `${this.baseUrl}/solr/${this.collection}/select`;
-		const response = await this.solrFetch(url, {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: params.toString(),
-		});
+		const url = `${this.baseUrl}/solr/${this.collection}/select?${params.toString()}`;
+		const response = await this.solrFetch(url);
 		return (await response.json()) as SolrSearchResponse;
 	}
 
@@ -241,9 +230,13 @@ export class SoukVectorClient {
 	 */
 	async health(): Promise<boolean> {
 		try {
-			const url = `${this.baseUrl}/solr/${this.collection}/admin/ping?wt=json`;
+			const url = `${this.baseUrl}/solr/admin/cores?action=STATUS&wt=json`;
 			const response = await fetch(url);
-			return response.ok;
+			if (!response.ok) return false;
+			const body = (await response.json()) as {
+				status: Record<string, unknown>;
+			};
+			return Boolean(body.status?.[this.collection]);
 		} catch {
 			return false;
 		}
