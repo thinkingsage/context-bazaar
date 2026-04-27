@@ -309,7 +309,7 @@ describe("compass_setup — create_collections (extended)", () => {
 	});
 
 	test("non-'already exists' HTTP 4xx error includes HTTP status in error field", async () => {
-		// HTTP 409 with a body that does NOT include "already exists"
+		// HTTP 403 with a body that does NOT include "already exists"
 		fetchSpy.mockResolvedValueOnce(
 			new Response("Permission denied", { status: 403 }),
 		);

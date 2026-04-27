@@ -93,13 +93,11 @@ const HTTP_URL = "http://localhost:9000/embed";
 async function makeLocalProvider(
 	dimensions = 1024,
 	apiUrl?: string,
-): ReturnType<
-	typeof import("../providers/local-provider.js")["LocalEmbeddingProvider"]["prototype"]["embed"]
-> {
+) {
 	const { LocalEmbeddingProvider } = await import(
 		"../providers/local-provider.js"
 	);
-	return new LocalEmbeddingProvider({ dimensions, apiUrl }) as any;
+	return new LocalEmbeddingProvider({ dimensions, apiUrl });
 }
 
 /**
