@@ -45,11 +45,10 @@ let fakeTransformersOutput = new Float32Array(384).fill(0.5);
 let transformersShouldThrow = false;
 
 mock.module("@xenova/transformers", () => ({
-	pipeline: async () =>
-		async (_text: string, _opts: unknown) => {
-			if (transformersShouldThrow) throw new Error("model not found");
-			return { data: fakeTransformersOutput };
-		},
+	pipeline: async () => async (_text: string, _opts: unknown) => {
+		if (transformersShouldThrow) throw new Error("model not found");
+		return { data: fakeTransformersOutput };
+	},
 }));
 
 // ---------------------------------------------------------------------------
@@ -59,7 +58,9 @@ mock.module("@xenova/transformers", () => ({
 let bedrockEmbedding: number[] = Array(1024).fill(0.1);
 let bedrockShouldThrow: Error | null = null;
 let capturedBedrockRegion: string | undefined;
-let capturedBedrockBody: { inputText?: string; dimensions?: number } | undefined;
+let capturedBedrockBody:
+	| { inputText?: string; dimensions?: number }
+	| undefined;
 let capturedModelId: string | undefined;
 
 mock.module("@aws-sdk/client-bedrock-runtime", () => ({
@@ -90,10 +91,7 @@ mock.module("@aws-sdk/client-bedrock-runtime", () => ({
 
 const HTTP_URL = "http://localhost:9000/embed";
 
-async function makeLocalProvider(
-	dimensions = 1024,
-	apiUrl?: string,
-) {
+async function makeLocalProvider(dimensions = 1024, apiUrl?: string) {
 	const { LocalEmbeddingProvider } = await import(
 		"../providers/local-provider.js"
 	);
@@ -121,16 +119,16 @@ function installBedrockMock() {
 
 			constructor(config: { dimensions: number; region?: string }) {
 				this.dimensions = config.dimensions;
-				this.region =
-					config.region ?? process.env.AWS_REGION ?? "us-east-1";
+				this.region = config.region ?? process.env.AWS_REGION ?? "us-east-1";
 				capturedBedrockRegion = this.region;
 			}
 
 			async embed(text: string): Promise<number[]> {
 				const truncated = text.slice(0, 32_000);
 				try {
-					const { BedrockRuntimeClient, InvokeModelCommand } =
-						await import("@aws-sdk/client-bedrock-runtime");
+					const { BedrockRuntimeClient, InvokeModelCommand } = await import(
+						"@aws-sdk/client-bedrock-runtime"
+					);
 					const client = new BedrockRuntimeClient({
 						region: this.region,
 					});
@@ -145,9 +143,7 @@ function installBedrockMock() {
 					});
 					const response = await (client as any).send(command);
 					const body = JSON.parse(
-						new TextDecoder().decode(
-							(response as { body: Uint8Array }).body,
-						),
+						new TextDecoder().decode((response as { body: Uint8Array }).body),
 					) as { embedding: number[] };
 					return body.embedding;
 				} catch (err) {

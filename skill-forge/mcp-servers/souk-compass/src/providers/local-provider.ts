@@ -4,7 +4,9 @@ import { ErrorCodes, SoukCompassError } from "../errors.js";
 const MAX_INPUT_LENGTH = 32_000; // ~8k tokens rough estimate
 
 // Lazily initialised on first call to embedViaTransformers(); reused for all subsequent calls.
-let cachedTransformersPipeline: Awaited<ReturnType<typeof import("@xenova/transformers").pipeline>> | undefined;
+let cachedTransformersPipeline:
+	| Awaited<ReturnType<typeof import("@xenova/transformers").pipeline>>
+	| undefined;
 
 export class LocalEmbeddingProvider implements EmbeddingProvider {
 	readonly name = "transformers-local";

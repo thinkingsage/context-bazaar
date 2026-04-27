@@ -1,7 +1,7 @@
-import { SoukVectorClient } from "../solr-client.js";
 import { ErrorCodes, SoukCompassError } from "../errors.js";
 import type { CompassIndexDocumentInput } from "../schemas.js";
 import { toUserSolrDocument } from "../serialization.js";
+import { SoukVectorClient } from "../solr-client.js";
 import type { ToolContext, ToolResult } from "./types.js";
 
 export async function handleCompassIndexDocument(

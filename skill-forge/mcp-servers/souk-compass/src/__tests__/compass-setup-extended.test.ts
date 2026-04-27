@@ -20,14 +20,7 @@
  * cannot retroactively affect the cached execAsync binding. Those paths are
  * covered by the integration-level tool-handlers.test.ts.
  */
-import {
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	spyOn,
-	test,
-} from "bun:test";
+import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
 import type { SoukCompassConfig } from "../schemas.js";
 import type { SoukVectorClient } from "../solr-client.js";
 import type { ToolContext, ToolResult } from "../tools/types.js";
@@ -297,14 +290,12 @@ describe("compass_setup — create_collections (extended)", () => {
 
 	test("result always contains action:'create_collections'", async () => {
 		fetchSpy
-			.mockResolvedValueOnce(
-				new Response("{}", { status: 200 }),
-			)
-			.mockResolvedValueOnce(
-				new Response("{}", { status: 200 }),
-			);
+			.mockResolvedValueOnce(new Response("{}", { status: 200 }))
+			.mockResolvedValueOnce(new Response("{}", { status: 200 }));
 		const handler = await importSetup();
-		const data = parseResult(await handler({ action: "create_collections" }, makeCtx()));
+		const data = parseResult(
+			await handler({ action: "create_collections" }, makeCtx()),
+		);
 		expect(data.action).toBe("create_collections");
 	});
 
@@ -313,11 +304,11 @@ describe("compass_setup — create_collections (extended)", () => {
 		fetchSpy.mockResolvedValueOnce(
 			new Response("Permission denied", { status: 403 }),
 		);
-		fetchSpy.mockResolvedValueOnce(
-			new Response("{}", { status: 200 }),
-		);
+		fetchSpy.mockResolvedValueOnce(new Response("{}", { status: 200 }));
 		const handler = await importSetup();
-		const data = parseResult(await handler({ action: "create_collections" }, makeCtx()));
+		const data = parseResult(
+			await handler({ action: "create_collections" }, makeCtx()),
+		);
 		const cols = data.collections as Array<{
 			created: boolean;
 			error?: string;
@@ -332,7 +323,9 @@ describe("compass_setup — create_collections (extended)", () => {
 		);
 		fetchSpy.mockResolvedValueOnce(new Response("{}", { status: 200 }));
 		const handler = await importSetup();
-		const data = parseResult(await handler({ action: "create_collections" }, makeCtx()));
+		const data = parseResult(
+			await handler({ action: "create_collections" }, makeCtx()),
+		);
 		const col = (
 			data.collections as Array<{ created: boolean; error?: string }>
 		)[0];

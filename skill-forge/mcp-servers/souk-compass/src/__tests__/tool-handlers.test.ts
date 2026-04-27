@@ -868,10 +868,10 @@ describe("compass_index_document handler", () => {
 		// so we spy on fetch rather than the mock client to verify correct routing.
 		const fetchSpy = spyOn(globalThis, "fetch");
 		fetchSpy.mockResolvedValueOnce(
-			new Response(
-				JSON.stringify({ responseHeader: { status: 0 } }),
-				{ status: 200, headers: { "Content-Type": "application/json" } },
-			),
+			new Response(JSON.stringify({ responseHeader: { status: 0 } }), {
+				status: 200,
+				headers: { "Content-Type": "application/json" },
+			}),
 		);
 
 		const ctx = makeCtx();
