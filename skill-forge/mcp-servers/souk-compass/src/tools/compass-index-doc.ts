@@ -1,3 +1,4 @@
+import { SoukVectorClient } from "../solr-client.js";
 import { ErrorCodes, SoukCompassError } from "../errors.js";
 import type { CompassIndexDocumentInput } from "../schemas.js";
 import { toUserSolrDocument } from "../serialization.js";
@@ -16,7 +17,9 @@ export async function handleCompassIndexDocument(
 			input.metadata,
 		);
 
-		const client = input.collection ? ctx.userSolrClient : ctx.userSolrClient;
+		const client = input.collection
+			? new SoukVectorClient(ctx.config.solrUrl, input.collection)
+			: ctx.userSolrClient;
 		await client.upsert(doc.id, doc.text, doc.vector, extractMetadata(doc));
 
 		return jsonResult({

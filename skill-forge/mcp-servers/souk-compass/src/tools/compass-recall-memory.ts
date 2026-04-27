@@ -13,11 +13,11 @@ export async function handleCompassRecallMemory(
 		// Build filter: always include doc_source:"memory"
 		const filters: string[] = ['doc_source:"memory"'];
 		if (input.category) {
-			filters.push(`metadata_category:"${input.category}"`);
+			filters.push(`metadata_category:"${escapeSolrPhrase(input.category)}"`);
 		}
 		if (input.tags?.length) {
 			for (const tag of input.tags) {
-				filters.push(`metadata_tags:*${tag}*`);
+				filters.push(`metadata_tags:*${escapeSolrWildcard(tag)}*`);
 			}
 		}
 		const filterQuery = filters.join(" AND ");
@@ -75,4 +75,20 @@ function jsonResult(data: unknown): ToolResult {
 	return {
 		content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
 	};
+}
+
+/**
+ * Escape special Solr characters for use inside a double-quoted phrase.
+ * Only `\` and `"` need escaping within a quoted Solr string.
+ */
+function escapeSolrPhrase(value: string): string {
+	return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+/**
+ * Escape special Solr characters for use in a wildcard term context.
+ * Escapes everything except the leading/trailing `*` wildcards added by the caller.
+ */
+function escapeSolrWildcard(value: string): string {
+	return value.replace(/[+\-&|!(){}[\]^"~*?:\\/]/g, "\\$&");
 }

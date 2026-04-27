@@ -47,7 +47,12 @@ export class BedrockTitanProvider implements EmbeddingProvider {
 	}
 
 	async batchEmbed(texts: string[]): Promise<number[][]> {
-		// Bedrock Titan doesn't support batch — process sequentially
-		return Promise.all(texts.map((t) => this.embed(t)));
+		// Bedrock Titan doesn't support batch — process sequentially to stay within
+		// rate limits and avoid concurrent request bursts.
+		const results: number[][] = [];
+		for (const t of texts) {
+			results.push(await this.embed(t));
+		}
+		return results;
 	}
 }

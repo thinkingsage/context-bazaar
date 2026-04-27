@@ -65,7 +65,7 @@ describe(".mcp.json souk-compass entry", () => {
 
 	test("souk-compass entry has command and args", async () => {
 		const entry = (await Bun.file(mcpPath).json())["souk-compass"];
-		expect(entry.command).toBe("node");
+		expect(entry.command).toBe("bun");
 		expect(Array.isArray(entry.args)).toBe(true);
 		expect(entry.args.length).toBeGreaterThan(0);
 	});

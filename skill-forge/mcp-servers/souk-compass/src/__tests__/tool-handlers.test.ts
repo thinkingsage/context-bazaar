@@ -863,14 +863,18 @@ describe("compass_index_document handler", () => {
 
 	test("indexes with custom collection parameter", async () => {
 		const handleCompassIndexDocument = await importHandler();
-		let upsertCalled = false;
-		const ctx = makeCtx({
-			userSolrClient: makeMockSolrClient({
-				upsert: async () => {
-					upsertCalled = true;
-				},
-			}),
-		});
+
+		// The handler now creates a dedicated SoukVectorClient for custom collections,
+		// so we spy on fetch rather than the mock client to verify correct routing.
+		const fetchSpy = spyOn(globalThis, "fetch");
+		fetchSpy.mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({ responseHeader: { status: 0 } }),
+				{ status: 200, headers: { "Content-Type": "application/json" } },
+			),
+		);
+
+		const ctx = makeCtx();
 
 		const result = await handleCompassIndexDocument(
 			{
@@ -884,7 +888,13 @@ describe("compass_index_document handler", () => {
 
 		expect(data.indexed).toBe(true);
 		expect(data.collection).toBe("my-custom-collection");
-		expect(upsertCalled).toBe(true);
+
+		// Verify the upsert targeted the custom collection URL
+		expect(fetchSpy).toHaveBeenCalledTimes(1);
+		const [url] = fetchSpy.mock.calls[0] as [string];
+		expect(url).toContain("/solr/my-custom-collection/");
+
+		fetchSpy.mockRestore();
 	});
 
 	test("indexes with metadata", async () => {

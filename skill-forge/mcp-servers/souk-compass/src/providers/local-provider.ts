@@ -3,6 +3,9 @@ import { ErrorCodes, SoukCompassError } from "../errors.js";
 
 const MAX_INPUT_LENGTH = 32_000; // ~8k tokens rough estimate
 
+// Lazily initialised on first call to embedViaTransformers(); reused for all subsequent calls.
+let cachedTransformersPipeline: Awaited<ReturnType<typeof import("@xenova/transformers").pipeline>> | undefined;
+
 export class LocalEmbeddingProvider implements EmbeddingProvider {
 	readonly name = "transformers-local";
 	readonly dimensions: number;
@@ -24,8 +27,14 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
 	}
 
 	async batchEmbed(texts: string[]): Promise<number[][]> {
-		// Process sequentially to avoid overwhelming local resources
-		return Promise.all(texts.map((t) => this.embed(t)));
+		// Process sequentially to avoid overwhelming local resources (model loads,
+		// memory pressure, CPU saturation). Concurrent execution via Promise.all
+		// would load the pipeline multiple times and saturate available resources.
+		const results: number[][] = [];
+		for (const t of texts) {
+			results.push(await this.embed(t));
+		}
+		return results;
 	}
 
 	private async embedViaHttp(text: string): Promise<number[]> {
@@ -53,11 +62,14 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
 
 	private async embedViaTransformers(text: string): Promise<number[]> {
 		try {
-			const { pipeline } = await import("@xenova/transformers");
-			const extractor = await pipeline(
-				"feature-extraction",
-				"Xenova/all-MiniLM-L6-v2",
-			);
+			if (!cachedTransformersPipeline) {
+				const { pipeline } = await import("@xenova/transformers");
+				cachedTransformersPipeline = await pipeline(
+					"feature-extraction",
+					"Xenova/all-MiniLM-L6-v2",
+				);
+			}
+			const extractor = cachedTransformersPipeline;
 			const output = await extractor(text, {
 				pooling: "mean",
 				normalize: true,

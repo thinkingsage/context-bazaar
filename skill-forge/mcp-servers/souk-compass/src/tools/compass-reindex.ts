@@ -147,7 +147,9 @@ async function fetchExistingArtifactDocs(
 	ctx: ToolContext,
 ): Promise<Record<string, unknown>[]> {
 	const params = new URLSearchParams({
-		q: 'doc_source:"artifact"',
+		// Exclude chunk documents (id contains "__chunk_") so they are not
+		// mistakenly treated as top-level artifacts and deleted on reindex.
+		q: 'doc_source:"artifact" AND -id:*__chunk_*',
 		fl: "id,version,content_hash",
 		rows: "10000",
 		wt: "json",
@@ -171,8 +173,10 @@ async function fetchExistingArtifactDocs(
 	return body.response?.docs ?? [];
 }
 
-function extractMetadata(doc: Record<string, unknown>): Record<string, string> {
-	const meta: Record<string, string> = {};
+function extractMetadata(
+	doc: Record<string, unknown>,
+): Record<string, string | string[]> {
+	const meta: Record<string, string | string[]> = {};
 	const metadataKeys = [
 		"artifact_name",
 		"artifact_type",
@@ -187,7 +191,12 @@ function extractMetadata(doc: Record<string, unknown>): Record<string, string> {
 	];
 	for (const key of metadataKeys) {
 		if (doc[key] != null) {
-			meta[key] = String(doc[key]);
+			const val = doc[key];
+			if (Array.isArray(val)) {
+				meta[key] = val.map(String);
+			} else {
+				meta[key] = String(val);
+			}
 		}
 	}
 	return meta;

@@ -12,23 +12,27 @@ export interface WorkspaceFile {
 export function generateWorkspaceDescription(files: WorkspaceFile[]): string {
 	const parts: string[] = [];
 
-	for (const file of files) {
+	// Sort by path first so the same set of files always produces the same output
+	// regardless of the order in which the caller provides them.
+	const sortedFiles = [...files].sort((a, b) => a.path.localeCompare(b.path));
+
+	for (const file of sortedFiles) {
 		if (file.path.endsWith("package.json")) {
 			try {
 				const pkg = JSON.parse(file.content);
 				if (pkg.name) parts.push(`Project: ${pkg.name}`);
 				if (pkg.dependencies) {
 					parts.push(
-						`Dependencies: ${Object.keys(pkg.dependencies).join(", ")}`,
+						`Dependencies: ${Object.keys(pkg.dependencies).sort().join(", ")}`,
 					);
 				}
 				if (pkg.devDependencies) {
 					parts.push(
-						`Dev dependencies: ${Object.keys(pkg.devDependencies).join(", ")}`,
+						`Dev dependencies: ${Object.keys(pkg.devDependencies).sort().join(", ")}`,
 					);
 				}
 				if (pkg.scripts) {
-					parts.push(`Scripts: ${Object.keys(pkg.scripts).join(", ")}`);
+					parts.push(`Scripts: ${Object.keys(pkg.scripts).sort().join(", ")}`);
 				}
 			} catch {
 				/* ignore parse errors */

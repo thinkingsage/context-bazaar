@@ -2,12 +2,6 @@
 	"folders": [
 		{
 			"path": "../../.."
-		},
-		{
-			"path": "../../../../../Vibes"
-		},
-		{
-			"path": "../../../../jhu-aws-iac-ALICE"
 		}
 	],
 	"settings": {}

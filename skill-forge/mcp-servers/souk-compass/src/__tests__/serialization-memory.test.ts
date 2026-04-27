@@ -114,7 +114,8 @@ describe("generateWorkspaceDescription", () => {
 			},
 		];
 		const desc = generateWorkspaceDescription(files);
-		expect(desc).toContain("Dependencies: zod, express");
+		// Dependencies are sorted alphabetically for deterministic output
+		expect(desc).toContain("Dependencies: express, zod");
 	});
 
 	test("detects build tools from scripts in package.json", () => {
@@ -127,7 +128,8 @@ describe("generateWorkspaceDescription", () => {
 			},
 		];
 		const desc = generateWorkspaceDescription(files);
-		expect(desc).toContain("Scripts: build, test, lint");
+		// Scripts are sorted alphabetically for deterministic output
+		expect(desc).toContain("Scripts: build, lint, test");
 	});
 
 	test("detects TypeScript from tsconfig.json", () => {

@@ -65,8 +65,11 @@ async function indexSingle(
 					chunkDoc.text,
 					chunkDoc.vector,
 					extractMetadata(chunkDoc),
+					{ commit: false },
 				);
 			}
+
+			await ctx.solrClient.commit();
 
 			return jsonResult({
 				indexed: chunkDocs.length,
@@ -196,23 +199,24 @@ async function indexAll(
 
 function extractArtifactMetadata(
 	entry: Awaited<ReturnType<typeof loadCatalog>>[number],
-): Record<string, string> {
-	const meta: Record<string, string> = {};
+): Record<string, string | string[]> {
+	const meta: Record<string, string | string[]> = {};
 	if (entry.name) meta.artifact_name = entry.name;
 	if (entry.type) meta.artifact_type = entry.type;
 	if (entry.displayName) meta.display_name = entry.displayName;
 	if (entry.maturity) meta.maturity = entry.maturity;
-	if (entry.collections?.length)
-		meta.collection_names = entry.collections.join(",");
-	if (entry.keywords?.length) meta.keywords = entry.keywords.join(",");
+	if (entry.collections?.length) meta.collection_names = entry.collections;
+	if (entry.keywords?.length) meta.keywords = entry.keywords;
 	if (entry.author) meta.author = entry.author;
 	if (entry.version) meta.version = entry.version;
 	meta.doc_source = "artifact";
 	return meta;
 }
 
-function extractMetadata(doc: Record<string, unknown>): Record<string, string> {
-	const meta: Record<string, string> = {};
+function extractMetadata(
+	doc: Record<string, unknown>,
+): Record<string, string | string[]> {
+	const meta: Record<string, string | string[]> = {};
 	const metadataKeys = [
 		"artifact_name",
 		"artifact_type",
@@ -229,7 +233,12 @@ function extractMetadata(doc: Record<string, unknown>): Record<string, string> {
 	];
 	for (const key of metadataKeys) {
 		if (doc[key] != null) {
-			meta[key] = String(doc[key]);
+			const val = doc[key];
+			if (Array.isArray(val)) {
+				meta[key] = val.map(String);
+			} else {
+				meta[key] = String(val);
+			}
 		}
 	}
 	return meta;

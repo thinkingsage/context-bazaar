@@ -143,6 +143,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 						type: "boolean",
 						description: "Index all artifacts in the catalog.",
 					},
+					chunked: {
+						type: "boolean",
+						description:
+							"Split artifact content into chunks before indexing (default: false).",
+					},
 				},
 			},
 		},
@@ -179,6 +184,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 						enum: ["artifacts", "documents", "all"],
 						description:
 							"Search scope: artifacts, documents, or all (default: artifacts).",
+					},
+					mode: {
+						type: "string",
+						enum: ["vector", "keyword", "hybrid"],
+						description:
+							"Search mode: vector (kNN), keyword (BM25), or hybrid (default: hybrid).",
+					},
+					hybridWeight: {
+						type: "number",
+						description:
+							"Weight given to vector results vs keyword results in hybrid mode, 0–1 (default: 0.5).",
+					},
+					snippetLength: {
+						type: "number",
+						description:
+							"Maximum character length of highlighted text snippets (default: 200).",
+					},
+					minScore: {
+						type: "number",
+						description:
+							"Minimum relevance score threshold, 0–1. Omit to return all results.",
 					},
 					includeContent: {
 						type: "boolean",

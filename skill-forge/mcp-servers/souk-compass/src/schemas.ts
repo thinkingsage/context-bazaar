@@ -1,3 +1,5 @@
+import { homedir } from "node:os";
+import { join } from "node:path";
 import { z } from "zod";
 
 // ---------------------------------------------------------------------------
@@ -13,7 +15,9 @@ export const SoukCompassConfigSchema = z.object({
 	cacheTiers: z
 		.array(z.enum(["memory", "sqlite", "solr"]))
 		.default(["memory", "sqlite", "solr"]),
-	cacheDbPath: z.string().default("~/.souk-compass/embed-cache.db"),
+	cacheDbPath: z
+		.string()
+		.default(() => join(homedir(), ".souk-compass", "embed-cache.db")),
 	embedCacheSize: z.number().int().positive().default(1000),
 	defaultMinScore: z.number().min(0).max(1).optional(),
 	efSearchScaleFactor: z.number().positive().default(1.0),
@@ -34,8 +38,8 @@ export const SolrDocumentSchema = z
 		artifact_type: z.string().optional(),
 		display_name: z.string().optional(),
 		maturity: z.string().optional(),
-		collection_names: z.string().optional(),
-		keywords: z.string().optional(),
+		collection_names: z.union([z.string(), z.array(z.string())]).optional(),
+		keywords: z.union([z.string(), z.array(z.string())]).optional(),
 		author: z.string().optional(),
 		version: z.string().optional(),
 		doc_source: z.enum(["artifact", "user", "memory"]),
