@@ -105,8 +105,8 @@ export class SoukVectorClient {
 		} else if (mode === "hybrid") {
 			// Inline the kNN and text clauses directly in q so tests can inspect them.
 			const knnClause = `{!knn ${knnParams}}${JSON.stringify(queryEmbedding)}`;
-			// Escape single quotes in queryText to prevent breaking the local-params {v='...'} syntax.
-			const escapedText = queryText.replace(/'/g, "\\'");
+			// Escape backslashes and single quotes in queryText to preserve local-params {v='...'} syntax.
+			const escapedText = queryText.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 			const textClause = `text:${escapedText}`;
 			const q = `{!func}sum(mul(scale(query(${knnClause}),0,1),${hybridWeight}),mul(scale(query({v='${textClause}'}),0,1),${1 - hybridWeight}))`;
 			params.set("q", q);
