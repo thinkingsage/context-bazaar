@@ -1,4 +1,14 @@
 #!/usr/bin/env bun
+
+if (typeof globalThis.Bun === "undefined") {
+	console.error(
+		"Error: Skill Forge requires Bun (https://bun.sh) to run.\n" +
+			"Install it with: curl -fsSL https://bun.sh/install | bash\n" +
+			"Then run: bunx @jhu-sheridan-libraries/skill-forge <command>",
+	);
+	process.exit(1);
+}
+
 import chalk from "chalk";
 import { Command } from "commander";
 import { browseCommand, exportCommand } from "./browse";
