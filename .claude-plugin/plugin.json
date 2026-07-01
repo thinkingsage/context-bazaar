@@ -9,7 +9,7 @@
   "homepage": "https://github.com/thinkingsage/context-bazaar",
   "license": "BSL-1.0",
   "keywords": [
-    "claude-code", "kiro", "copilot", "cursor", "windsurf",
+    "claude-code", "kiro", "codex", "copilot", "cursor", "windsurf",
     "knowledge", "skills", "powers", "workflows", "prompts",
     "ai-coding", "context", "bazaar",
     "semantic-search", "vector-search", "solr", "embeddings"

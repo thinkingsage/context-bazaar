@@ -17,7 +17,7 @@
       "category": "productivity",
       "homepage": "https://github.com/thinkingsage/context-bazaar",
       "tags": [
-        "knowledge", "skills", "powers", "kiro", "claude-code",
+        "knowledge", "skills", "powers", "kiro", "claude-code", "codex",
         "copilot", "cursor", "ai-coding", "context", "bazaar",
         "writing", "developer-workflow",
         "semantic-search", "vector-search", "solr"

@@ -7,16 +7,18 @@ Skill Forge is a CLI tool that lets you author **knowledge artifacts** (skills, 
 ## Quick Start
 
 ```bash
-# Clone and install
-git clone https://github.com/jhu-sheridan-libraries/skill-forge.git
-cd skill-forge
-bun install
-
 # Build all artifacts for all harnesses
-bun run dev build
+forge build
 
 # Build for a single harness
-bun run dev build --harness kiro
+forge build --harness kiro
+
+# Validate artifacts (including security checks)
+forge validate
+forge validate --security
+
+# Browse the catalog in your browser
+forge catalog browse
 
 # Validate artifacts (including security checks)
 bun run dev validate
@@ -26,10 +28,10 @@ bun run dev validate --security
 bun run dev catalog browse
 
 # Install into your project
-bun run dev install my-artifact --harness kiro --source .
+forge install my-artifact --harness kiro --source .
 
 # Scaffold a new knowledge artifact
-bun run dev new my-artifact
+forge new my-artifact
 
 # Guided walkthrough for first-time authors
 bun run dev tutorial
