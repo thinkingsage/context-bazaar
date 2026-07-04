@@ -121,6 +121,7 @@ describe("codeshop spec-hooks — example-based tests", () => {
 			test(`${expected.name} has conditional branches`, () => {
 				const hook = findHook(expected.name);
 				expect(hook).toBeDefined();
+				// biome-ignore lint/style/noNonNullAssertion: guarded by toBeDefined() above
 				const prompt = hook!.then.prompt;
 
 				// Match branch: "If the task matches" or "If the task is the first task"
@@ -150,6 +151,7 @@ describe("codeshop spec-hooks — example-based tests", () => {
 			test(`${expected.name} (pre-task) contains an either/or directive`, () => {
 				const hook = findHook(expected.name);
 				expect(hook).toBeDefined();
+				// biome-ignore lint/style/noNonNullAssertion: guarded by toBeDefined() above
 				const prompt = hook!.then.prompt;
 
 				// Pre-task hooks have conditional logic and use "Either ... or ..."
@@ -161,11 +163,13 @@ describe("codeshop spec-hooks — example-based tests", () => {
 			test(`${expected.name} (post-task) ends with a concrete directive`, () => {
 				const hook = findHook(expected.name);
 				expect(hook).toBeDefined();
+				// biome-ignore lint/style/noNonNullAssertion: guarded by toBeDefined() above
 				const prompt = hook!.then.prompt.trim();
 
 				// Post-task hooks are unconditional — they end with a direct
 				// imperative like "Load the X workflow and confirm/present..."
 				// Extract the last line/paragraph as the closing directive
+				// biome-ignore lint/style/noNonNullAssertion: split().pop() on non-empty string is safe
 				const lastParagraph = prompt.split("\n\n").pop()!.trim();
 				expect(lastParagraph.length).toBeGreaterThan(0);
 				// The closing directive should reference the steering file

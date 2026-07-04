@@ -189,7 +189,6 @@ describe("Build pipeline: Kiro inclusion summary and threshold warning", () => {
 	test("all-always with strict mode promotes threshold warning to errors", async () => {
 		const opts = makeBuildOptions({ strict: true });
 		// biome-ignore lint/style/noNonNullAssertion: test helper guarantees knowledgeDir is set
-		// biome-ignore lint/style/noNonNullAssertion: test helper guarantees knowledgeDir
 		await mkdir(opts.knowledgeDir!, { recursive: true });
 		await mkdir(opts.mcpServersDir, { recursive: true });
 

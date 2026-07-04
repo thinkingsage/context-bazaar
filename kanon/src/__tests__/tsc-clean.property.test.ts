@@ -9,7 +9,7 @@
  *
  * This test is EXPECTED TO FAIL on unfixed code — failure confirms the bug exists.
  */
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { execSync } from "node:child_process";
 import { resolve } from "node:path";
 
@@ -187,5 +187,5 @@ describe("Bug Condition: TypeScript Type Errors", () => {
 		// The assertion: tsc should exit cleanly with zero errors
 		expect(exitCode).toBe(0);
 		expect(result.total).toBe(0);
-	});
+	}, 120_000);
 });

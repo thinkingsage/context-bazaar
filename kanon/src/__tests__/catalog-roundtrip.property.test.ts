@@ -78,7 +78,12 @@ const catalogEntryArb: fc.Arbitrary<CatalogEntry> = fc.record({
 	collections: fc.array(kebabCaseString(), { maxLength: 3 }),
 	changelog: fc.boolean(),
 	migrations: fc.boolean(),
-	features: fc.constant({ hooks: false, mcp: false, workflows: false, conditionalInclusion: false }),
+	features: fc.constant({
+		hooks: false,
+		mcp: false,
+		workflows: false,
+		conditionalInclusion: false,
+	}),
 	visibility: fc.constant("public" as const),
 	priority: fc.integer({ min: 1, max: 100 }),
 	outcomes: fc.constant([]),

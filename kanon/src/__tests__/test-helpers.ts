@@ -83,7 +83,12 @@ export function makeCatalogEntry(
 		collections: [],
 		changelog: false,
 		migrations: false,
-		features: { hooks: false, mcp: false, workflows: false, conditionalInclusion: false },
+		features: {
+			hooks: false,
+			mcp: false,
+			workflows: false,
+			conditionalInclusion: false,
+		},
 		visibility: "public",
 		priority: 50,
 		outcomes: [],

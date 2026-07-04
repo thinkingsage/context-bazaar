@@ -297,8 +297,12 @@ describe("Schema round-trip properties", () => {
 
 				// Verify field equivalence
 				expect(revalidated.data.name).toBe(mcp.name);
-				expect((revalidated.data as StdioMcpServer).command).toBe((mcp as StdioMcpServer).command);
-				expect((revalidated.data as StdioMcpServer).args).toEqual((mcp as StdioMcpServer).args);
+				expect((revalidated.data as StdioMcpServer).command).toBe(
+					(mcp as StdioMcpServer).command,
+				);
+				expect((revalidated.data as StdioMcpServer).args).toEqual(
+					(mcp as StdioMcpServer).args,
+				);
 				expect(revalidated.data.env).toEqual(mcp.env);
 			}),
 			{ numRuns: 100 },

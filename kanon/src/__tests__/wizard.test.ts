@@ -904,7 +904,10 @@ describe("runWizard", () => {
 		expect(result.mcpServers).toHaveLength(1);
 		expect(result.mcpServers[0].name).toBe("my-server");
 		expect((result.mcpServers[0] as StdioMcpServer).command).toBe("npx");
-		expect((result.mcpServers[0] as StdioMcpServer).args).toEqual(["-y", "@my/server"]);
+		expect((result.mcpServers[0] as StdioMcpServer).args).toEqual([
+			"-y",
+			"@my/server",
+		]);
 		expect(result.mcpServers[0].env).toEqual({ API_KEY: "abc123" });
 	});
 });

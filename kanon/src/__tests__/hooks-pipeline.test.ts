@@ -262,8 +262,10 @@ describe("runPipeline — multiple hooks with mixed gate pass/fail", () => {
 
 	test("mixed gates combined with a postcondition halt stop processing at the halt", () => {
 		const resolve: ResolvePredicates = (hook) => {
-			if (hook.name === "skip-me") return { tests_pass: false } as Record<string, boolean>;
-			if (hook.name === "halt-me") return { lint_clean: false } as Record<string, boolean>;
+			if (hook.name === "skip-me")
+				return { tests_pass: false } as Record<string, boolean>;
+			if (hook.name === "halt-me")
+				return { lint_clean: false } as Record<string, boolean>;
 			return { tests_pass: true } as Record<string, boolean>;
 		};
 

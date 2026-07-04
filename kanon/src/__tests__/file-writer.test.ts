@@ -330,8 +330,12 @@ describe("File writer properties", () => {
 						const roundTripped = parsed[i];
 
 						expect(roundTripped.name).toBe(original.name);
-						expect((roundTripped as StdioMcpServer).command).toBe((original as StdioMcpServer).command);
-						expect((roundTripped as StdioMcpServer).args).toEqual((original as StdioMcpServer).args);
+						expect((roundTripped as StdioMcpServer).command).toBe(
+							(original as StdioMcpServer).command,
+						);
+						expect((roundTripped as StdioMcpServer).args).toEqual(
+							(original as StdioMcpServer).args,
+						);
 						expect(roundTripped.env).toEqual(original.env);
 					}
 				}
