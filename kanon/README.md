@@ -65,7 +65,7 @@ The deprecated `forge` alias remains available for one release, so existing Skil
 | Harness | Output Formats |
 |---------|---------------|
 | **Kiro** | Steering files, hooks, powers, skills |
-| **Claude Code** | CLAUDE.md, settings.json, MCP config |
+| **Claude Code** | CLAUDE.md, native skills, settings.json, MCP config |
 | **OpenAI Codex** | AGENTS.md, native skills, MCP config |
 | **GitHub Copilot** | Instructions, path-scoped instructions, AGENTS.md |
 | **Cursor** | Rules, MCP config |

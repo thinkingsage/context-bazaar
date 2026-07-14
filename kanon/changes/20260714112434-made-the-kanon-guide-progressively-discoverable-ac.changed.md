@@ -1,0 +1,1 @@
+Made the Kanon guide progressively discoverable across Kiro, Claude Code, and Codex, with current skill paths, cross-harness eval inputs, output-size contract checks, and accurate Temper reports for native workflow references.

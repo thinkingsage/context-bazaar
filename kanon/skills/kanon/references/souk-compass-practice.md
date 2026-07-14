@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Optional Practice: Semantic Search with Souk Compass
 
 ## Purpose

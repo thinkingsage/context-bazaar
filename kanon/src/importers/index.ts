@@ -23,11 +23,16 @@ import { parseWindsurf } from "./windsurf";
  */
 export const HARNESS_NATIVE_PATHS: Record<HarnessName, string[]> = {
 	kiro: [".kiro/steering/*.md", ".kiro/skills/*/SKILL.md"],
-	"claude-code": ["CLAUDE.md", ".claude/settings.json"],
+	"claude-code": [
+		"CLAUDE.md",
+		".claude/skills/*/SKILL.md",
+		".claude/settings.json",
+		".claude/mcp.json",
+	],
 	codex: [
 		"AGENTS.md",
-		".codex/skills/*/SKILL.md",
 		".agents/skills/*/SKILL.md",
+		".codex/skills/*/SKILL.md",
 		".codex/config.toml",
 	],
 	copilot: [

@@ -2,10 +2,22 @@ import { resolveFormat } from "../format-registry";
 import { renderTemplate } from "../template-engine";
 import type { HarnessCapabilityName } from "./capabilities";
 import { applyDegradation } from "./degradation";
-import type { AdapterWarning, HarnessAdapter, OutputFile } from "./types";
+import type {
+	AdapterError,
+	AdapterWarning,
+	HarnessAdapter,
+	OutputFile,
+} from "./types";
 import { buildMcpConfig } from "./types";
 
 const SUPPORTED_CLAUDE_EVENTS = new Set(["agent_stop"]);
+
+/** Claude's published authoring recommendation for the main skill file. */
+export const CLAUDE_SKILL_MAX_LINES = 500;
+
+function lineCount(value: string): number {
+	return value.length === 0 ? 0 : value.split(/\r?\n/).length;
+}
 
 export const claudeCodeAdapter: HarnessAdapter = (
 	artifact,
@@ -14,6 +26,15 @@ export const claudeCodeAdapter: HarnessAdapter = (
 ) => {
 	const files: OutputFile[] = [];
 	const warnings: AdapterWarning[] = [];
+	const errors: AdapterError[] = [];
+	const harnessConfig = (artifact.frontmatter as Record<string, unknown>)[
+		"harness-config"
+	] as Record<string, unknown> | undefined;
+	const claudeCodeConfig = (harnessConfig?.["claude-code"] ?? {}) as Record<
+		string,
+		unknown
+	>;
+	const { format } = resolveFormat("claude-code", claudeCodeConfig);
 
 	// Capability degradation checks
 	if (context) {
@@ -23,7 +44,10 @@ export const claudeCodeAdapter: HarnessAdapter = (
 		}> = [
 			{ capability: "hooks", hasFeature: artifact.hooks.length > 0 },
 			{ capability: "mcp", hasFeature: artifact.mcpServers.length > 0 },
-			{ capability: "workflows", hasFeature: artifact.workflows.length > 0 },
+			{
+				capability: "workflows",
+				hasFeature: artifact.workflows.length > 0 && format !== "skill",
+			},
 		];
 		for (const { capability, hasFeature } of checks) {
 			if (!hasFeature) continue;
@@ -47,22 +71,52 @@ export const claudeCodeAdapter: HarnessAdapter = (
 		}
 	}
 
-	const harnessConfig = (artifact.frontmatter as Record<string, unknown>)[
-		"harness-config"
-	] as Record<string, unknown> | undefined;
-	const claudeCodeConfig = (harnessConfig?.["claude-code"] ?? {}) as Record<
-		string,
-		unknown
-	>;
-	resolveFormat("claude-code", claudeCodeConfig);
+	if (format === "skill") {
+		const skillName = artifact.name;
+		const skillContent = renderTemplate(
+			templateEnv,
+			"claude-code/skill.md.njk",
+			{ artifact },
+		);
+		files.push({
+			relativePath: `.claude/skills/${skillName}/SKILL.md`,
+			content: skillContent,
+		});
 
-	// Generate CLAUDE.md
-	const claudeContent = renderTemplate(
-		templateEnv,
-		"claude-code/claude.md.njk",
-		{ artifact },
-	);
-	files.push({ relativePath: "CLAUDE.md", content: claudeContent });
+		const lines = lineCount(skillContent);
+		if (lines >= CLAUDE_SKILL_MAX_LINES) {
+			const message =
+				`SKILL.md is ${lines} lines; Claude recommends keeping it under ` +
+				`${CLAUDE_SKILL_MAX_LINES} lines and moving detail into supporting files.`;
+			warnings.push({
+				artifactName: artifact.name,
+				harnessName: "claude-code",
+				message,
+			});
+			if (context?.strict) {
+				errors.push({
+					artifactName: artifact.name,
+					harnessName: "claude-code",
+					message,
+					field: `.claude/skills/${skillName}/SKILL.md`,
+				});
+			}
+		}
+
+		for (const workflow of artifact.workflows) {
+			files.push({
+				relativePath: `.claude/skills/${skillName}/references/${workflow.filename}`,
+				content: workflow.content,
+			});
+		}
+	} else {
+		const claudeContent = renderTemplate(
+			templateEnv,
+			"claude-code/claude.md.njk",
+			{ artifact },
+		);
+		files.push({ relativePath: "CLAUDE.md", content: claudeContent });
+	}
 
 	// Translate agent_stop + run_command hooks to .claude/settings.json
 	const stopHooks: Array<{ command: string }> = [];
@@ -106,5 +160,5 @@ export const claudeCodeAdapter: HarnessAdapter = (
 		files.push({ relativePath: ".claude/mcp.json", content: mcpContent });
 	}
 
-	return { files, warnings };
+	return { files, warnings, errors: errors.length > 0 ? errors : undefined };
 };

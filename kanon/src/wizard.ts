@@ -198,7 +198,7 @@ export async function promptFrontmatter(
 		kiro: "Steering files or powers for Kiro IDE",
 		cursor: "Rule files for Cursor",
 		copilot: "Instructions or agents for GitHub Copilot",
-		"claude-code": "CLAUDE.md for Claude Code",
+		"claude-code": "CLAUDE.md or skills for Claude Code",
 		codex: "AGENTS.md and skills for OpenAI Codex",
 		windsurf: "Rule files for Windsurf",
 		cline: "Rule files for Cline",
@@ -226,9 +226,14 @@ export async function promptFrontmatter(
 			instructions: "A copilot-instructions.md file for GitHub Copilot",
 			agent: "An AGENTS.md file for GitHub Copilot agents",
 		},
+		"claude-code": {
+			"claude-md":
+				"A CLAUDE.md project guide loaded into every Claude Code session",
+			skill: "A discoverable skill under .claude/skills/<name>/SKILL.md",
+		},
 		codex: {
 			"agents-md": "An AGENTS.md repo guide loaded into every Codex session",
-			skill: "A discoverable skill under .codex/skills/<name>/SKILL.md",
+			skill: "A discoverable skill under .agents/skills/<name>/SKILL.md",
 		},
 		qdeveloper: {
 			rule: "A rule file in .q/rules/",

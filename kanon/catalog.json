@@ -1297,7 +1297,7 @@
       "agent-scaffolding"
     ],
     "author": "robin (revfactory), adapted for Kanon by Steven J. Miklovic",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "harnesses": [
       "kiro",
       "claude-code",
@@ -1674,10 +1674,11 @@
       "harness-compilation"
     ],
     "author": "Johns Hopkins DRCC",
-    "version": "0.2.3",
+    "version": "0.2.6",
     "harnesses": [
       "kiro",
-      "claude-code"
+      "claude-code",
+      "codex"
     ],
     "type": "skill",
     "path": "knowledge/kanon",
@@ -1693,7 +1694,8 @@
     "enhances": [],
     "formatByHarness": {
       "kiro": "power",
-      "claude-code": "claude-md"
+      "claude-code": "skill",
+      "codex": "skill"
     },
     "features": {
       "hooks": false,
@@ -1727,7 +1729,7 @@
       "best-practices"
     ],
     "author": "Andrej Karpathy (packaged by Forrest Chang)",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "harnesses": [
       "kiro",
       "claude-code",
@@ -1735,7 +1737,8 @@
       "cursor",
       "windsurf",
       "cline",
-      "qdeveloper"
+      "qdeveloper",
+      "codex"
     ],
     "type": "skill",
     "path": "knowledge/karpathy-mode",
@@ -1755,7 +1758,8 @@
       "cursor": "rule",
       "windsurf": "rule",
       "cline": "rule",
-      "qdeveloper": "rule"
+      "qdeveloper": "rule",
+      "codex": "agents-md"
     },
     "features": {
       "hooks": true,
@@ -1786,10 +1790,11 @@
       "concise-responses"
     ],
     "author": "kanon",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "harnesses": [
       "kiro",
-      "claude-code"
+      "claude-code",
+      "codex"
     ],
     "type": "skill",
     "path": "knowledge/laconic-output",
@@ -1804,7 +1809,8 @@
     "enhances": [],
     "formatByHarness": {
       "kiro": "steering",
-      "claude-code": "claude-md"
+      "claude-code": "claude-md",
+      "codex": "agents-md"
     },
     "features": {
       "hooks": false,

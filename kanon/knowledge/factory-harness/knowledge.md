@@ -18,7 +18,7 @@ keywords:
   - hierarchical-delegation
   - agent-scaffolding
 author: robin (revfactory), adapted for Kanon by Steven J. Miklovic
-version: 0.1.0
+version: 0.1.1
 harnesses:
   - kiro
   - claude-code
@@ -55,7 +55,7 @@ orchestration, validates the result, and keeps it evolving.
 It compiles to three harnesses and realizes the same team natively on each:
 
 - **Claude Code** — agent teams (`.claude/agents/`) + skills (`.claude/skills/`), self-coordinating through team messaging, with a `CLAUDE.md` pointer.
-- **Codex** — repo-local skills (`.codex/skills/<name>/SKILL.md`) + a short always-loaded `AGENTS.md`, coordinating through file-based handoffs in `_workspace/`.
+- **Codex** — repo-local skills (`.agents/skills/<name>/SKILL.md`) + a short always-loaded `AGENTS.md`, coordinating through file-based handoffs in `_workspace/`.
 - **Kiro** — a power (`POWER.md` + steering) with agent hooks for automation and specs for structured execution.
 
 ## Core Principles
@@ -128,7 +128,7 @@ specialities earn their keep — read `reference-harness-realization` for the
 full mapping, file layouts, and per-harness checklists. In short:
 
 - **Claude Code** — generate `.claude/agents/{role}.md` and `.claude/skills/{name}/SKILL.md`; default to an agent team that self-coordinates; register a minimal pointer in `CLAUDE.md`. Agent teams and sub-agents are first-class.
-- **Codex** — generate `.codex/skills/{name}/SKILL.md` (frontmatter + lean body + `references/`) and a short, pointer-heavy `AGENTS.md`; coordinate through deterministic `_workspace/{phase}_{role}_{artifact}.md` handoffs; register MCP servers in `.codex/config.toml`. Keep recovery logic rippable.
+- **Codex** — generate `.agents/skills/{name}/SKILL.md` (frontmatter + lean body + `references/`) and a short, pointer-heavy `AGENTS.md`; coordinate through deterministic `_workspace/{phase}_{role}_{artifact}.md` handoffs; register MCP servers in `.codex/config.toml`. Keep recovery logic rippable.
 - **Kiro** — generate a power (`POWER.md` + `steering/`), use **agent hooks** for automation (post-task validation, manual harness audit) and **specs** for structured multi-step execution; register MCP servers in `mcp.json`.
 
 ## Skill Authoring Principles

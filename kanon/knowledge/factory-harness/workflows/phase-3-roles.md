@@ -4,8 +4,9 @@ role must persist as a file to be reusable next session.
 ## 3-0. Dedup First
 
 Before creating an agent, check the existing roster (`.claude/agents/`,
-`.codex/skills/` role briefs, Kiro steering). Repeated harness builds accumulate
-overlapping roles under different names. Reuse or generalize instead of cloning.
+`.agents/skills/` Codex role briefs, Kiro steering). Repeated harness builds
+accumulate overlapping roles under different names. Reuse or generalize instead
+of cloning.
 
 ## Required Sections
 

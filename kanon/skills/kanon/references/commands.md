@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Kanon Command Reference
 
 Complete reference for every Kanon CLI command. All commands are run from the `kanon/` directory using `bun run dev <command>`.

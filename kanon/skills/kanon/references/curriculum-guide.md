@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Kanon Curriculum Guide for Johns Hopkins Libraries Staff
 
 ## Purpose

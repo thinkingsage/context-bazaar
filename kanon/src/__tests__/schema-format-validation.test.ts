@@ -41,6 +41,15 @@ describe("FrontmatterSchema per-harness format validation", () => {
 			expect(result.success).toBe(true);
 		});
 
+		test("claude-code format: skill passes", () => {
+			const result = FrontmatterSchema.safeParse({
+				...baseFrontmatter,
+				harnesses: ["claude-code"],
+				"harness-config": { "claude-code": { format: "skill" } },
+			});
+			expect(result.success).toBe(true);
+		});
+
 		test("qdeveloper format: rule passes", () => {
 			const result = FrontmatterSchema.safeParse({
 				...baseFrontmatter,

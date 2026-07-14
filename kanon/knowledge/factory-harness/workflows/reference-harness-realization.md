@@ -37,8 +37,8 @@ File layout:
 
 ```
 AGENTS.md                              # short, repo-wide WHAT/WHY/HOW + pointer
-.codex/skills/{name}/SKILL.md          # frontmatter + lean body
-.codex/skills/{name}/references/*      # progressive-disclosure detail
+.agents/skills/{name}/SKILL.md         # frontmatter + lean body
+.agents/skills/{name}/references/*     # progressive-disclosure detail
 .codex/config.toml                     # [mcp_servers.<name>] entries
 _workspace/{phase}_{role}_{artifact}.md # deterministic handoffs
 docs/harness/{domain}/team-spec.md     # role topology, handoffs, failure policy

@@ -80,6 +80,18 @@ describe("detectHarnessFiles", () => {
 		expect(result["claude-code"]).toContain("CLAUDE.md");
 	});
 
+	test("detects .claude/skills/*/SKILL.md for claude-code", async () => {
+		await mkdir(join(tempDir, ".claude", "skills", "my-skill"), {
+			recursive: true,
+		});
+		await writeFile(
+			join(tempDir, ".claude", "skills", "my-skill", "SKILL.md"),
+			"# Skill",
+		);
+		const result = await detectHarnessFiles(tempDir);
+		expect(result["claude-code"]).toContain(".claude/skills/my-skill/SKILL.md");
+	});
+
 	test("detects .cursorrules for cursor", async () => {
 		await writeFile(join(tempDir, ".cursorrules"), "# Cursor rules");
 		const result = await detectHarnessFiles(tempDir);
@@ -118,11 +130,11 @@ describe("detectHarnessFiles", () => {
 
 	test("detects Codex AGENTS.md, skills, and config.toml", async () => {
 		await writeFile(join(tempDir, "AGENTS.md"), "# Codex agents");
-		await mkdir(join(tempDir, ".codex", "skills", "my-skill"), {
+		await mkdir(join(tempDir, ".agents", "skills", "my-skill"), {
 			recursive: true,
 		});
 		await writeFile(
-			join(tempDir, ".codex", "skills", "my-skill", "SKILL.md"),
+			join(tempDir, ".agents", "skills", "my-skill", "SKILL.md"),
 			"# Skill",
 		);
 		await mkdir(join(tempDir, ".codex"), { recursive: true });
@@ -131,7 +143,7 @@ describe("detectHarnessFiles", () => {
 		const result = await detectHarnessFiles(tempDir);
 
 		expect(result.codex).toContain("AGENTS.md");
-		expect(result.codex).toContain(".codex/skills/my-skill/SKILL.md");
+		expect(result.codex).toContain(".agents/skills/my-skill/SKILL.md");
 		expect(result.codex).toContain(".codex/config.toml");
 	});
 

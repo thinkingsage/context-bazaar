@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, test } from "bun:test";
 import { resolve } from "node:path";
 import type nunjucks from "nunjucks";
 import { getCapabilities } from "../adapters/capabilities";
-import { codexAdapter } from "../adapters/codex";
+import { CODEX_PROJECT_DOC_MAX_BYTES, codexAdapter } from "../adapters/codex";
 import { createTemplateEnv } from "../template-engine";
 import { makeArtifact, makeFrontmatter } from "./test-helpers";
 
@@ -56,9 +56,9 @@ describe("codexAdapter", () => {
 		const result = codexAdapter(artifact, templateEnv);
 		const paths = result.files.map((f) => f.relativePath);
 
-		expect(paths).toContain(".codex/skills/stable-skill-name/SKILL.md");
+		expect(paths).toContain(".agents/skills/stable-skill-name/SKILL.md");
 		expect(paths).toContain(
-			".codex/skills/stable-skill-name/references/plan.md",
+			".agents/skills/stable-skill-name/references/plan.md",
 		);
 		expect(paths).toContain("AGENTS.md");
 
@@ -67,7 +67,7 @@ describe("codexAdapter", () => {
 
 		const pointer = result.files.find((f) => f.relativePath === "AGENTS.md");
 		expect(pointer?.content).toContain(
-			".codex/skills/stable-skill-name/SKILL.md",
+			".agents/skills/stable-skill-name/SKILL.md",
 		);
 
 		const reference = result.files.find((f) =>
@@ -181,5 +181,42 @@ describe("codexAdapter", () => {
 				w.message.includes("Strict mode: capability hooks is degraded"),
 			),
 		).toBe(true);
+	});
+
+	test("warns when AGENTS.md exceeds Codex's default 32 KiB budget", () => {
+		const artifact = makeArtifact({
+			name: "oversized-agents",
+			frontmatter: makeFrontmatter({
+				name: "oversized-agents",
+				harnesses: ["codex"],
+			}),
+			body: "x".repeat(CODEX_PROJECT_DOC_MAX_BYTES),
+		});
+
+		const result = codexAdapter(artifact, templateEnv);
+
+		expect(
+			result.warnings.some((warning) =>
+				warning.message.includes("project_doc_max_bytes"),
+			),
+		).toBe(true);
+	});
+
+	test("promotes an oversized AGENTS.md to an error in strict mode", () => {
+		const artifact = makeArtifact({
+			name: "strict-oversized-agents",
+			frontmatter: makeFrontmatter({
+				name: "strict-oversized-agents",
+				harnesses: ["codex"],
+			}),
+			body: "x".repeat(CODEX_PROJECT_DOC_MAX_BYTES),
+		});
+
+		const result = codexAdapter(artifact, templateEnv, {
+			capabilities: getCapabilities("codex"),
+			strict: true,
+		});
+
+		expect(result.errors?.[0]?.field).toBe("AGENTS.md");
 	});
 });

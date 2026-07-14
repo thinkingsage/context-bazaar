@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Kanon Tutorial
 
 A complete sequential walkthrough of every Kanon capability, from first install to publishing and team distribution. Each lesson is self-contained so you can skip ahead or return to a topic later.

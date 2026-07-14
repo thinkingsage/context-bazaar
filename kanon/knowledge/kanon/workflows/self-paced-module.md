@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Self-Paced Course on Coding Agents and Skill Creation
 
 ## Abstract

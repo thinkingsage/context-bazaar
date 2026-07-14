@@ -11,10 +11,11 @@ keywords:
   - forge-cli
   - harness-compilation
 author: Johns Hopkins DRCC
-version: 0.2.5
+version: 0.2.6
 harnesses:
   - kiro
   - claude-code
+  - codex
 type: skill
 inclusion: auto
 categories:
@@ -37,6 +38,10 @@ harness-config:
     inclusion: manual
     inline-workflows: false
     main-steering: false
+  claude-code:
+    format: skill
+  codex:
+    format: skill
 ---
 # Kanon
 

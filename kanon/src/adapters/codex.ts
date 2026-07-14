@@ -4,7 +4,19 @@ import { isStdioServer } from "../schemas";
 import { renderTemplate } from "../template-engine";
 import type { HarnessCapabilityName } from "./capabilities";
 import { applyDegradation } from "./degradation";
-import type { AdapterWarning, HarnessAdapter, OutputFile } from "./types";
+import type {
+	AdapterError,
+	AdapterWarning,
+	HarnessAdapter,
+	OutputFile,
+} from "./types";
+
+/** Codex's default combined project-instructions budget. */
+export const CODEX_PROJECT_DOC_MAX_BYTES = 32 * 1024;
+
+function utf8ByteLength(value: string): number {
+	return new TextEncoder().encode(value).byteLength;
+}
 
 /** TOML string literal — escape backslashes and double quotes. */
 function tomlString(value: string): string {
@@ -67,6 +79,7 @@ export const codexAdapter: HarnessAdapter = (
 ) => {
 	const files: OutputFile[] = [];
 	const warnings: AdapterWarning[] = [];
+	const errors: AdapterError[] = [];
 	const degradedSections: string[] = [];
 
 	// Capability degradation checks
@@ -122,14 +135,14 @@ export const codexAdapter: HarnessAdapter = (
 			renderContext,
 		);
 		files.push({
-			relativePath: `.codex/skills/${skillName}/SKILL.md`,
+			relativePath: `.agents/skills/${skillName}/SKILL.md`,
 			content: skillContent,
 		});
 
 		// Workflow phase files live under references/ for progressive disclosure.
 		for (const wf of artifact.workflows) {
 			files.push({
-				relativePath: `.codex/skills/${skillName}/references/${wf.filename}`,
+				relativePath: `.agents/skills/${skillName}/references/${wf.filename}`,
 				content: wf.content,
 			});
 		}
@@ -169,5 +182,29 @@ export const codexAdapter: HarnessAdapter = (
 		});
 	}
 
-	return { files, warnings };
+	const agentsFile = files.find((file) => file.relativePath === "AGENTS.md");
+	if (agentsFile) {
+		const size = utf8ByteLength(agentsFile.content);
+		if (size > CODEX_PROJECT_DOC_MAX_BYTES) {
+			const message =
+				`AGENTS.md is ${size} bytes, exceeding Codex's default combined ` +
+				`project_doc_max_bytes limit of ${CODEX_PROJECT_DOC_MAX_BYTES} bytes. ` +
+				"Use harness-config.codex.format: skill or split instructions across nested directories.";
+			warnings.push({
+				artifactName: artifact.name,
+				harnessName: "codex",
+				message,
+			});
+			if (context?.strict) {
+				errors.push({
+					artifactName: artifact.name,
+					harnessName: "codex",
+					message,
+					field: "AGENTS.md",
+				});
+			}
+		}
+	}
+
+	return { files, warnings, errors: errors.length > 0 ? errors : undefined };
 };

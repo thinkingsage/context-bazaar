@@ -14,7 +14,7 @@
  */
 
 import { mkdir, rm, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { generateCatalog, SOURCE_DIRS } from "../src/catalog";
 import { isParseError, loadKnowledgeArtifact } from "../src/parser";
 import { createTemplateEnv, renderTemplate } from "../src/template-engine";
@@ -60,7 +60,9 @@ async function main() {
 			const referencesDir = join(skillDir, "references");
 			await mkdir(referencesDir, { recursive: true });
 			for (const wf of artifact.workflows) {
-				await writeFile(join(referencesDir, wf.filename), wf.content, "utf-8");
+				const referencePath = join(referencesDir, wf.filename);
+				await mkdir(dirname(referencePath), { recursive: true });
+				await writeFile(referencePath, wf.content, "utf-8");
 			}
 		}
 

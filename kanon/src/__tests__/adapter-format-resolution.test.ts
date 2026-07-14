@@ -264,7 +264,7 @@ describe("codexAdapter format resolution", () => {
 
 		const result = codexAdapter(artifact, templateEnv);
 		const skillFile = result.files.find(
-			(f) => f.relativePath === ".codex/skills/native-skill/SKILL.md",
+			(f) => f.relativePath === ".agents/skills/native-skill/SKILL.md",
 		);
 		expect(skillFile).toBeDefined();
 		expect(

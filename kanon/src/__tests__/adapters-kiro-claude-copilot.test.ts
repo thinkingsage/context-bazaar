@@ -1,7 +1,11 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import { resolve } from "node:path";
 import type nunjucks from "nunjucks";
-import { claudeCodeAdapter } from "../adapters/claude-code";
+import { getCapabilities } from "../adapters/capabilities";
+import {
+	CLAUDE_SKILL_MAX_LINES,
+	claudeCodeAdapter,
+} from "../adapters/claude-code";
 import { copilotAdapter } from "../adapters/copilot";
 import { kiroAdapter } from "../adapters/kiro";
 import { resolveKiroInclusion } from "../adapters/kiro-inclusion";
@@ -427,6 +431,61 @@ describe("claudeCodeAdapter", () => {
 		const claudeFile = result.files.find((f) => f.relativePath === "CLAUDE.md");
 		expect(claudeFile).toBeDefined();
 		expect(claudeFile?.content).toContain("This is test content.");
+	});
+
+	test("generates a progressive-disclosure skill when format is skill", () => {
+		const artifact = makeArtifact({
+			name: "native-claude-skill",
+			frontmatter: makeFrontmatter({
+				name: "native-claude-skill",
+				harnesses: ["claude-code"],
+				"harness-config": { "claude-code": { format: "skill" } },
+			}),
+			workflows: [
+				{
+					name: "Plan",
+					filename: "plan.md",
+					content: "# Plan\n\nPlan the work.",
+				},
+			],
+		});
+
+		const result = claudeCodeAdapter(artifact, templateEnv);
+		const paths = result.files.map((file) => file.relativePath);
+
+		expect(paths).toContain(".claude/skills/native-claude-skill/SKILL.md");
+		expect(paths).toContain(
+			".claude/skills/native-claude-skill/references/plan.md",
+		);
+		expect(paths).not.toContain("CLAUDE.md");
+	});
+
+	test("warns on oversized skills and fails them in strict mode", () => {
+		const artifact = makeArtifact({
+			name: "oversized-claude-skill",
+			frontmatter: makeFrontmatter({
+				name: "oversized-claude-skill",
+				harnesses: ["claude-code"],
+				"harness-config": { "claude-code": { format: "skill" } },
+			}),
+			body: Array.from(
+				{ length: CLAUDE_SKILL_MAX_LINES },
+				(_, index) => `Line ${index + 1}`,
+			).join("\n"),
+		});
+
+		const advisory = claudeCodeAdapter(artifact, templateEnv);
+		expect(
+			advisory.warnings.some((warning) =>
+				warning.message.includes("keeping it under 500 lines"),
+			),
+		).toBe(true);
+
+		const strict = claudeCodeAdapter(artifact, templateEnv, {
+			capabilities: getCapabilities("claude-code"),
+			strict: true,
+		});
+		expect(strict.errors?.[0]?.field).toContain("SKILL.md");
 	});
 
 	/**

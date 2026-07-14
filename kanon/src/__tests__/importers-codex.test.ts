@@ -30,8 +30,8 @@ describe("parseCodex", () => {
 		expect(result.body).toContain("Use this.");
 	});
 
-	test("imports .codex/skills/<name>/SKILL.md", async () => {
-		const skillDir = join(tempDir, ".codex", "skills", "commit-craft");
+	test("imports .agents/skills/<name>/SKILL.md", async () => {
+		const skillDir = join(tempDir, ".agents", "skills", "commit-craft");
 		await mkdir(skillDir, { recursive: true });
 		const filePath = join(skillDir, "SKILL.md");
 		await writeFile(

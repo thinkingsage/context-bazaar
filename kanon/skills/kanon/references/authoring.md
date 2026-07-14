@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Authoring Your First Knowledge Artifact
 
 This guide walks you through creating a knowledge artifact from scratch. By the end, you'll have a working artifact that compiles to one or more AI coding assistant formats.

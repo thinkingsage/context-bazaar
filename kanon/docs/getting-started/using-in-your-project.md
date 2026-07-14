@@ -92,8 +92,8 @@ bunx @thinkingsage/kanon install adr --backend jhu --harness kiro --dry-run
 | Harness | Destination |
 |---|---|
 | Kiro | `.kiro/` (steering files, hooks, `mcp.json`, `POWER.md`) |
-| Claude Code | `.claude/`, `CLAUDE.md` at project root |
-| Codex | `AGENTS.md`, `.codex/skills/<name>/SKILL.md`, `.codex/config.toml` |
+| Claude Code | `.claude/skills/<name>/SKILL.md`, `.claude/`, or `CLAUDE.md` at project root |
+| Codex | `AGENTS.md`, `.agents/skills/<name>/SKILL.md`, `.codex/config.toml` |
 | Cursor | `.cursor/rules/`, `.cursor/mcp.json` |
 | Copilot | `.github/instructions/`, `AGENTS.md` |
 | Windsurf | `.windsurf/rules/`, `.windsurf/workflows/` |
@@ -111,7 +111,7 @@ Restart your AI assistant so it picks up the new files, then confirm:
 ls .kiro/steering/
 
 # Claude Code
-ls .claude/ && test -f CLAUDE.md && echo "CLAUDE.md present"
+find .claude/skills -name SKILL.md -print
 ```
 
 For Kiro specifically, the installed steering files carry `inclusion` metadata that controls when they activate — `always`, `auto`, `fileMatch`, or `manual`. Open any steering file to see which mode it uses.

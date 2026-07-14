@@ -8,7 +8,7 @@ import {
 	HARNESS_CAPABILITIES,
 } from "./adapters/capabilities";
 import { adapterRegistry } from "./adapters/index";
-import type { AdapterContext } from "./adapters/types";
+import type { AdapterContext, OutputFile } from "./adapters/types";
 import { generateCatalog, SOURCE_DIRS } from "./catalog";
 import { isParseError, loadKnowledgeArtifact } from "./parser";
 import type {
@@ -197,7 +197,12 @@ export async function renderTemper(
 		if (degradation) {
 			// Check if this capability is actually used by the artifact
 			const isUsed = isCapabilityUsed(artifact, cap as HarnessCapabilityName);
-			if (isUsed) {
+			const isFullyRealized = isCapabilityFullyRealized(
+				artifact,
+				cap as HarnessCapabilityName,
+				adapterResult.files,
+			);
+			if (isUsed && !isFullyRealized) {
 				degradations.push(`${cap}: ${degradation}`);
 				if (cap === "hooks") {
 					hooksDegraded = artifact.hooks.length;
@@ -308,6 +313,27 @@ export async function renderTemper(
 		hooksDegraded,
 		mcpServers: artifact.mcpServers.map((s) => s.name),
 	};
+}
+
+/**
+ * Static capability tables describe a harness's default format. An adapter can
+ * still realize a capability fully in another native format. Detect that from
+ * the compiled bundle so Temper reports the output users will actually install.
+ */
+function isCapabilityFullyRealized(
+	artifact: KnowledgeArtifact,
+	capability: HarnessCapabilityName,
+	files: OutputFile[],
+): boolean {
+	if (capability !== "workflows" || artifact.workflows.length === 0) {
+		return false;
+	}
+
+	return artifact.workflows.every((workflow) =>
+		files.some((file) =>
+			file.relativePath.endsWith(`/references/${workflow.filename}`),
+		),
+	);
 }
 
 /**

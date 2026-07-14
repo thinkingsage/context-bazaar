@@ -8,8 +8,12 @@ import type { ImportedFile, ImportParser } from "./types";
  * Derives a kebab-case artifact name from a file path.
  */
 function deriveArtifactName(filePath: string): string {
+	const parts = filePath.split("/");
 	const base = basename(filePath);
-	const name = base.replace(/\.[^.]+$/, "");
+	let name = base.replace(/\.[^.]+$/, "");
+	if (name.toLowerCase() === "skill" && parts.length >= 2) {
+		name = parts[parts.length - 2];
+	}
 	return name
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, "-")
@@ -167,7 +171,8 @@ async function parseMcpJson(filePath: string): Promise<ImportedFile> {
 
 /**
  * Claude Code import parser.
- * Handles CLAUDE.md, .claude/settings.json, and .claude/mcp.json.
+ * Handles CLAUDE.md, .claude/skills/<name>/SKILL.md,
+ * .claude/settings.json, and .claude/mcp.json.
  */
 export const parseClaudeCode: ImportParser = async (
 	filePath: string,

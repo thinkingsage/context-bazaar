@@ -1,14 +1,16 @@
-# Eval: command reference produces correct forge CLI invocations
+# Eval: command reference produces correct Kanon CLI invocations
 #
-# Verifies the commands steering yields accurate `bun run dev` commands
-# for common tasks.
+# Verifies each harness's commands reference yields accurate `bun run dev`
+# commands for common tasks.
 #
 # Run:  bun run dev eval kanon
 
-description: "command reference yields correct forge CLI invocations"
+description: "command reference yields correct Kanon CLI invocations across harnesses"
 
 prompts:
-  - file://dist/kiro/skill-forge/steering/commands.md
+  - file://dist/kiro/kanon/steering/commands.md
+  - file://dist/claude-code/kanon/.claude/skills/kanon/references/commands.md
+  - file://dist/codex/kanon/.agents/skills/kanon/references/commands.md
 
 providers:
   - id: bedrock:us.anthropic.claude-sonnet-4-6

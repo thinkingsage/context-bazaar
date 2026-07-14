@@ -167,7 +167,9 @@ describe("Wizard per-harness format prompting", () => {
 		expect(cursorOption?.label).toContain("Rule files for Cursor");
 
 		const claudeOption = options.find((o) => o.value === "claude-code");
-		expect(claudeOption?.label).toContain("CLAUDE.md for Claude Code");
+		expect(claudeOption?.label).toContain(
+			"CLAUDE.md or skills for Claude Code",
+		);
 
 		const windsurfOption = options.find((o) => o.value === "windsurf");
 		expect(windsurfOption?.label).toContain("Rule files for Windsurf");
@@ -286,7 +288,7 @@ describe("Wizard per-harness format prompting", () => {
 
 	/**
 	 * Validates: Requirements 4.3
-	 * Single-format harnesses (cursor, claude-code, windsurf, cline) skip format prompt.
+	 * Single-format harnesses (cursor, windsurf, cline) skip format prompt.
 	 */
 	test("single-format harnesses skip format prompt entirely", async () => {
 		promptQueue = [
@@ -296,7 +298,7 @@ describe("Wizard per-harness format prompting", () => {
 			"skill", // type select
 			"always",
 			["testing"],
-			["cursor", "claude-code", "windsurf", "cline"], // all single-format
+			["cursor", "windsurf", "cline"], // all single-format
 			// NO format prompts expected
 			"typescript",
 		];

@@ -4,7 +4,7 @@ When the harness skill triggers, audit the current state **before** generating a
 
 1. Read the harness's native locations for the running harness:
    - Claude Code — `.claude/agents/`, `.claude/skills/`, `CLAUDE.md`
-   - Codex — `.codex/skills/` (and `.agents/skills/`), `AGENTS.md`, `.codex/config.toml`
+   - Codex — `.agents/skills/`, `AGENTS.md`, `.codex/config.toml`
    - Kiro — `.kiro/steering/`, any installed power, `.kiro/specs/`, `.kiro/hooks`
 2. Branch into an execution mode:
    - **New build** — no agents/skills present → run Phases 1–7 fully.

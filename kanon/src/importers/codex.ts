@@ -12,7 +12,8 @@ function deriveArtifactName(filePath: string): string {
 	const parts = filePath.split("/");
 	const base = basename(filePath);
 	let name = base.replace(/\.[^.]+$/, "");
-	// `.codex/skills/<name>/SKILL.md` → use the skill directory name
+	// `.agents/skills/<name>/SKILL.md` (or the legacy `.codex/skills` path)
+	// → use the skill directory name.
 	if (name.toLowerCase() === "skill" && parts.length >= 2) {
 		name = parts[parts.length - 2];
 	}
@@ -171,7 +172,8 @@ async function parseConfigToml(filePath: string): Promise<ImportedFile> {
 
 /**
  * Codex import parser.
- * Handles AGENTS.md, SKILL.md files under .codex/skills and .agents/skills,
+ * Handles AGENTS.md, SKILL.md files under .agents/skills and the legacy
+ * .codex/skills location,
  * and `.codex/config.toml`.
  */
 export const parseCodex: ImportParser = async (

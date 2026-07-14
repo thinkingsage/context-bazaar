@@ -38,6 +38,12 @@ describe("HARNESS_FORMAT_REGISTRY", () => {
 		expect(def.default).toBe("agents-md");
 	});
 
+	test("claude-code has claude-md and skill formats with claude-md as default", () => {
+		const def = HARNESS_FORMAT_REGISTRY["claude-code"];
+		expect(def.formats).toEqual(["claude-md", "skill"]);
+		expect(def.default).toBe("claude-md");
+	});
+
 	test("qdeveloper has rule and agent formats with rule as default", () => {
 		const def = HARNESS_FORMAT_REGISTRY.qdeveloper;
 		expect(def.formats).toEqual(["rule", "agent"]);
@@ -45,12 +51,7 @@ describe("HARNESS_FORMAT_REGISTRY", () => {
 	});
 
 	test("single-format harnesses have exactly one format", () => {
-		const singleFormat: HarnessName[] = [
-			"cursor",
-			"claude-code",
-			"windsurf",
-			"cline",
-		];
+		const singleFormat: HarnessName[] = ["cursor", "windsurf", "cline"];
 		for (const harness of singleFormat) {
 			expect(HARNESS_FORMAT_REGISTRY[harness].formats).toHaveLength(1);
 		}
