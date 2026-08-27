@@ -1354,8 +1354,7 @@ export const AcquisitionProfileSchema = z
 		remote: z.string().min(1).default("origin"),
 		checkoutPrefix: z.string().optional(),
 		credentialReference: z.string().optional(),
-	})
-	.strict();
+	});
 export type AcquisitionProfile = z.infer<typeof AcquisitionProfileSchema>;
 
 export const TranslationProfileSchema = z
