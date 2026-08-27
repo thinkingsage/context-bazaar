@@ -141,6 +141,15 @@ function installCatalogReaderMock(): void {
 			frontmatter: {},
 			body: `# ${entry.name}\n\nThis is the body of ${entry.name}.`,
 		}),
+		// Mock the module's full public shape. The production tools
+		// (compass-index/search/reindex) import resolveRequestContentRoot from
+		// this module; omitting it makes Bun throw "Export named
+		// 'resolveRequestContentRoot' not found" when the mock leaks into another
+		// file under parallel/ordered CI runs. Return the provided fallback.
+		resolveRequestContentRoot: async (
+			_input: unknown,
+			fallback: string,
+		): Promise<string> => fallback,
 	}));
 }
 
