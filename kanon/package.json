@@ -1,6 +1,6 @@
 {
 	"name": "@thinkingsage/kanon",
-	"version": "0.7.0",
+	"version": "0.7.1",
 	"description": "Write knowledge once, compile to every AI coding assistant harness",
 	"type": "module",
 	"bin": {
@@ -24,7 +24,8 @@
 		"build:skills": "bun run scripts/generate-plugin-skills.ts",
 		"build:souk-compass": "bun --cwd mcp-servers/souk-compass run build",
 		"prepublishOnly": "bun test && biome check src/cli.ts src/adapters/ src/backends/ src/guild/ src/help/ src/importers/ src/*.ts templates/ bridge/",
-		"test": "bun test",
+		"test": "bun test src/__tests__ && bun --cwd mcp-servers/souk-compass test",
+		"validate:rosetta": "bun run scripts/validate-rosetta.ts",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",

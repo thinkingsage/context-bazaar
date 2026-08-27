@@ -16,11 +16,52 @@
  */
 
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
+import {
+	type ChangelogFragment,
+	validateReleaseFragments,
+} from "./changelog-validation";
 
 const projectRoot = resolve(import.meta.dir, "..");
+
+/**
+ * Read the changelog fragments from `changes/` as filesystem-free records.
+ * Non-fragment files (e.g. `.gitkeep`) are ignored.
+ */
+function readChangelogFragments(): ChangelogFragment[] {
+	const changesDir = join(projectRoot, "changes");
+	let files: string[];
+	try {
+		files = readdirSync(changesDir).filter((file) => file.endsWith(".md"));
+	} catch {
+		return [];
+	}
+	return files.map((file) => ({
+		file,
+		content: readFileSync(join(changesDir, file), "utf-8"),
+	}));
+}
+
+/**
+ * Halt the release unless at least one substantive changelog fragment exists.
+ * Prints actionable guidance and exits nonzero when validation fails.
+ */
+function requireSubstantiveChangelogFragment(): void {
+	const result = validateReleaseFragments(readChangelogFragments());
+	if (result.valid) {
+		console.log(
+			`✓ Found ${result.substantive.length} substantive changelog fragment(s)`,
+		);
+		return;
+	}
+	console.error("Error: Release requires a substantive changelog fragment.");
+	for (const message of result.errors) {
+		console.error(`  - ${message}`);
+	}
+	process.exit(1);
+}
 
 function exec(cmd: string, opts?: { cwd?: string }) {
 	return execSync(cmd, {
@@ -35,9 +76,11 @@ function readPkg() {
 }
 
 function writePkg(pkg: Record<string, unknown>) {
+	// Use tab indentation to match the Biome formatter, so the bumped
+	// package.json stays lint-clean without a follow-up format pass.
 	writeFileSync(
 		resolve(projectRoot, "package.json"),
-		`${JSON.stringify(pkg, null, 2)}\n`,
+		`${JSON.stringify(pkg, null, "\t")}\n`,
 	);
 }
 
@@ -106,6 +149,9 @@ const tag = `v${nextVersion}`;
 
 console.log(`\n→ ${currentVersion} → ${nextVersion} (${tag})`);
 
+// ── Release validation: require a substantive changelog fragment ──
+requireSubstantiveChangelogFragment();
+
 if (dryRun) {
 	console.log(
 		"[dry-run] Would update package.json, compile changelog, commit, and tag.",
@@ -143,7 +189,7 @@ try {
 }
 
 // ── Step 3: Commit ──
-exec("git add package.json CHANGELOG.md changes/");
+exec("git add package.json CITATION.cff CHANGELOG.md changes/");
 exec(`git commit -m "release: ${tag}"`);
 console.log(`✓ Created release commit`);
 

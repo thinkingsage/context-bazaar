@@ -54,20 +54,44 @@ jobs:
         run: |
           bun audit --json > audit-results.json 2>/dev/null || true
 
-          # Parse JSON to count high/critical vulnerabilities precisely
-          TOTAL_HIGH=$(jq '[to_entries[].value[] | select(.severity == "high" or .severity == "critical")] | length' audit-results.json 2>/dev/null || echo 0)
+          # Accepted high/critical advisories, keyed by the vulnerable package.
+          # These are transitive dependencies that are NOT part of the shipped
+          # runtime surface:
+          #   * Everything under `promptfoo` (the eval framework) and
+          #     `@codecov` (coverage) — neither is bundled into the compiled
+          #     `kanon` binary; they run only in dev/CI.
+          #   * `js-yaml` — the remaining high (GHSA-52cp-r559-cp3m,
+          #     GHSA-5p4m-2wfm-xmqj) is a quadratic-CPU DoS in YAML merge-key /
+          #     !!omap handling reachable only through `gray-matter`, which is
+          #     pinned to js-yaml 3.x (safeLoad/safeDump). Kanon parses only
+          #     repo-authored frontmatter, not untrusted remote YAML, and Bun
+          #     cannot scope an override to gray-matter's nested copy. Tracked
+          #     for removal when gray-matter moves off js-yaml 3.x.
+          #
+          # Any high/critical advisory for a package NOT on this list fails the
+          # job. Counting is done per-package from the JSON so it cannot drift
+          # from a human-output grep.
+          ALLOWED_PKGS='["adm-zip","basic-ftp","brace-expansion","engine.io","fast-uri","fast-xml-builder","form-data","ip-address","js-yaml","protobufjs","sharp","simple-git","socket.io-parser","undici","ws"]'
 
-          # Check if all high/critical vulns are from dev-only transitive deps
-          # (promptfoo: eval framework, @codecov: coverage plugin — neither shipped in compiled binary)
-          DEV_ONLY_PATHS=$(bun audit 2>&1 | grep -cE "promptfoo|@codecov" || true)
+          # Packages that have at least one high/critical advisory.
+          HIGH_PKGS=$(jq -r '[to_entries[]
+            | select(.value | any(.severity == "high" or .severity == "critical"))
+            | .key] | sort | unique | .[]' audit-results.json 2>/dev/null || true)
 
-          if [ "$TOTAL_HIGH" -gt 0 ] && [ "$DEV_ONLY_PATHS" -ge "$TOTAL_HIGH" ]; then
+          # Actionable = high/critical packages not on the allowlist.
+          ACTIONABLE_PKGS=$(comm -23 \
+            <(printf '%s\n' "$HIGH_PKGS" | sort -u | sed '/^$/d') \
+            <(echo "$ALLOWED_PKGS" | jq -r '.[]' | sort -u))
+
+          if [ -z "$ACTIONABLE_PKGS" ]; then
             echo "high_count=0" >> "$GITHUB_OUTPUT"
-            echo "::warning::Found $TOTAL_HIGH high/critical vulnerabilities in dev-only transitive deps (promptfoo, @codecov). Not blocking."
+            ACCEPTED=$(printf '%s\n' "$HIGH_PKGS" | sed '/^$/d' | wc -l | tr -d ' ')
+            echo "::warning::Found high/critical advisories only in accepted transitive deps ($ACCEPTED package(s): promptfoo/@codecov tree + gray-matter's js-yaml). Not blocking."
           else
-            ACTIONABLE=$((TOTAL_HIGH - DEV_ONLY_PATHS))
-            if [ "$ACTIONABLE" -lt 0 ]; then ACTIONABLE=0; fi
-            echo "high_count=$ACTIONABLE" >> "$GITHUB_OUTPUT"
+            COUNT=$(printf '%s\n' "$ACTIONABLE_PKGS" | sed '/^$/d' | wc -l | tr -d ' ')
+            echo "high_count=$COUNT" >> "$GITHUB_OUTPUT"
+            echo "::error::High/critical advisories in non-allowlisted packages:"
+            printf '%s\n' "$ACTIONABLE_PKGS"
           fi
 
       - name: Upload audit results
