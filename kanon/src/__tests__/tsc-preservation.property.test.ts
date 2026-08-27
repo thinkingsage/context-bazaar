@@ -27,10 +27,16 @@ describe("Preservation: Existing Test Suite Passes", () => {
 		let exitCode: number;
 
 		try {
-			// Run the child suite serially so its filesystem/environment fixtures do
-			// not race while the parent Bun process runs other test files.
+			// Scope the child suite to kanon's own tests (src/__tests__). The
+			// souk-compass package has its own suite and is exercised separately;
+			// including it here loads both packages' top-level mock.module calls
+			// into one process, and because mock.module is process-global (not
+			// per-file, and not undone by --max-concurrency), those mocks leak
+			// across packages and fail order-dependently in CI. Keeping the two
+			// packages in separate `bun test` processes makes that leak
+			// structurally impossible.
 			stdout = execSync(
-				'bun test --max-concurrency=1 --path-ignore-patterns="**/tsc-preservation*" --path-ignore-patterns="**/tsc-clean*" 2>&1',
+				'bun test src/__tests__ --max-concurrency=1 --path-ignore-patterns="**/tsc-preservation*" --path-ignore-patterns="**/tsc-clean*" 2>&1',
 				{
 					cwd: PROJECT_ROOT,
 					encoding: "utf-8",
