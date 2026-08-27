@@ -109,12 +109,12 @@ var require_code = __commonJS((exports) => {
       return item === "" || item === '""';
     }
     get str() {
-      var _a3;
-      return (_a3 = this._str) !== null && _a3 !== undefined ? _a3 : this._str = this._items.reduce((s, c) => `${s}${c}`, "");
+      var _a2;
+      return (_a2 = this._str) !== null && _a2 !== undefined ? _a2 : this._str = this._items.reduce((s, c) => `${s}${c}`, "");
     }
     get names() {
-      var _a3;
-      return (_a3 = this._names) !== null && _a3 !== undefined ? _a3 : this._names = this._items.reduce((names, c) => {
+      var _a2;
+      return (_a2 = this._names) !== null && _a2 !== undefined ? _a2 : this._names = this._items.reduce((names, c) => {
         if (c instanceof Name)
           names[c.str] = (names[c.str] || 0) + 1;
         return names;
@@ -259,8 +259,8 @@ var require_scope = __commonJS((exports) => {
       return `${prefix}${ng.index++}`;
     }
     _nameGroup(prefix) {
-      var _a3, _b;
-      if (((_b = (_a3 = this._parent) === null || _a3 === undefined ? undefined : _a3._prefixes) === null || _b === undefined ? undefined : _b.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
+      var _a2, _b;
+      if (((_b = (_a2 = this._parent) === null || _a2 === undefined ? undefined : _a2._prefixes) === null || _b === undefined ? undefined : _b.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
         throw new Error(`CodeGen: prefix "${prefix}" is not allowed in this scope`);
       }
       return this._names[prefix] = { prefix, index: 0 };
@@ -295,12 +295,12 @@ var require_scope = __commonJS((exports) => {
       return new ValueScopeName(prefix, this._newName(prefix));
     }
     value(nameOrPrefix, value) {
-      var _a3;
+      var _a2;
       if (value.ref === undefined)
         throw new Error("CodeGen: ref must be passed in value");
       const name = this.toName(nameOrPrefix);
       const { prefix } = name;
-      const valueKey = (_a3 = value.key) !== null && _a3 !== undefined ? _a3 : value.ref;
+      const valueKey = (_a2 = value.key) !== null && _a2 !== undefined ? _a2 : value.ref;
       let vs = this._values[prefix];
       if (vs) {
         const _name = vs.get(valueKey);
@@ -511,9 +511,9 @@ var require_codegen = __commonJS((exports) => {
   }
 
   class Throw extends Node {
-    constructor(error51) {
+    constructor(error48) {
       super();
-      this.error = error51;
+      this.error = error48;
     }
     render({ _n }) {
       return `throw ${this.error};` + _n;
@@ -628,8 +628,8 @@ var require_codegen = __commonJS((exports) => {
       return this;
     }
     optimizeNames(names, constants) {
-      var _a3;
-      this.else = (_a3 = this.else) === null || _a3 === undefined ? undefined : _a3.optimizeNames(names, constants);
+      var _a2;
+      this.else = (_a2 = this.else) === null || _a2 === undefined ? undefined : _a2.optimizeNames(names, constants);
       if (!(super.optimizeNames(names, constants) || this.else))
         return;
       this.condition = optimizeExpr(this.condition, names, constants);
@@ -740,16 +740,16 @@ var require_codegen = __commonJS((exports) => {
       return code;
     }
     optimizeNodes() {
-      var _a3, _b;
+      var _a2, _b;
       super.optimizeNodes();
-      (_a3 = this.catch) === null || _a3 === undefined || _a3.optimizeNodes();
+      (_a2 = this.catch) === null || _a2 === undefined || _a2.optimizeNodes();
       (_b = this.finally) === null || _b === undefined || _b.optimizeNodes();
       return this;
     }
     optimizeNames(names, constants) {
-      var _a3, _b;
+      var _a2, _b;
       super.optimizeNames(names, constants);
-      (_a3 = this.catch) === null || _a3 === undefined || _a3.optimizeNames(names, constants);
+      (_a2 = this.catch) === null || _a2 === undefined || _a2.optimizeNames(names, constants);
       (_b = this.finally) === null || _b === undefined || _b.optimizeNames(names, constants);
       return this;
     }
@@ -764,9 +764,9 @@ var require_codegen = __commonJS((exports) => {
   }
 
   class Catch extends BlockNode {
-    constructor(error51) {
+    constructor(error48) {
       super();
-      this.error = error51;
+      this.error = error48;
     }
     render(opts) {
       return `catch(${this.error})` + super.render(opts);
@@ -934,9 +934,9 @@ var require_codegen = __commonJS((exports) => {
       this._blockNode(node);
       this.code(tryBody);
       if (catchCode) {
-        const error51 = this.name("e");
-        this._currNode = node.catch = new Catch(error51);
-        catchCode(error51);
+        const error48 = this.name("e");
+        this._currNode = node.catch = new Catch(error48);
+        catchCode(error48);
       }
       if (finallyCode) {
         this._currNode = node.finally = new Finally;
@@ -944,8 +944,8 @@ var require_codegen = __commonJS((exports) => {
       }
       return this._endBlockNode(Catch, Finally);
     }
-    throw(error51) {
-      return this._leafNode(new Throw(error51));
+    throw(error48) {
+      return this._leafNode(new Throw(error48));
     }
     block(body, nodeCount) {
       this._blockStarts.push(this._nodes.length);
@@ -1277,10 +1277,10 @@ var require_errors = __commonJS((exports) => {
   exports.keyword$DataError = {
     message: ({ keyword, schemaType }) => schemaType ? (0, codegen_1.str)`"${keyword}" keyword must be ${schemaType} ($data)` : (0, codegen_1.str)`"${keyword}" keyword is invalid ($data)`
   };
-  function reportError(cxt, error51 = exports.keywordError, errorPaths, overrideAllErrors) {
+  function reportError(cxt, error48 = exports.keywordError, errorPaths, overrideAllErrors) {
     const { it } = cxt;
     const { gen, compositeRule, allErrors } = it;
-    const errObj = errorObjectCode(cxt, error51, errorPaths);
+    const errObj = errorObjectCode(cxt, error48, errorPaths);
     if (overrideAllErrors !== null && overrideAllErrors !== undefined ? overrideAllErrors : compositeRule || allErrors) {
       addError(gen, errObj);
     } else {
@@ -1288,10 +1288,10 @@ var require_errors = __commonJS((exports) => {
     }
   }
   exports.reportError = reportError;
-  function reportExtraError(cxt, error51 = exports.keywordError, errorPaths) {
+  function reportExtraError(cxt, error48 = exports.keywordError, errorPaths) {
     const { it } = cxt;
     const { gen, compositeRule, allErrors } = it;
-    const errObj = errorObjectCode(cxt, error51, errorPaths);
+    const errObj = errorObjectCode(cxt, error48, errorPaths);
     addError(gen, errObj);
     if (!(compositeRule || allErrors)) {
       returnErrors(it, names_1.default.vErrors);
@@ -1341,19 +1341,19 @@ var require_errors = __commonJS((exports) => {
     schema: new codegen_1.Name("schema"),
     parentSchema: new codegen_1.Name("parentSchema")
   };
-  function errorObjectCode(cxt, error51, errorPaths) {
+  function errorObjectCode(cxt, error48, errorPaths) {
     const { createErrors } = cxt.it;
     if (createErrors === false)
       return (0, codegen_1._)`{}`;
-    return errorObject(cxt, error51, errorPaths);
+    return errorObject(cxt, error48, errorPaths);
   }
-  function errorObject(cxt, error51, errorPaths = {}) {
+  function errorObject(cxt, error48, errorPaths = {}) {
     const { gen, it } = cxt;
     const keyValues = [
       errorInstancePath(it, errorPaths),
       errorSchemaPath(cxt, errorPaths)
     ];
-    extraErrorProps(cxt, error51, keyValues);
+    extraErrorProps(cxt, error48, keyValues);
     return gen.object(...keyValues);
   }
   function errorInstancePath({ errorPath }, { instancePath }) {
@@ -1472,8 +1472,8 @@ var require_applicability = __commonJS((exports) => {
   }
   exports.shouldUseGroup = shouldUseGroup;
   function shouldUseRule(schema, rule) {
-    var _a3;
-    return schema[rule.keyword] !== undefined || ((_a3 = rule.definition.implements) === null || _a3 === undefined ? undefined : _a3.some((kwd) => schema[kwd] !== undefined));
+    var _a2;
+    return schema[rule.keyword] !== undefined || ((_a2 = rule.definition.implements) === null || _a2 === undefined ? undefined : _a2.some((kwd) => schema[kwd] !== undefined));
   }
   exports.shouldUseRule = shouldUseRule;
 });
@@ -1848,14 +1848,14 @@ var require_keyword = __commonJS((exports) => {
   }
   exports.macroKeywordCode = macroKeywordCode;
   function funcKeywordCode(cxt, def) {
-    var _a3;
+    var _a2;
     const { gen, keyword, schema, parentSchema, $data, it } = cxt;
     checkAsyncKeyword(it, def);
     const validate = !$data && def.compile ? def.compile.call(it.self, schema, parentSchema, it) : def.validate;
     const validateRef = useKeyword(gen, keyword, validate);
     const valid = gen.let("valid");
     cxt.block$data(valid, validateKeyword);
-    cxt.ok((_a3 = def.valid) !== null && _a3 !== undefined ? _a3 : valid);
+    cxt.ok((_a2 = def.valid) !== null && _a2 !== undefined ? _a2 : valid);
     function validateKeyword() {
       if (def.errors === false) {
         assignValid();
@@ -1886,8 +1886,8 @@ var require_keyword = __commonJS((exports) => {
       gen.assign(valid, (0, codegen_1._)`${_await}${(0, code_1.callValidateCode)(cxt, validateRef, passCxt, passSchema)}`, def.modifying);
     }
     function reportErrs(errors3) {
-      var _a4;
-      gen.if((0, codegen_1.not)((_a4 = def.valid) !== null && _a4 !== undefined ? _a4 : valid), errors3);
+      var _a3;
+      gen.if((0, codegen_1.not)((_a3 = def.valid) !== null && _a3 !== undefined ? _a3 : valid), errors3);
     }
   }
   exports.funcKeywordCode = funcKeywordCode;
@@ -2842,7 +2842,7 @@ var require_compile = __commonJS((exports) => {
 
   class SchemaEnv {
     constructor(env) {
-      var _a3;
+      var _a2;
       this.refs = {};
       this.dynamicAnchors = {};
       let schema;
@@ -2851,7 +2851,7 @@ var require_compile = __commonJS((exports) => {
       this.schema = env.schema;
       this.schemaId = env.schemaId;
       this.root = env.root || this;
-      this.baseId = (_a3 = env.baseId) !== null && _a3 !== undefined ? _a3 : (0, resolve_1.normalizeId)(schema === null || schema === undefined ? undefined : schema[env.schemaId || "$id"]);
+      this.baseId = (_a2 = env.baseId) !== null && _a2 !== undefined ? _a2 : (0, resolve_1.normalizeId)(schema === null || schema === undefined ? undefined : schema[env.schemaId || "$id"]);
       this.schemaPath = env.schemaPath;
       this.localRefs = env.localRefs;
       this.meta = env.meta;
@@ -2946,14 +2946,14 @@ var require_compile = __commonJS((exports) => {
   }
   exports.compileSchema = compileSchema;
   function resolveRef2(root, baseId, ref) {
-    var _a3;
+    var _a2;
     ref = (0, resolve_1.resolveUrl)(this.opts.uriResolver, baseId, ref);
     const schOrFunc = root.refs[ref];
     if (schOrFunc)
       return schOrFunc;
     let _sch = resolve.call(this, root, ref);
     if (_sch === undefined) {
-      const schema = (_a3 = root.localRefs) === null || _a3 === undefined ? undefined : _a3[ref];
+      const schema = (_a2 = root.localRefs) === null || _a2 === undefined ? undefined : _a2[ref];
       const { schemaId } = this.opts;
       if (schema)
         _sch = new SchemaEnv({ schema, schemaId, root, baseId });
@@ -3022,8 +3022,8 @@ var require_compile = __commonJS((exports) => {
     "definitions"
   ]);
   function getJsonPointer(parsedRef, { baseId, schema, root }) {
-    var _a3;
-    if (((_a3 = parsedRef.fragment) === null || _a3 === undefined ? undefined : _a3[0]) !== "/")
+    var _a2;
+    if (((_a2 = parsedRef.fragment) === null || _a2 === undefined ? undefined : _a2[0]) !== "/")
       return;
     for (const part of parsedRef.fragment.slice(1).split("/")) {
       if (typeof schema === "boolean")
@@ -3834,9 +3834,9 @@ var require_core = __commonJS((exports) => {
   };
   var MAX_EXPRESSION = 200;
   function requiredOptions(o) {
-    var _a3, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
+    var _a2, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
     const s = o.strict;
-    const _optz = (_a3 = o.code) === null || _a3 === undefined ? undefined : _a3.optimize;
+    const _optz = (_a2 = o.code) === null || _a2 === undefined ? undefined : _a2.optimize;
     const optimize = _optz === true || _optz === undefined ? 1 : _optz || 0;
     const regExp = (_c = (_b = o.code) === null || _b === undefined ? undefined : _b.regExp) !== null && _c !== undefined ? _c : defaultRegExp;
     const uriResolver = (_d = o.uriResolver) !== null && _d !== undefined ? _d : uri_1.default;
@@ -4295,7 +4295,7 @@ var require_core = __commonJS((exports) => {
     }
   }
   function addRule(keyword, definition, dataType) {
-    var _a3;
+    var _a2;
     const post = definition === null || definition === undefined ? undefined : definition.post;
     if (dataType && post)
       throw new Error('keyword with "post" flag cannot have "type"');
@@ -4321,7 +4321,7 @@ var require_core = __commonJS((exports) => {
     else
       ruleGroup.rules.push(rule);
     RULES.all[keyword] = rule;
-    (_a3 = definition.implements) === null || _a3 === undefined || _a3.forEach((kwd) => this.addKeyword(kwd));
+    (_a2 = definition.implements) === null || _a2 === undefined || _a2.forEach((kwd) => this.addKeyword(kwd));
   }
   function addBeforeRule(ruleGroup, rule, before) {
     const i = ruleGroup.rules.findIndex((_rule) => _rule.keyword === before);
@@ -4449,10 +4449,10 @@ var require_ref = __commonJS((exports) => {
       gen.assign(names_1.default.errors, (0, codegen_1._)`${names_1.default.vErrors}.length`);
     }
     function addEvaluatedFrom(source) {
-      var _a3;
+      var _a2;
       if (!it.opts.unevaluated)
         return;
-      const schEvaluated = (_a3 = sch === null || sch === undefined ? undefined : sch.validate) === null || _a3 === undefined ? undefined : _a3.evaluated;
+      const schEvaluated = (_a2 = sch === null || sch === undefined ? undefined : sch.validate) === null || _a2 === undefined ? undefined : _a2.evaluated;
       if (it.props !== true) {
         if (schEvaluated && !schEvaluated.dynamicProps) {
           if (schEvaluated.props !== undefined) {
@@ -4508,7 +4508,7 @@ var require_limitNumber = __commonJS((exports) => {
     exclusiveMaximum: { okStr: "<", ok: ops.LT, fail: ops.GTE },
     exclusiveMinimum: { okStr: ">", ok: ops.GT, fail: ops.LTE }
   };
-  var error51 = {
+  var error48 = {
     message: ({ keyword, schemaCode }) => (0, codegen_1.str)`must be ${KWDs[keyword].okStr} ${schemaCode}`,
     params: ({ keyword, schemaCode }) => (0, codegen_1._)`{comparison: ${KWDs[keyword].okStr}, limit: ${schemaCode}}`
   };
@@ -4517,7 +4517,7 @@ var require_limitNumber = __commonJS((exports) => {
     type: "number",
     schemaType: "number",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { keyword, data, schemaCode } = cxt;
       cxt.fail$data((0, codegen_1._)`${data} ${KWDs[keyword].fail} ${schemaCode} || isNaN(${data})`);
@@ -4530,7 +4530,7 @@ var require_limitNumber = __commonJS((exports) => {
 var require_multipleOf = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
-  var error51 = {
+  var error48 = {
     message: ({ schemaCode }) => (0, codegen_1.str)`must be multiple of ${schemaCode}`,
     params: ({ schemaCode }) => (0, codegen_1._)`{multipleOf: ${schemaCode}}`
   };
@@ -4539,7 +4539,7 @@ var require_multipleOf = __commonJS((exports) => {
     type: "number",
     schemaType: "number",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, schemaCode, it } = cxt;
       const prec = it.opts.multipleOfPrecision;
@@ -4580,7 +4580,7 @@ var require_limitLength = __commonJS((exports) => {
   var codegen_1 = require_codegen();
   var util_1 = require_util();
   var ucs2length_1 = require_ucs2length();
-  var error51 = {
+  var error48 = {
     message({ keyword, schemaCode }) {
       const comp = keyword === "maxLength" ? "more" : "fewer";
       return (0, codegen_1.str)`must NOT have ${comp} than ${schemaCode} characters`;
@@ -4592,7 +4592,7 @@ var require_limitLength = __commonJS((exports) => {
     type: "string",
     schemaType: "number",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { keyword, data, schemaCode, it } = cxt;
       const op = keyword === "maxLength" ? codegen_1.operators.GT : codegen_1.operators.LT;
@@ -4609,7 +4609,7 @@ var require_pattern = __commonJS((exports) => {
   var code_1 = require_code2();
   var util_1 = require_util();
   var codegen_1 = require_codegen();
-  var error51 = {
+  var error48 = {
     message: ({ schemaCode }) => (0, codegen_1.str)`must match pattern "${schemaCode}"`,
     params: ({ schemaCode }) => (0, codegen_1._)`{pattern: ${schemaCode}}`
   };
@@ -4618,7 +4618,7 @@ var require_pattern = __commonJS((exports) => {
     type: "string",
     schemaType: "string",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, $data, schema, schemaCode, it } = cxt;
       const u = it.opts.unicodeRegExp ? "u" : "";
@@ -4641,7 +4641,7 @@ var require_pattern = __commonJS((exports) => {
 var require_limitProperties = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
-  var error51 = {
+  var error48 = {
     message({ keyword, schemaCode }) {
       const comp = keyword === "maxProperties" ? "more" : "fewer";
       return (0, codegen_1.str)`must NOT have ${comp} than ${schemaCode} properties`;
@@ -4653,7 +4653,7 @@ var require_limitProperties = __commonJS((exports) => {
     type: "object",
     schemaType: "number",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { keyword, data, schemaCode } = cxt;
       const op = keyword === "maxProperties" ? codegen_1.operators.GT : codegen_1.operators.LT;
@@ -4669,7 +4669,7 @@ var require_required = __commonJS((exports) => {
   var code_1 = require_code2();
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: ({ params: { missingProperty } }) => (0, codegen_1.str)`must have required property '${missingProperty}'`,
     params: ({ params: { missingProperty } }) => (0, codegen_1._)`{missingProperty: ${missingProperty}}`
   };
@@ -4678,7 +4678,7 @@ var require_required = __commonJS((exports) => {
     type: "object",
     schemaType: "array",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, schema, schemaCode, data, $data, it } = cxt;
       const { opts } = it;
@@ -4746,7 +4746,7 @@ var require_required = __commonJS((exports) => {
 var require_limitItems = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
-  var error51 = {
+  var error48 = {
     message({ keyword, schemaCode }) {
       const comp = keyword === "maxItems" ? "more" : "fewer";
       return (0, codegen_1.str)`must NOT have ${comp} than ${schemaCode} items`;
@@ -4758,7 +4758,7 @@ var require_limitItems = __commonJS((exports) => {
     type: "array",
     schemaType: "number",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { keyword, data, schemaCode } = cxt;
       const op = keyword === "maxItems" ? codegen_1.operators.GT : codegen_1.operators.LT;
@@ -4783,7 +4783,7 @@ var require_uniqueItems = __commonJS((exports) => {
   var codegen_1 = require_codegen();
   var util_1 = require_util();
   var equal_1 = require_equal();
-  var error51 = {
+  var error48 = {
     message: ({ params: { i, j } }) => (0, codegen_1.str)`must NOT have duplicate items (items ## ${j} and ${i} are identical)`,
     params: ({ params: { i, j } }) => (0, codegen_1._)`{i: ${i}, j: ${j}}`
   };
@@ -4792,7 +4792,7 @@ var require_uniqueItems = __commonJS((exports) => {
     type: "array",
     schemaType: "boolean",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, $data, schema, parentSchema, schemaCode, it } = cxt;
       if (!$data && !schema)
@@ -4846,14 +4846,14 @@ var require_const = __commonJS((exports) => {
   var codegen_1 = require_codegen();
   var util_1 = require_util();
   var equal_1 = require_equal();
-  var error51 = {
+  var error48 = {
     message: "must be equal to constant",
     params: ({ schemaCode }) => (0, codegen_1._)`{allowedValue: ${schemaCode}}`
   };
   var def = {
     keyword: "const",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, $data, schemaCode, schema } = cxt;
       if ($data || schema && typeof schema == "object") {
@@ -4872,7 +4872,7 @@ var require_enum = __commonJS((exports) => {
   var codegen_1 = require_codegen();
   var util_1 = require_util();
   var equal_1 = require_equal();
-  var error51 = {
+  var error48 = {
     message: "must be equal to one of the allowed values",
     params: ({ schemaCode }) => (0, codegen_1._)`{allowedValues: ${schemaCode}}`
   };
@@ -4880,7 +4880,7 @@ var require_enum = __commonJS((exports) => {
     keyword: "enum",
     schemaType: "array",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, $data, schema, schemaCode, it } = cxt;
       if (!$data && schema.length === 0)
@@ -4948,7 +4948,7 @@ var require_additionalItems = __commonJS((exports) => {
   exports.validateAdditionalItems = undefined;
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: ({ params: { len } }) => (0, codegen_1.str)`must NOT have more than ${len} items`,
     params: ({ params: { len } }) => (0, codegen_1._)`{limit: ${len}}`
   };
@@ -4957,7 +4957,7 @@ var require_additionalItems = __commonJS((exports) => {
     type: "array",
     schemaType: ["boolean", "object"],
     before: "uniqueItems",
-    error: error51,
+    error: error48,
     code(cxt) {
       const { parentSchema, it } = cxt;
       const { items } = parentSchema;
@@ -5067,7 +5067,7 @@ var require_items2020 = __commonJS((exports) => {
   var util_1 = require_util();
   var code_1 = require_code2();
   var additionalItems_1 = require_additionalItems();
-  var error51 = {
+  var error48 = {
     message: ({ params: { len } }) => (0, codegen_1.str)`must NOT have more than ${len} items`,
     params: ({ params: { len } }) => (0, codegen_1._)`{limit: ${len}}`
   };
@@ -5076,7 +5076,7 @@ var require_items2020 = __commonJS((exports) => {
     type: "array",
     schemaType: ["object", "boolean"],
     before: "uniqueItems",
-    error: error51,
+    error: error48,
     code(cxt) {
       const { schema, parentSchema, it } = cxt;
       const { prefixItems } = parentSchema;
@@ -5097,7 +5097,7 @@ var require_contains = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: ({ params: { min, max } }) => max === undefined ? (0, codegen_1.str)`must contain at least ${min} valid item(s)` : (0, codegen_1.str)`must contain at least ${min} and no more than ${max} valid item(s)`,
     params: ({ params: { min, max } }) => max === undefined ? (0, codegen_1._)`{minContains: ${min}}` : (0, codegen_1._)`{minContains: ${min}, maxContains: ${max}}`
   };
@@ -5107,7 +5107,7 @@ var require_contains = __commonJS((exports) => {
     schemaType: ["object", "boolean"],
     before: "uniqueItems",
     trackErrors: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, schema, parentSchema, data, it } = cxt;
       let min;
@@ -5273,7 +5273,7 @@ var require_propertyNames = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: "property name must be valid",
     params: ({ params }) => (0, codegen_1._)`{propertyName: ${params.propertyName}}`
   };
@@ -5281,7 +5281,7 @@ var require_propertyNames = __commonJS((exports) => {
     keyword: "propertyNames",
     type: "object",
     schemaType: ["object", "boolean"],
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, schema, data, it } = cxt;
       if ((0, util_1.alwaysValidSchema)(it, schema))
@@ -5315,7 +5315,7 @@ var require_additionalProperties = __commonJS((exports) => {
   var codegen_1 = require_codegen();
   var names_1 = require_names();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: "must NOT have additional properties",
     params: ({ params }) => (0, codegen_1._)`{additionalProperty: ${params.additionalProperty}}`
   };
@@ -5325,7 +5325,7 @@ var require_additionalProperties = __commonJS((exports) => {
     schemaType: ["boolean", "object"],
     allowUndefined: true,
     trackErrors: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, schema, parentSchema, data, errsCount, it } = cxt;
       if (!errsCount)
@@ -5584,7 +5584,7 @@ var require_oneOf = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: "must match exactly one schema in oneOf",
     params: ({ params }) => (0, codegen_1._)`{passingSchemas: ${params.passing}}`
   };
@@ -5592,7 +5592,7 @@ var require_oneOf = __commonJS((exports) => {
     keyword: "oneOf",
     schemaType: "array",
     trackErrors: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, schema, parentSchema, it } = cxt;
       if (!Array.isArray(schema))
@@ -5663,7 +5663,7 @@ var require_if = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: ({ params }) => (0, codegen_1.str)`must match "${params.ifClause}" schema`,
     params: ({ params }) => (0, codegen_1._)`{failingKeyword: ${params.ifClause}}`
   };
@@ -5671,7 +5671,7 @@ var require_if = __commonJS((exports) => {
     keyword: "if",
     schemaType: ["object", "boolean"],
     trackErrors: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, parentSchema, it } = cxt;
       if (parentSchema.then === undefined && parentSchema.else === undefined) {
@@ -5786,7 +5786,7 @@ var require_applicator = __commonJS((exports) => {
 var require_format = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
-  var error51 = {
+  var error48 = {
     message: ({ schemaCode }) => (0, codegen_1.str)`must match format "${schemaCode}"`,
     params: ({ schemaCode }) => (0, codegen_1._)`{format: ${schemaCode}}`
   };
@@ -5795,7 +5795,7 @@ var require_format = __commonJS((exports) => {
     type: ["number", "string"],
     schemaType: "string",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt, ruleType) {
       const { gen, data, $data, schema, schemaCode, it } = cxt;
       const { opts, errSchemaPath, schemaEnv, self } = it;
@@ -5935,7 +5935,7 @@ var require_discriminator = __commonJS((exports) => {
   var compile_1 = require_compile();
   var ref_error_1 = require_ref_error();
   var util_1 = require_util();
-  var error51 = {
+  var error48 = {
     message: ({ params: { discrError, tagName } }) => discrError === types_1.DiscrError.Tag ? `tag "${tagName}" must be string` : `value of tag "${tagName}" must be in oneOf`,
     params: ({ params: { discrError, tag, tagName } }) => (0, codegen_1._)`{error: ${discrError}, tag: ${tagName}, tagValue: ${tag}}`
   };
@@ -5943,7 +5943,7 @@ var require_discriminator = __commonJS((exports) => {
     keyword: "discriminator",
     type: "object",
     schemaType: "object",
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, schema, parentSchema, it } = cxt;
       const { oneOf } = parentSchema;
@@ -5979,7 +5979,7 @@ var require_discriminator = __commonJS((exports) => {
         return _valid;
       }
       function getMapping() {
-        var _a3;
+        var _a2;
         const oneOfMapping = {};
         const topRequired = hasRequired(parentSchema);
         let tagRequired = true;
@@ -5993,7 +5993,7 @@ var require_discriminator = __commonJS((exports) => {
             if (sch === undefined)
               throw new ref_error_1.default(it.opts.uriResolver, it.baseId, ref);
           }
-          const propSch = (_a3 = sch === null || sch === undefined ? undefined : sch.properties) === null || _a3 === undefined ? undefined : _a3[tagName];
+          const propSch = (_a2 = sch === null || sch === undefined ? undefined : sch.properties) === null || _a2 === undefined ? undefined : _a2[tagName];
           if (typeof propSch != "object") {
             throw new Error(`discriminator: oneOf subschemas (or referenced schemas) must have "properties/${tagName}"`);
           }
@@ -6442,7 +6442,7 @@ var require_limit = __commonJS((exports) => {
     formatExclusiveMaximum: { okStr: "<", ok: ops.LT, fail: ops.GTE },
     formatExclusiveMinimum: { okStr: ">", ok: ops.GT, fail: ops.LTE }
   };
-  var error51 = {
+  var error48 = {
     message: ({ keyword, schemaCode }) => (0, codegen_1.str)`should be ${KWDs[keyword].okStr} ${schemaCode}`,
     params: ({ keyword, schemaCode }) => (0, codegen_1._)`{comparison: ${KWDs[keyword].okStr}, limit: ${schemaCode}}`
   };
@@ -6451,7 +6451,7 @@ var require_limit = __commonJS((exports) => {
     type: "string",
     schemaType: "string",
     $data: true,
-    error: error51,
+    error: error48,
     code(cxt) {
       const { gen, data, schemaCode, keyword, it } = cxt;
       const { opts, self } = it;
@@ -6526,9 +6526,9 @@ var require_dist = __commonJS((exports, module) => {
     return f;
   };
   function addFormats(ajv, list, fs, exportName) {
-    var _a3;
+    var _a2;
     var _b;
-    (_a3 = (_b = ajv.opts.code).formats) !== null && _a3 !== undefined || (_b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`);
+    (_a2 = (_b = ajv.opts.code).formats) !== null && _a2 !== undefined || (_b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`);
     for (const f of list)
       ajv.addFormat(f, fs[f]);
   }
@@ -6554,6 +6554,7 @@ var init_errors = __esm(() => {
     CACHE_INIT: "CACHE_INIT",
     CHUNKER: "CHUNKER",
     REINDEX: "REINDEX",
+    CONTENT_ROOT_INVALID: "CONTENT_ROOT_INVALID",
     TENANT_UNKNOWN: "TENANT_UNKNOWN",
     TENANT_READ_ONLY: "TENANT_READ_ONLY",
     RECORD_NOT_FOUND: "RECORD_NOT_FOUND"
@@ -10248,10 +10249,10 @@ function $constructor2(name, initializer3, params) {
   }
   Object.defineProperty(Definition, "name", { value: name });
   function _(def) {
-    var _a4;
+    var _a3;
     const inst = params?.Parent ? new Definition : this;
     init(inst, def);
-    (_a4 = inst._zod).deferred ?? (_a4.deferred = []);
+    (_a3 = inst._zod).deferred ?? (_a3.deferred = []);
     for (const fn of inst._zod.deferred) {
       fn();
     }
@@ -10273,7 +10274,7 @@ function config2(newConfig) {
     Object.assign(globalConfig2, newConfig);
   return globalConfig2;
 }
-var _a3, NEVER2, $brand2, $ZodAsyncError2, $ZodEncodeError2, globalConfig2;
+var _a2, NEVER2, $brand2, $ZodAsyncError2, $ZodEncodeError2, globalConfig2;
 var init_core = __esm(() => {
   NEVER2 = /* @__PURE__ */ Object.freeze({
     status: "aborted"
@@ -10290,7 +10291,7 @@ var init_core = __esm(() => {
       this.name = "ZodEncodeError";
     }
   };
-  (_a3 = globalThis).__zod_globalConfig ?? (_a3.__zod_globalConfig = {});
+  (_a2 = globalThis).__zod_globalConfig ?? (_a2.__zod_globalConfig = {});
   globalConfig2 = globalThis.__zod_globalConfig;
 });
 
@@ -10336,7 +10337,7 @@ __export(exports_util2, {
   floatSafeRemainder: () => floatSafeRemainder2,
   finalizeIssue: () => finalizeIssue2,
   extend: () => extend2,
-  explicitlyAborted: () => explicitlyAborted2,
+  explicitlyAborted: () => explicitlyAborted,
   escapeRegex: () => escapeRegex2,
   esc: () => esc2,
   defineLazy: () => defineLazy2,
@@ -10778,7 +10779,7 @@ function aborted2(x, startIndex = 0) {
   }
   return false;
 }
-function explicitlyAborted2(x, startIndex = 0) {
+function explicitlyAborted(x, startIndex = 0) {
   if (x.aborted === true)
     return true;
   for (let i = startIndex;i < x.issues.length; i++) {
@@ -10790,8 +10791,8 @@ function explicitlyAborted2(x, startIndex = 0) {
 }
 function prefixIssues2(path, issues) {
   return issues.map((iss) => {
-    var _a4;
-    (_a4 = iss).path ?? (_a4.path = []);
+    var _a3;
+    (_a3 = iss).path ?? (_a3.path = []);
     iss.path.unshift(path);
     return iss;
   });
@@ -10990,10 +10991,10 @@ var init_util = __esm(() => {
 });
 
 // ../../node_modules/zod/v4/core/errors.js
-function flattenError2(error51, mapper = (issue3) => issue3.message) {
+function flattenError2(error48, mapper = (issue3) => issue3.message) {
   const fieldErrors = {};
   const formErrors = [];
-  for (const sub of error51.issues) {
+  for (const sub of error48.issues) {
     if (sub.path.length > 0) {
       fieldErrors[sub.path[0]] = fieldErrors[sub.path[0]] || [];
       fieldErrors[sub.path[0]].push(mapper(sub));
@@ -11003,10 +11004,10 @@ function flattenError2(error51, mapper = (issue3) => issue3.message) {
   }
   return { formErrors, fieldErrors };
 }
-function formatError2(error51, mapper = (issue3) => issue3.message) {
+function formatError2(error48, mapper = (issue3) => issue3.message) {
   const fieldErrors = { _errors: [] };
-  const processError = (error52, path = []) => {
-    for (const issue3 of error52.issues) {
+  const processError = (error49, path = []) => {
+    for (const issue3 of error49.issues) {
       if (issue3.code === "invalid_union" && issue3.errors.length) {
         issue3.errors.map((issues) => processError({ issues }, [...path, ...issue3.path]));
       } else if (issue3.code === "invalid_key") {
@@ -11036,14 +11037,14 @@ function formatError2(error51, mapper = (issue3) => issue3.message) {
       }
     }
   };
-  processError(error51);
+  processError(error48);
   return fieldErrors;
 }
-function treeifyError2(error51, mapper = (issue3) => issue3.message) {
+function treeifyError2(error48, mapper = (issue3) => issue3.message) {
   const result = { errors: [] };
-  const processError = (error52, path = []) => {
-    var _a4, _b;
-    for (const issue3 of error52.issues) {
+  const processError = (error49, path = []) => {
+    var _a3, _b;
+    for (const issue3 of error49.issues) {
       if (issue3.code === "invalid_union" && issue3.errors.length) {
         issue3.errors.map((issues) => processError({ issues }, [...path, ...issue3.path]));
       } else if (issue3.code === "invalid_key") {
@@ -11063,7 +11064,7 @@ function treeifyError2(error51, mapper = (issue3) => issue3.message) {
           const terminal = i === fullpath.length - 1;
           if (typeof el === "string") {
             curr.properties ?? (curr.properties = {});
-            (_a4 = curr.properties)[el] ?? (_a4[el] = { errors: [] });
+            (_a3 = curr.properties)[el] ?? (_a3[el] = { errors: [] });
             curr = curr.properties[el];
           } else {
             curr.items ?? (curr.items = []);
@@ -11078,7 +11079,7 @@ function treeifyError2(error51, mapper = (issue3) => issue3.message) {
       }
     }
   };
-  processError(error51);
+  processError(error48);
   return result;
 }
 function toDotPath2(_path) {
@@ -11099,9 +11100,9 @@ function toDotPath2(_path) {
   }
   return segs.join("");
 }
-function prettifyError2(error51) {
+function prettifyError2(error48) {
   const lines = [];
-  const issues = [...error51.issues].sort((a, b) => (a.path ?? []).length - (b.path ?? []).length);
+  const issues = [...error48.issues].sort((a, b) => (a.path ?? []).length - (b.path ?? []).length);
   for (const issue3 of issues) {
     lines.push(`\u2716 ${issue3.message}`);
     if (issue3.path?.length)
@@ -11255,7 +11256,7 @@ __export(exports_regexes2, {
   ipv4: () => ipv43,
   integer: () => integer2,
   idnEmail: () => idnEmail2,
-  httpProtocol: () => httpProtocol2,
+  httpProtocol: () => httpProtocol,
   html5Email: () => html5Email2,
   hostname: () => hostname3,
   hex: () => hex3,
@@ -11312,7 +11313,7 @@ var cuid5, cuid23, ulid3, xid3, ksuid3, nanoid3, duration3, extendedDuration2, g
 }, uuid42, uuid62, uuid72, email3, html5Email2, rfc5322Email2, unicodeEmail2, idnEmail2, browserEmail2, _emoji3 = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$`, ipv43, ipv63, mac3 = (delimiter) => {
   const escapedDelim = escapeRegex2(delimiter ?? ":");
   return new RegExp(`^(?:[0-9A-F]{2}${escapedDelim}){5}[0-9A-F]{2}$|^(?:[0-9a-f]{2}${escapedDelim}){5}[0-9a-f]{2}$`);
-}, cidrv43, cidrv63, base643, base64url3, hostname3, domain2, httpProtocol2, e1643, dateSource2 = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`, date6, string5 = (params) => {
+}, cidrv43, cidrv63, base643, base64url3, hostname3, domain2, httpProtocol, e1643, dateSource2 = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`, date6, string5 = (params) => {
   const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
   return new RegExp(`^${regex}$`);
 }, bigint5, integer2, number5, boolean5, _null4, _undefined4, lowercase2, uppercase2, hex3, md5_hex2, md5_base642, md5_base64url2, sha1_hex2, sha1_base642, sha1_base64url2, sha256_hex2, sha256_base642, sha256_base64url2, sha384_hex2, sha384_base642, sha384_base64url2, sha512_hex2, sha512_base642, sha512_base64url2;
@@ -11344,7 +11345,7 @@ var init_regexes = __esm(() => {
   base64url3 = /^[A-Za-z0-9_-]*$/;
   hostname3 = /^(?=.{1,253}\.?$)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?)*\.?$/;
   domain2 = /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
-  httpProtocol2 = /^https?$/;
+  httpProtocol = /^https?$/;
   e1643 = /^\+[1-9]\d{6,14}$/;
   date6 = /* @__PURE__ */ new RegExp(`^${dateSource2}$`);
   bigint5 = /^-?\d+n?$/;
@@ -11385,10 +11386,10 @@ var init_checks = __esm(() => {
   init_regexes();
   init_util();
   $ZodCheck2 = /* @__PURE__ */ $constructor2("$ZodCheck", (inst, def) => {
-    var _a4;
+    var _a3;
     inst._zod ?? (inst._zod = {});
     inst._zod.def = def;
-    (_a4 = inst._zod).onattach ?? (_a4.onattach = []);
+    (_a3 = inst._zod).onattach ?? (_a3.onattach = []);
   });
   numericOriginMap2 = {
     number: "number",
@@ -11454,8 +11455,8 @@ var init_checks = __esm(() => {
   $ZodCheckMultipleOf2 = /* @__PURE__ */ $constructor2("$ZodCheckMultipleOf", (inst, def) => {
     $ZodCheck2.init(inst, def);
     inst._zod.onattach.push((inst2) => {
-      var _a4;
-      (_a4 = inst2._zod.bag).multipleOf ?? (_a4.multipleOf = def.value);
+      var _a3;
+      (_a3 = inst2._zod.bag).multipleOf ?? (_a3.multipleOf = def.value);
     });
     inst._zod.check = (payload) => {
       if (typeof payload.value !== typeof def.value)
@@ -11588,9 +11589,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckMaxSize2 = /* @__PURE__ */ $constructor2("$ZodCheckMaxSize", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.size !== undefined;
     });
@@ -11616,9 +11617,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckMinSize2 = /* @__PURE__ */ $constructor2("$ZodCheckMinSize", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.size !== undefined;
     });
@@ -11644,9 +11645,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckSizeEquals2 = /* @__PURE__ */ $constructor2("$ZodCheckSizeEquals", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.size !== undefined;
     });
@@ -11674,9 +11675,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckMaxLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMaxLength", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.length !== undefined;
     });
@@ -11703,9 +11704,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckMinLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMinLength", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.length !== undefined;
     });
@@ -11732,9 +11733,9 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckLengthEquals2 = /* @__PURE__ */ $constructor2("$ZodCheckLengthEquals", (inst, def) => {
-    var _a4;
+    var _a3;
     $ZodCheck2.init(inst, def);
-    (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
+    (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
       const val = payload.value;
       return !nullish3(val) && val.length !== undefined;
     });
@@ -11763,7 +11764,7 @@ var init_checks = __esm(() => {
     };
   });
   $ZodCheckStringFormat2 = /* @__PURE__ */ $constructor2("$ZodCheckStringFormat", (inst, def) => {
-    var _a4, _b;
+    var _a3, _b;
     $ZodCheck2.init(inst, def);
     inst._zod.onattach.push((inst2) => {
       const bag = inst2._zod.bag;
@@ -11774,7 +11775,7 @@ var init_checks = __esm(() => {
       }
     });
     if (def.pattern)
-      (_a4 = inst._zod).check ?? (_a4.check = (payload) => {
+      (_a3 = inst._zod).check ?? (_a3.check = (payload) => {
         def.pattern.lastIndex = 0;
         if (def.pattern.test(payload.value))
           return;
@@ -12229,7 +12230,7 @@ function handleIntersectionResults2(result, left, right) {
   result.value = merged.data;
   return result;
 }
-function getTupleOptStart2(items, key) {
+function getTupleOptStart(items, key) {
   for (let i = items.length - 1;i >= 0; i--) {
     if (items[i]._zod[key] !== "optional")
       return i + 1;
@@ -12242,7 +12243,7 @@ function handleTupleResult2(result, final, index) {
   }
   final.value[index] = result.value;
 }
-function handleTupleResults2(itemResults, final, items, input, optoutStart) {
+function handleTupleResults(itemResults, final, items, input, optoutStart) {
   for (let i = 0;i < items.length; i++) {
     const r = itemResults[i];
     const isPresent = i < input.length;
@@ -12375,7 +12376,7 @@ function handleRefineResult2(result, payload, input, inst) {
     payload.issues.push(issue2(_iss));
   }
 }
-var $ZodType2, $ZodString2, $ZodStringFormat2, $ZodGUID2, $ZodUUID2, $ZodEmail2, $ZodURL2, $ZodEmoji2, $ZodNanoID2, $ZodCUID3, $ZodCUID22, $ZodULID2, $ZodXID2, $ZodKSUID2, $ZodISODateTime2, $ZodISODate2, $ZodISOTime2, $ZodISODuration2, $ZodIPv42, $ZodIPv62, $ZodMAC2, $ZodCIDRv42, $ZodCIDRv62, $ZodBase642, $ZodBase64URL2, $ZodE1642, $ZodJWT2, $ZodCustomStringFormat2, $ZodNumber2, $ZodNumberFormat2, $ZodBoolean2, $ZodBigInt2, $ZodBigIntFormat2, $ZodSymbol2, $ZodUndefined2, $ZodNull2, $ZodAny2, $ZodUnknown2, $ZodNever2, $ZodVoid2, $ZodDate2, $ZodArray2, $ZodObject2, $ZodObjectJIT2, $ZodUnion2, $ZodXor2, $ZodDiscriminatedUnion2, $ZodIntersection2, $ZodTuple2, $ZodRecord2, $ZodMap2, $ZodSet2, $ZodEnum2, $ZodLiteral2, $ZodFile2, $ZodTransform2, $ZodOptional2, $ZodExactOptional2, $ZodNullable2, $ZodDefault2, $ZodPrefault2, $ZodNonOptional2, $ZodSuccess2, $ZodCatch2, $ZodNaN2, $ZodPipe2, $ZodCodec2, $ZodPreprocess2, $ZodReadonly2, $ZodTemplateLiteral2, $ZodFunction2, $ZodPromise2, $ZodLazy2, $ZodCustom2;
+var $ZodType2, $ZodString2, $ZodStringFormat2, $ZodGUID2, $ZodUUID2, $ZodEmail2, $ZodURL2, $ZodEmoji2, $ZodNanoID2, $ZodCUID3, $ZodCUID22, $ZodULID2, $ZodXID2, $ZodKSUID2, $ZodISODateTime2, $ZodISODate2, $ZodISOTime2, $ZodISODuration2, $ZodIPv42, $ZodIPv62, $ZodMAC2, $ZodCIDRv42, $ZodCIDRv62, $ZodBase642, $ZodBase64URL2, $ZodE1642, $ZodJWT2, $ZodCustomStringFormat2, $ZodNumber2, $ZodNumberFormat2, $ZodBoolean2, $ZodBigInt2, $ZodBigIntFormat2, $ZodSymbol2, $ZodUndefined2, $ZodNull2, $ZodAny2, $ZodUnknown2, $ZodNever2, $ZodVoid2, $ZodDate2, $ZodArray2, $ZodObject2, $ZodObjectJIT2, $ZodUnion2, $ZodXor2, $ZodDiscriminatedUnion2, $ZodIntersection2, $ZodTuple2, $ZodRecord2, $ZodMap2, $ZodSet2, $ZodEnum2, $ZodLiteral2, $ZodFile2, $ZodTransform2, $ZodOptional2, $ZodExactOptional2, $ZodNullable2, $ZodDefault2, $ZodPrefault2, $ZodNonOptional2, $ZodSuccess2, $ZodCatch2, $ZodNaN2, $ZodPipe2, $ZodCodec2, $ZodPreprocess, $ZodReadonly2, $ZodTemplateLiteral2, $ZodFunction2, $ZodPromise2, $ZodLazy2, $ZodCustom2;
 var init_schemas = __esm(() => {
   init_checks();
   init_core();
@@ -12385,7 +12386,7 @@ var init_schemas = __esm(() => {
   init_versions();
   init_util();
   $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
-    var _a4;
+    var _a3;
     inst ?? (inst = {});
     inst._zod.def = def;
     inst._zod.bag = inst._zod.bag || {};
@@ -12400,7 +12401,7 @@ var init_schemas = __esm(() => {
       }
     }
     if (checks3.length === 0) {
-      (_a4 = inst._zod).deferred ?? (_a4.deferred = []);
+      (_a3 = inst._zod).deferred ?? (_a3.deferred = []);
       inst._zod.deferred?.push(() => {
         inst._zod.run = inst._zod.parse;
       });
@@ -12410,7 +12411,7 @@ var init_schemas = __esm(() => {
         let asyncResult;
         for (const ch of checks4) {
           if (ch._zod.def.when) {
-            if (explicitlyAborted2(payload))
+            if (explicitlyAborted(payload))
               continue;
             const shouldRun = ch._zod.def.when(payload);
             if (!shouldRun)
@@ -12551,7 +12552,7 @@ var init_schemas = __esm(() => {
     inst._zod.check = (payload) => {
       try {
         const trimmed = payload.value.trim();
-        if (!def.normalize && def.protocol?.source === httpProtocol2.source) {
+        if (!def.normalize && def.protocol?.source === httpProtocol.source) {
           if (!/^https?:\/\//i.test(trimmed)) {
             payload.issues.push({
               code: "invalid_format",
@@ -13351,8 +13352,8 @@ var init_schemas = __esm(() => {
       }
       payload.value = [];
       const proms = [];
-      const optinStart = getTupleOptStart2(items, "optin");
-      const optoutStart = getTupleOptStart2(items, "optout");
+      const optinStart = getTupleOptStart(items, "optin");
+      const optoutStart = getTupleOptStart(items, "optout");
       if (!def.rest) {
         if (input.length < optinStart) {
           payload.issues.push({
@@ -13401,9 +13402,9 @@ var init_schemas = __esm(() => {
         }
       }
       if (proms.length) {
-        return Promise.all(proms).then(() => handleTupleResults2(itemResults, payload, items, input, optoutStart));
+        return Promise.all(proms).then(() => handleTupleResults(itemResults, payload, items, input, optoutStart));
       }
-      return handleTupleResults2(itemResults, payload, items, input, optoutStart);
+      return handleTupleResults(itemResults, payload, items, input, optoutStart);
     };
   });
   $ZodRecord2 = /* @__PURE__ */ $constructor2("$ZodRecord", (inst, def) => {
@@ -13886,7 +13887,7 @@ var init_schemas = __esm(() => {
       }
     };
   });
-  $ZodPreprocess2 = /* @__PURE__ */ $constructor2("$ZodPreprocess", (inst, def) => {
+  $ZodPreprocess = /* @__PURE__ */ $constructor2("$ZodPreprocess", (inst, def) => {
     $ZodPipe2.init(inst, def);
   });
   $ZodReadonly2 = /* @__PURE__ */ $constructor2("$ZodReadonly", (inst, def) => {
@@ -14072,10 +14073,10 @@ var init_schemas = __esm(() => {
 // ../../node_modules/zod/v4/locales/ar.js
 function ar_default2() {
   return {
-    localeError: error51()
+    localeError: error48()
   };
 }
-var error51 = () => {
+var error48 = () => {
   const Sizable = {
     string: { unit: "\u062D\u0631\u0641", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" },
     file: { unit: "\u0628\u0627\u064A\u062A", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" },
@@ -14182,10 +14183,10 @@ var init_ar = __esm(() => {
 // ../../node_modules/zod/v4/locales/az.js
 function az_default2() {
   return {
-    localeError: error52()
+    localeError: error49()
   };
 }
-var error52 = () => {
+var error49 = () => {
   const Sizable = {
     string: { unit: "simvol", verb: "olmal\u0131d\u0131r" },
     file: { unit: "bayt", verb: "olmal\u0131d\u0131r" },
@@ -14306,10 +14307,10 @@ function getBelarusianPlural2(count, one, few, many) {
 }
 function be_default2() {
   return {
-    localeError: error53()
+    localeError: error50()
   };
 }
-var error53 = () => {
+var error50 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -14451,10 +14452,10 @@ var init_be = __esm(() => {
 // ../../node_modules/zod/v4/locales/bg.js
 function bg_default2() {
   return {
-    localeError: error54()
+    localeError: error51()
   };
 }
-var error54 = () => {
+var error51 = () => {
   const Sizable = {
     string: { unit: "\u0441\u0438\u043C\u0432\u043E\u043B\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" },
     file: { unit: "\u0431\u0430\u0439\u0442\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" },
@@ -14575,10 +14576,10 @@ var init_bg = __esm(() => {
 // ../../node_modules/zod/v4/locales/ca.js
 function ca_default2() {
   return {
-    localeError: error55()
+    localeError: error52()
   };
 }
-var error55 = () => {
+var error52 = () => {
   const Sizable = {
     string: { unit: "car\xE0cters", verb: "contenir" },
     file: { unit: "bytes", verb: "contenir" },
@@ -14686,10 +14687,10 @@ var init_ca = __esm(() => {
 // ../../node_modules/zod/v4/locales/cs.js
 function cs_default2() {
   return {
-    localeError: error56()
+    localeError: error53()
   };
 }
-var error56 = () => {
+var error53 = () => {
   const Sizable = {
     string: { unit: "znak\u016F", verb: "m\xEDt" },
     file: { unit: "bajt\u016F", verb: "m\xEDt" },
@@ -14801,10 +14802,10 @@ var init_cs = __esm(() => {
 // ../../node_modules/zod/v4/locales/da.js
 function da_default2() {
   return {
-    localeError: error57()
+    localeError: error54()
   };
 }
-var error57 = () => {
+var error54 = () => {
   const Sizable = {
     string: { unit: "tegn", verb: "havde" },
     file: { unit: "bytes", verb: "havde" },
@@ -14920,10 +14921,10 @@ var init_da = __esm(() => {
 // ../../node_modules/zod/v4/locales/de.js
 function de_default2() {
   return {
-    localeError: error58()
+    localeError: error55()
   };
 }
-var error58 = () => {
+var error55 = () => {
   const Sizable = {
     string: { unit: "Zeichen", verb: "zu haben" },
     file: { unit: "Bytes", verb: "zu haben" },
@@ -15030,12 +15031,12 @@ var init_de = __esm(() => {
 });
 
 // ../../node_modules/zod/v4/locales/el.js
-function el_default2() {
+function el_default() {
   return {
-    localeError: error59()
+    localeError: error56()
   };
 }
-var error59 = () => {
+var error56 = () => {
   const Sizable = {
     string: { unit: "\u03C7\u03B1\u03C1\u03B1\u03BA\u03C4\u03AE\u03C1\u03B5\u03C2", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
     file: { unit: "bytes", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
@@ -15145,10 +15146,10 @@ var init_el = __esm(() => {
 // ../../node_modules/zod/v4/locales/en.js
 function en_default2() {
   return {
-    localeError: error60()
+    localeError: error57()
   };
 }
-var error60 = () => {
+var error57 = () => {
   const Sizable = {
     string: { unit: "characters", verb: "to have" },
     file: { unit: "bytes", verb: "to have" },
@@ -15259,10 +15260,10 @@ var init_en = __esm(() => {
 // ../../node_modules/zod/v4/locales/eo.js
 function eo_default2() {
   return {
-    localeError: error61()
+    localeError: error58()
   };
 }
-var error61 = () => {
+var error58 = () => {
   const Sizable = {
     string: { unit: "karaktrojn", verb: "havi" },
     file: { unit: "bajtojn", verb: "havi" },
@@ -15372,10 +15373,10 @@ var init_eo = __esm(() => {
 // ../../node_modules/zod/v4/locales/es.js
 function es_default2() {
   return {
-    localeError: error62()
+    localeError: error59()
   };
 }
-var error62 = () => {
+var error59 = () => {
   const Sizable = {
     string: { unit: "caracteres", verb: "tener" },
     file: { unit: "bytes", verb: "tener" },
@@ -15508,10 +15509,10 @@ var init_es = __esm(() => {
 // ../../node_modules/zod/v4/locales/fa.js
 function fa_default2() {
   return {
-    localeError: error63()
+    localeError: error60()
   };
 }
-var error63 = () => {
+var error60 = () => {
   const Sizable = {
     string: { unit: "\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" },
     file: { unit: "\u0628\u0627\u06CC\u062A", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" },
@@ -15626,10 +15627,10 @@ var init_fa = __esm(() => {
 // ../../node_modules/zod/v4/locales/fi.js
 function fi_default2() {
   return {
-    localeError: error64()
+    localeError: error61()
   };
 }
-var error64 = () => {
+var error61 = () => {
   const Sizable = {
     string: { unit: "merkki\xE4", subject: "merkkijonon" },
     file: { unit: "tavua", subject: "tiedoston" },
@@ -15742,10 +15743,10 @@ var init_fi = __esm(() => {
 // ../../node_modules/zod/v4/locales/fr.js
 function fr_default2() {
   return {
-    localeError: error65()
+    localeError: error62()
   };
 }
-var error65 = () => {
+var error62 = () => {
   const Sizable = {
     string: { unit: "caract\xE8res", verb: "avoir" },
     file: { unit: "octets", verb: "avoir" },
@@ -15871,10 +15872,10 @@ var init_fr = __esm(() => {
 // ../../node_modules/zod/v4/locales/fr-CA.js
 function fr_CA_default2() {
   return {
-    localeError: error66()
+    localeError: error63()
   };
 }
-var error66 = () => {
+var error63 = () => {
   const Sizable = {
     string: { unit: "caract\xE8res", verb: "avoir" },
     file: { unit: "octets", verb: "avoir" },
@@ -15982,10 +15983,10 @@ var init_fr_CA = __esm(() => {
 // ../../node_modules/zod/v4/locales/he.js
 function he_default2() {
   return {
-    localeError: error67()
+    localeError: error64()
   };
 }
-var error67 = () => {
+var error64 = () => {
   const TypeNames = {
     string: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA", gender: "f" },
     number: { label: "\u05DE\u05E1\u05E4\u05E8", gender: "m" },
@@ -16177,12 +16178,12 @@ var init_he = __esm(() => {
 });
 
 // ../../node_modules/zod/v4/locales/hr.js
-function hr_default2() {
+function hr_default() {
   return {
-    localeError: error68()
+    localeError: error65()
   };
 }
-var error68 = () => {
+var error65 = () => {
   const Sizable = {
     string: { unit: "znakova", verb: "imati" },
     file: { unit: "bajtova", verb: "imati" },
@@ -16305,10 +16306,10 @@ var init_hr = __esm(() => {
 // ../../node_modules/zod/v4/locales/hu.js
 function hu_default2() {
   return {
-    localeError: error69()
+    localeError: error66()
   };
 }
-var error69 = () => {
+var error66 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "legyen" },
     file: { unit: "byte", verb: "legyen" },
@@ -16427,10 +16428,10 @@ function withDefiniteArticle2(word) {
 }
 function hy_default2() {
   return {
-    localeError: error70()
+    localeError: error67()
   };
 }
-var error70 = () => {
+var error67 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -16568,10 +16569,10 @@ var init_hy = __esm(() => {
 // ../../node_modules/zod/v4/locales/id.js
 function id_default2() {
   return {
-    localeError: error71()
+    localeError: error68()
   };
 }
-var error71 = () => {
+var error68 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "memiliki" },
     file: { unit: "byte", verb: "memiliki" },
@@ -16678,10 +16679,10 @@ var init_id = __esm(() => {
 // ../../node_modules/zod/v4/locales/is.js
 function is_default2() {
   return {
-    localeError: error72()
+    localeError: error69()
   };
 }
-var error72 = () => {
+var error69 = () => {
   const Sizable = {
     string: { unit: "stafi", verb: "a\xF0 hafa" },
     file: { unit: "b\xE6ti", verb: "a\xF0 hafa" },
@@ -16791,10 +16792,10 @@ var init_is = __esm(() => {
 // ../../node_modules/zod/v4/locales/it.js
 function it_default2() {
   return {
-    localeError: error73()
+    localeError: error70()
   };
 }
-var error73 = () => {
+var error70 = () => {
   const Sizable = {
     string: { unit: "caratteri", verb: "avere" },
     file: { unit: "byte", verb: "avere" },
@@ -16903,10 +16904,10 @@ var init_it = __esm(() => {
 // ../../node_modules/zod/v4/locales/ja.js
 function ja_default2() {
   return {
-    localeError: error74()
+    localeError: error71()
   };
 }
-var error74 = () => {
+var error71 = () => {
   const Sizable = {
     string: { unit: "\u6587\u5B57", verb: "\u3067\u3042\u308B" },
     file: { unit: "\u30D0\u30A4\u30C8", verb: "\u3067\u3042\u308B" },
@@ -17014,10 +17015,10 @@ var init_ja = __esm(() => {
 // ../../node_modules/zod/v4/locales/ka.js
 function ka_default2() {
   return {
-    localeError: error75()
+    localeError: error72()
   };
 }
-var error75 = () => {
+var error72 = () => {
   const Sizable = {
     string: { unit: "\u10E1\u10D8\u10DB\u10D1\u10DD\u10DA\u10DD", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" },
     file: { unit: "\u10D1\u10D0\u10D8\u10E2\u10D8", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" },
@@ -17130,10 +17131,10 @@ var init_ka = __esm(() => {
 // ../../node_modules/zod/v4/locales/km.js
 function km_default2() {
   return {
-    localeError: error76()
+    localeError: error73()
   };
 }
-var error76 = () => {
+var error73 = () => {
   const Sizable = {
     string: { unit: "\u178F\u17BD\u17A2\u1780\u17D2\u179F\u179A", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" },
     file: { unit: "\u1794\u17C3", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" },
@@ -17252,10 +17253,10 @@ var init_kh = __esm(() => {
 // ../../node_modules/zod/v4/locales/ko.js
 function ko_default2() {
   return {
-    localeError: error77()
+    localeError: error74()
   };
 }
-var error77 = () => {
+var error74 = () => {
   const Sizable = {
     string: { unit: "\uBB38\uC790", verb: "to have" },
     file: { unit: "\uBC14\uC774\uD2B8", verb: "to have" },
@@ -17377,12 +17378,12 @@ function getUnitTypeFromNumber2(number6) {
 }
 function lt_default2() {
   return {
-    localeError: error78()
+    localeError: error75()
   };
 }
 var capitalizeFirstCharacter2 = (text) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
-}, error78 = () => {
+}, error75 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -17573,10 +17574,10 @@ var init_lt = __esm(() => {
 // ../../node_modules/zod/v4/locales/mk.js
 function mk_default2() {
   return {
-    localeError: error79()
+    localeError: error76()
   };
 }
-var error79 = () => {
+var error76 = () => {
   const Sizable = {
     string: { unit: "\u0437\u043D\u0430\u0446\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" },
     file: { unit: "\u0431\u0430\u0458\u0442\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" },
@@ -17686,10 +17687,10 @@ var init_mk = __esm(() => {
 // ../../node_modules/zod/v4/locales/ms.js
 function ms_default2() {
   return {
-    localeError: error80()
+    localeError: error77()
   };
 }
-var error80 = () => {
+var error77 = () => {
   const Sizable = {
     string: { unit: "aksara", verb: "mempunyai" },
     file: { unit: "bait", verb: "mempunyai" },
@@ -17797,10 +17798,10 @@ var init_ms = __esm(() => {
 // ../../node_modules/zod/v4/locales/nl.js
 function nl_default2() {
   return {
-    localeError: error81()
+    localeError: error78()
   };
 }
-var error81 = () => {
+var error78 = () => {
   const Sizable = {
     string: { unit: "tekens", verb: "heeft" },
     file: { unit: "bytes", verb: "heeft" },
@@ -17911,10 +17912,10 @@ var init_nl = __esm(() => {
 // ../../node_modules/zod/v4/locales/no.js
 function no_default2() {
   return {
-    localeError: error82()
+    localeError: error79()
   };
 }
-var error82 = () => {
+var error79 = () => {
   const Sizable = {
     string: { unit: "tegn", verb: "\xE5 ha" },
     file: { unit: "bytes", verb: "\xE5 ha" },
@@ -18023,10 +18024,10 @@ var init_no = __esm(() => {
 // ../../node_modules/zod/v4/locales/ota.js
 function ota_default2() {
   return {
-    localeError: error83()
+    localeError: error80()
   };
 }
-var error83 = () => {
+var error80 = () => {
   const Sizable = {
     string: { unit: "harf", verb: "olmal\u0131d\u0131r" },
     file: { unit: "bayt", verb: "olmal\u0131d\u0131r" },
@@ -18136,10 +18137,10 @@ var init_ota = __esm(() => {
 // ../../node_modules/zod/v4/locales/ps.js
 function ps_default2() {
   return {
-    localeError: error84()
+    localeError: error81()
   };
 }
-var error84 = () => {
+var error81 = () => {
   const Sizable = {
     string: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" },
     file: { unit: "\u0628\u0627\u06CC\u067C\u0633", verb: "\u0648\u0644\u0631\u064A" },
@@ -18254,10 +18255,10 @@ var init_ps = __esm(() => {
 // ../../node_modules/zod/v4/locales/pl.js
 function pl_default2() {
   return {
-    localeError: error85()
+    localeError: error82()
   };
 }
-var error85 = () => {
+var error82 = () => {
   const Sizable = {
     string: { unit: "znak\xF3w", verb: "mie\u0107" },
     file: { unit: "bajt\xF3w", verb: "mie\u0107" },
@@ -18367,10 +18368,10 @@ var init_pl = __esm(() => {
 // ../../node_modules/zod/v4/locales/pt.js
 function pt_default2() {
   return {
-    localeError: error86()
+    localeError: error83()
   };
 }
-var error86 = () => {
+var error83 = () => {
   const Sizable = {
     string: { unit: "caracteres", verb: "ter" },
     file: { unit: "bytes", verb: "ter" },
@@ -18477,12 +18478,12 @@ var init_pt = __esm(() => {
 });
 
 // ../../node_modules/zod/v4/locales/ro.js
-function ro_default2() {
+function ro_default() {
   return {
-    localeError: error87()
+    localeError: error84()
   };
 }
-var error87 = () => {
+var error84 = () => {
   const Sizable = {
     string: { unit: "caractere", verb: "s\u0103 aib\u0103" },
     file: { unit: "octe\u021Bi", verb: "s\u0103 aib\u0103" },
@@ -18617,10 +18618,10 @@ function getRussianPlural2(count, one, few, many) {
 }
 function ru_default2() {
   return {
-    localeError: error88()
+    localeError: error85()
   };
 }
-var error88 = () => {
+var error85 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -18762,10 +18763,10 @@ var init_ru = __esm(() => {
 // ../../node_modules/zod/v4/locales/sl.js
 function sl_default2() {
   return {
-    localeError: error89()
+    localeError: error86()
   };
 }
-var error89 = () => {
+var error86 = () => {
   const Sizable = {
     string: { unit: "znakov", verb: "imeti" },
     file: { unit: "bajtov", verb: "imeti" },
@@ -18875,10 +18876,10 @@ var init_sl = __esm(() => {
 // ../../node_modules/zod/v4/locales/sv.js
 function sv_default2() {
   return {
-    localeError: error90()
+    localeError: error87()
   };
 }
-var error90 = () => {
+var error87 = () => {
   const Sizable = {
     string: { unit: "tecken", verb: "att ha" },
     file: { unit: "bytes", verb: "att ha" },
@@ -18989,10 +18990,10 @@ var init_sv = __esm(() => {
 // ../../node_modules/zod/v4/locales/ta.js
 function ta_default2() {
   return {
-    localeError: error91()
+    localeError: error88()
   };
 }
-var error91 = () => {
+var error88 = () => {
   const Sizable = {
     string: { unit: "\u0B8E\u0BB4\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1\u0B95\u0BCD\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" },
     file: { unit: "\u0BAA\u0BC8\u0B9F\u0BCD\u0B9F\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" },
@@ -19103,10 +19104,10 @@ var init_ta = __esm(() => {
 // ../../node_modules/zod/v4/locales/th.js
 function th_default2() {
   return {
-    localeError: error92()
+    localeError: error89()
   };
 }
-var error92 = () => {
+var error89 = () => {
   const Sizable = {
     string: { unit: "\u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" },
     file: { unit: "\u0E44\u0E1A\u0E15\u0E4C", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" },
@@ -19217,10 +19218,10 @@ var init_th = __esm(() => {
 // ../../node_modules/zod/v4/locales/tr.js
 function tr_default2() {
   return {
-    localeError: error93()
+    localeError: error90()
   };
 }
-var error93 = () => {
+var error90 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "olmal\u0131" },
     file: { unit: "bayt", verb: "olmal\u0131" },
@@ -19326,10 +19327,10 @@ var init_tr = __esm(() => {
 // ../../node_modules/zod/v4/locales/uk.js
 function uk_default2() {
   return {
-    localeError: error94()
+    localeError: error91()
   };
 }
-var error94 = () => {
+var error91 = () => {
   const Sizable = {
     string: { unit: "\u0441\u0438\u043C\u0432\u043E\u043B\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" },
     file: { unit: "\u0431\u0430\u0439\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" },
@@ -19446,10 +19447,10 @@ var init_ua = __esm(() => {
 // ../../node_modules/zod/v4/locales/ur.js
 function ur_default2() {
   return {
-    localeError: error95()
+    localeError: error92()
   };
 }
-var error95 = () => {
+var error92 = () => {
   const Sizable = {
     string: { unit: "\u062D\u0631\u0648\u0641", verb: "\u06C1\u0648\u0646\u0627" },
     file: { unit: "\u0628\u0627\u0626\u0679\u0633", verb: "\u06C1\u0648\u0646\u0627" },
@@ -19560,10 +19561,10 @@ var init_ur = __esm(() => {
 // ../../node_modules/zod/v4/locales/uz.js
 function uz_default2() {
   return {
-    localeError: error96()
+    localeError: error93()
   };
 }
-var error96 = () => {
+var error93 = () => {
   const Sizable = {
     string: { unit: "belgi", verb: "bo\u2018lishi kerak" },
     file: { unit: "bayt", verb: "bo\u2018lishi kerak" },
@@ -19674,10 +19675,10 @@ var init_uz = __esm(() => {
 // ../../node_modules/zod/v4/locales/vi.js
 function vi_default2() {
   return {
-    localeError: error97()
+    localeError: error94()
   };
 }
-var error97 = () => {
+var error94 = () => {
   const Sizable = {
     string: { unit: "k\xFD t\u1EF1", verb: "c\xF3" },
     file: { unit: "byte", verb: "c\xF3" },
@@ -19786,10 +19787,10 @@ var init_vi = __esm(() => {
 // ../../node_modules/zod/v4/locales/zh-CN.js
 function zh_CN_default2() {
   return {
-    localeError: error98()
+    localeError: error95()
   };
 }
-var error98 = () => {
+var error95 = () => {
   const Sizable = {
     string: { unit: "\u5B57\u7B26", verb: "\u5305\u542B" },
     file: { unit: "\u5B57\u8282", verb: "\u5305\u542B" },
@@ -19899,10 +19900,10 @@ var init_zh_CN = __esm(() => {
 // ../../node_modules/zod/v4/locales/zh-TW.js
 function zh_TW_default2() {
   return {
-    localeError: error99()
+    localeError: error96()
   };
 }
-var error99 = () => {
+var error96 = () => {
   const Sizable = {
     string: { unit: "\u5B57\u5143", verb: "\u64C1\u6709" },
     file: { unit: "\u4F4D\u5143\u7D44", verb: "\u64C1\u6709" },
@@ -20010,10 +20011,10 @@ var init_zh_TW = __esm(() => {
 // ../../node_modules/zod/v4/locales/yo.js
 function yo_default2() {
   return {
-    localeError: error100()
+    localeError: error97()
   };
 }
-var error100 = () => {
+var error97 = () => {
   const Sizable = {
     string: { unit: "\xE0mi", verb: "n\xED" },
     file: { unit: "bytes", verb: "n\xED" },
@@ -20135,7 +20136,7 @@ __export(exports_locales2, {
   sv: () => sv_default2,
   sl: () => sl_default2,
   ru: () => ru_default2,
-  ro: () => ro_default2,
+  ro: () => ro_default,
   pt: () => pt_default2,
   ps: () => ps_default2,
   pl: () => pl_default2,
@@ -20155,7 +20156,7 @@ __export(exports_locales2, {
   id: () => id_default2,
   hy: () => hy_default2,
   hu: () => hu_default2,
-  hr: () => hr_default2,
+  hr: () => hr_default,
   he: () => he_default2,
   frCA: () => fr_CA_default2,
   fr: () => fr_default2,
@@ -20164,7 +20165,7 @@ __export(exports_locales2, {
   es: () => es_default2,
   eo: () => eo_default2,
   en: () => en_default2,
-  el: () => el_default2,
+  el: () => el_default,
   de: () => de_default2,
   da: () => da_default2,
   cs: () => cs_default2,
@@ -20273,11 +20274,11 @@ class $ZodRegistry2 {
 function registry2() {
   return new $ZodRegistry2;
 }
-var _a4, $output2, $input2, globalRegistry2;
+var _a3, $output2, $input2, globalRegistry2;
 var init_registries = __esm(() => {
   $output2 = Symbol("ZodOutput");
   $input2 = Symbol("ZodInput");
-  (_a4 = globalThis).__zod_globalRegistry ?? (_a4.__zod_globalRegistry = registry2());
+  (_a3 = globalThis).__zod_globalRegistry ?? (_a3.__zod_globalRegistry = registry2());
   globalRegistry2 = globalThis.__zod_globalRegistry;
 });
 
@@ -21231,7 +21232,7 @@ function initializeContext2(params) {
   };
 }
 function process4(schema, ctx, _params = { path: [], schemaPath: [] }) {
-  var _a5;
+  var _a4;
   const def = schema._zod.def;
   const seen = ctx.seen.get(schema);
   if (seen) {
@@ -21279,7 +21280,7 @@ function process4(schema, ctx, _params = { path: [], schemaPath: [] }) {
     delete result.schema.default;
   }
   if (ctx.io === "input" && "_prefault" in result.schema)
-    (_a5 = result.schema).default ?? (_a5.default = result.schema._prefault);
+    (_a4 = result.schema).default ?? (_a4.default = result.schema._prefault);
   delete result.schema._prefault;
   const _result = ctx.seen.get(schema);
   return _result.schema;
@@ -22336,7 +22337,7 @@ __export(exports_core4, {
   $ZodRealError: () => $ZodRealError2,
   $ZodReadonly: () => $ZodReadonly2,
   $ZodPromise: () => $ZodPromise2,
-  $ZodPreprocess: () => $ZodPreprocess2,
+  $ZodPreprocess: () => $ZodPreprocess,
   $ZodPrefault: () => $ZodPrefault2,
   $ZodPipe: () => $ZodPipe2,
   $ZodOptional: () => $ZodOptional2,
@@ -22635,7 +22636,7 @@ __export(exports_schemas4, {
   json: () => json2,
   ipv6: () => ipv64,
   ipv4: () => ipv44,
-  invertCodec: () => invertCodec2,
+  invertCodec: () => invertCodec,
   intersection: () => intersection3,
   int64: () => int642,
   int32: () => int322,
@@ -22696,7 +22697,7 @@ __export(exports_schemas4, {
   ZodRecord: () => ZodRecord2,
   ZodReadonly: () => ZodReadonly2,
   ZodPromise: () => ZodPromise2,
-  ZodPreprocess: () => ZodPreprocess2,
+  ZodPreprocess: () => ZodPreprocess,
   ZodPrefault: () => ZodPrefault2,
   ZodPipe: () => ZodPipe2,
   ZodOptional: () => ZodOptional2,
@@ -22745,12 +22746,12 @@ __export(exports_schemas4, {
   ZodArray: () => ZodArray2,
   ZodAny: () => ZodAny2
 });
-function _installLazyMethods2(inst, group, methods) {
+function _installLazyMethods(inst, group, methods) {
   const proto = Object.getPrototypeOf(inst);
-  let installed = _installedGroups2.get(proto);
+  let installed = _installedGroups.get(proto);
   if (!installed) {
     installed = new Set;
-    _installedGroups2.set(proto, installed);
+    _installedGroups.set(proto, installed);
   }
   if (installed.has(group))
     return;
@@ -23162,7 +23163,7 @@ function codec2(in_, out, params) {
     reverseTransform: params.encode
   });
 }
-function invertCodec2(codec3) {
+function invertCodec(codec3) {
   const def = codec3._zod.def;
   return new ZodCodec2({
     type: "pipe",
@@ -23249,13 +23250,13 @@ function json2(params) {
   return jsonSchema;
 }
 function preprocess2(fn, schema) {
-  return new ZodPreprocess2({
+  return new ZodPreprocess({
     type: "pipe",
     in: transform2(fn),
     out: schema
   });
 }
-var _installedGroups2, ZodType2, _ZodString2, ZodString2, ZodStringFormat2, ZodEmail2, ZodGUID2, ZodUUID2, ZodURL2, ZodEmoji2, ZodNanoID2, ZodCUID3, ZodCUID22, ZodULID2, ZodXID2, ZodKSUID2, ZodIPv42, ZodMAC2, ZodIPv62, ZodCIDRv42, ZodCIDRv62, ZodBase642, ZodBase64URL2, ZodE1642, ZodJWT2, ZodCustomStringFormat2, ZodNumber2, ZodNumberFormat2, ZodBoolean2, ZodBigInt2, ZodBigIntFormat2, ZodSymbol2, ZodUndefined2, ZodNull2, ZodAny2, ZodUnknown2, ZodNever2, ZodVoid2, ZodDate2, ZodArray2, ZodObject2, ZodUnion2, ZodXor2, ZodDiscriminatedUnion2, ZodIntersection2, ZodTuple2, ZodRecord2, ZodMap2, ZodSet2, ZodEnum2, ZodLiteral2, ZodFile2, ZodTransform2, ZodOptional2, ZodExactOptional2, ZodNullable2, ZodDefault2, ZodPrefault2, ZodNonOptional2, ZodSuccess2, ZodCatch2, ZodNaN2, ZodPipe2, ZodCodec2, ZodPreprocess2, ZodReadonly2, ZodTemplateLiteral2, ZodLazy2, ZodPromise2, ZodFunction2, ZodCustom2, describe5, meta4, stringbool2 = (...args) => _stringbool2({
+var _installedGroups, ZodType2, _ZodString2, ZodString2, ZodStringFormat2, ZodEmail2, ZodGUID2, ZodUUID2, ZodURL2, ZodEmoji2, ZodNanoID2, ZodCUID3, ZodCUID22, ZodULID2, ZodXID2, ZodKSUID2, ZodIPv42, ZodMAC2, ZodIPv62, ZodCIDRv42, ZodCIDRv62, ZodBase642, ZodBase64URL2, ZodE1642, ZodJWT2, ZodCustomStringFormat2, ZodNumber2, ZodNumberFormat2, ZodBoolean2, ZodBigInt2, ZodBigIntFormat2, ZodSymbol2, ZodUndefined2, ZodNull2, ZodAny2, ZodUnknown2, ZodNever2, ZodVoid2, ZodDate2, ZodArray2, ZodObject2, ZodUnion2, ZodXor2, ZodDiscriminatedUnion2, ZodIntersection2, ZodTuple2, ZodRecord2, ZodMap2, ZodSet2, ZodEnum2, ZodLiteral2, ZodFile2, ZodTransform2, ZodOptional2, ZodExactOptional2, ZodNullable2, ZodDefault2, ZodPrefault2, ZodNonOptional2, ZodSuccess2, ZodCatch2, ZodNaN2, ZodPipe2, ZodCodec2, ZodPreprocess, ZodReadonly2, ZodTemplateLiteral2, ZodLazy2, ZodPromise2, ZodFunction2, ZodCustom2, describe5, meta4, stringbool2 = (...args) => _stringbool2({
   Codec: ZodCodec2,
   Boolean: ZodBoolean2,
   String: ZodString2
@@ -23268,7 +23269,7 @@ var init_schemas2 = __esm(() => {
   init_checks2();
   init_iso();
   init_parse2();
-  _installedGroups2 = /* @__PURE__ */ new WeakMap;
+  _installedGroups = /* @__PURE__ */ new WeakMap;
   ZodType2 = /* @__PURE__ */ $constructor2("ZodType", (inst, def) => {
     $ZodType2.init(inst, def);
     Object.assign(inst["~standard"], {
@@ -23294,7 +23295,7 @@ var init_schemas2 = __esm(() => {
     inst.safeDecode = (data, params) => safeDecode4(inst, data, params);
     inst.safeEncodeAsync = async (data, params) => safeEncodeAsync4(inst, data, params);
     inst.safeDecodeAsync = async (data, params) => safeDecodeAsync4(inst, data, params);
-    _installLazyMethods2(inst, "ZodType", {
+    _installLazyMethods(inst, "ZodType", {
       check(...chks) {
         const def2 = this.def;
         return this.clone(exports_util2.mergeDefs(def2, {
@@ -23406,7 +23407,7 @@ var init_schemas2 = __esm(() => {
     inst.format = bag.format ?? null;
     inst.minLength = bag.minimum ?? null;
     inst.maxLength = bag.maximum ?? null;
-    _installLazyMethods2(inst, "_ZodString", {
+    _installLazyMethods(inst, "_ZodString", {
       regex(...args) {
         return this.check(_regex2(...args));
       },
@@ -23577,7 +23578,7 @@ var init_schemas2 = __esm(() => {
     $ZodNumber2.init(inst, def);
     ZodType2.init(inst, def);
     inst._zod.processJSONSchema = (ctx, json2, params) => numberProcessor2(inst, ctx, json2, params);
-    _installLazyMethods2(inst, "ZodNumber", {
+    _installLazyMethods(inst, "ZodNumber", {
       gt(value, params) {
         return this.check(_gt2(value, params));
       },
@@ -23716,7 +23717,7 @@ var init_schemas2 = __esm(() => {
     ZodType2.init(inst, def);
     inst._zod.processJSONSchema = (ctx, json2, params) => arrayProcessor2(inst, ctx, json2, params);
     inst.element = def.element;
-    _installLazyMethods2(inst, "ZodArray", {
+    _installLazyMethods(inst, "ZodArray", {
       min(n, params) {
         return this.check(_minLength2(n, params));
       },
@@ -23741,7 +23742,7 @@ var init_schemas2 = __esm(() => {
     exports_util2.defineLazy(inst, "shape", () => {
       return def.shape;
     });
-    _installLazyMethods2(inst, "ZodObject", {
+    _installLazyMethods(inst, "ZodObject", {
       keyof() {
         return _enum4(Object.keys(this._zod.def.shape));
       },
@@ -24000,9 +24001,9 @@ var init_schemas2 = __esm(() => {
     ZodPipe2.init(inst, def);
     $ZodCodec2.init(inst, def);
   });
-  ZodPreprocess2 = /* @__PURE__ */ $constructor2("ZodPreprocess", (inst, def) => {
+  ZodPreprocess = /* @__PURE__ */ $constructor2("ZodPreprocess", (inst, def) => {
     ZodPipe2.init(inst, def);
-    $ZodPreprocess2.init(inst, def);
+    $ZodPreprocess.init(inst, def);
   });
   ZodReadonly2 = /* @__PURE__ */ $constructor2("ZodReadonly", (inst, def) => {
     $ZodReadonly2.init(inst, def);
@@ -24675,7 +24676,7 @@ __export(exports_external2, {
   iso: () => exports_iso2,
   ipv6: () => ipv64,
   ipv4: () => ipv44,
-  invertCodec: () => invertCodec2,
+  invertCodec: () => invertCodec,
   intersection: () => intersection3,
   int64: () => int642,
   int32: () => int322,
@@ -24754,7 +24755,7 @@ __export(exports_external2, {
   ZodRealError: () => ZodRealError2,
   ZodReadonly: () => ZodReadonly2,
   ZodPromise: () => ZodPromise2,
-  ZodPreprocess: () => ZodPreprocess2,
+  ZodPreprocess: () => ZodPreprocess,
   ZodPrefault: () => ZodPrefault2,
   ZodPipe: () => ZodPipe2,
   ZodOptional: () => ZodOptional2,
@@ -27099,7 +27100,6 @@ __export(exports_core2, {
   $ZodRealError: () => $ZodRealError,
   $ZodReadonly: () => $ZodReadonly,
   $ZodPromise: () => $ZodPromise,
-  $ZodPreprocess: () => $ZodPreprocess,
   $ZodPrefault: () => $ZodPrefault,
   $ZodPipe: () => $ZodPipe,
   $ZodOptional: () => $ZodOptional,
@@ -27180,8 +27180,7 @@ __export(exports_core2, {
 });
 
 // node_modules/zod/v4/core/core.js
-var _a;
-var NEVER = /* @__PURE__ */ Object.freeze({
+var NEVER = Object.freeze({
   status: "aborted"
 });
 function $constructor(name, initializer, params) {
@@ -27216,10 +27215,10 @@ function $constructor(name, initializer, params) {
   }
   Object.defineProperty(Definition, "name", { value: name });
   function _(def) {
-    var _a2;
+    var _a;
     const inst = params?.Parent ? new Definition : this;
     init(inst, def);
-    (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
+    (_a = inst._zod).deferred ?? (_a.deferred = []);
     for (const fn of inst._zod.deferred) {
       fn();
     }
@@ -27250,8 +27249,7 @@ class $ZodEncodeError extends Error {
     this.name = "ZodEncodeError";
   }
 }
-(_a = globalThis).__zod_globalConfig ?? (_a.__zod_globalConfig = {});
-var globalConfig = globalThis.__zod_globalConfig;
+var globalConfig = {};
 function config(newConfig) {
   if (newConfig)
     Object.assign(globalConfig, newConfig);
@@ -27299,7 +27297,6 @@ __export(exports_util, {
   floatSafeRemainder: () => floatSafeRemainder,
   finalizeIssue: () => finalizeIssue,
   extend: () => extend,
-  explicitlyAborted: () => explicitlyAborted,
   escapeRegex: () => escapeRegex,
   esc: () => esc,
   defineLazy: () => defineLazy,
@@ -27370,14 +27367,21 @@ function cleanRegex(source) {
   return source.slice(start, end);
 }
 function floatSafeRemainder(val, step) {
-  const ratio = val / step;
-  const roundedRatio = Math.round(ratio);
-  const tolerance = Number.EPSILON * Math.max(Math.abs(ratio), 1);
-  if (Math.abs(ratio - roundedRatio) < tolerance)
-    return 0;
-  return ratio - roundedRatio;
+  const valDecCount = (val.toString().split(".")[1] || "").length;
+  const stepString = step.toString();
+  let stepDecCount = (stepString.split(".")[1] || "").length;
+  if (stepDecCount === 0 && /\d?e-\d?/.test(stepString)) {
+    const match = stepString.match(/\d?e-(\d?)/);
+    if (match?.[1]) {
+      stepDecCount = Number.parseInt(match[1]);
+    }
+  }
+  const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
+  const valInt = Number.parseInt(val.toFixed(decCount).replace(".", ""));
+  const stepInt = Number.parseInt(step.toFixed(decCount).replace(".", ""));
+  return valInt % stepInt / 10 ** decCount;
 }
-var EVALUATING = /* @__PURE__ */ Symbol("evaluating");
+var EVALUATING = Symbol("evaluating");
 function defineLazy(object, key, getter) {
   let value = undefined;
   Object.defineProperty(object, key, {
@@ -27455,10 +27459,7 @@ var captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace :
 function isObject(data) {
   return typeof data === "object" && data !== null && !Array.isArray(data);
 }
-var allowsEval = /* @__PURE__ */ cached(() => {
-  if (globalConfig.jitless) {
-    return false;
-  }
+var allowsEval = cached(() => {
   if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) {
     return false;
   }
@@ -27491,10 +27492,6 @@ function shallowClone(o) {
     return { ...o };
   if (Array.isArray(o))
     return [...o];
-  if (o instanceof Map)
-    return new Map(o);
-  if (o instanceof Set)
-    return new Set(o);
   return o;
 }
 function numKeys(data) {
@@ -27550,15 +27547,8 @@ var getParsedType = (data) => {
       throw new Error(`Unknown data type: ${t}`);
   }
 };
-var propertyKeyTypes = /* @__PURE__ */ new Set(["string", "number", "symbol"]);
-var primitiveTypes = /* @__PURE__ */ new Set([
-  "string",
-  "number",
-  "bigint",
-  "boolean",
-  "symbol",
-  "undefined"
-]);
+var propertyKeyTypes = new Set(["string", "number", "symbol"]);
+var primitiveTypes = new Set(["string", "number", "bigint", "boolean", "symbol", "undefined"]);
 function escapeRegex(str2) {
   return str2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -27727,9 +27717,6 @@ function safeExtend(schema, shape) {
   return clone(schema, def);
 }
 function merge(a, b) {
-  if (a._zod.def.checks?.length) {
-    throw new Error(".merge() cannot be used on object schemas containing refinements. Use .safeExtend() instead.");
-  }
   const def = mergeDefs(a._zod.def, {
     get shape() {
       const _shape = { ...a._zod.def.shape, ...b._zod.def.shape };
@@ -27739,7 +27726,7 @@ function merge(a, b) {
     get catchall() {
       return b._zod.def.catchall;
     },
-    checks: b._zod.def.checks ?? []
+    checks: []
   });
   return clone(a, def);
 }
@@ -27822,20 +27809,10 @@ function aborted(x, startIndex = 0) {
   }
   return false;
 }
-function explicitlyAborted(x, startIndex = 0) {
-  if (x.aborted === true)
-    return true;
-  for (let i = startIndex;i < x.issues.length; i++) {
-    if (x.issues[i]?.continue === false) {
-      return true;
-    }
-  }
-  return false;
-}
 function prefixIssues(path, issues) {
   return issues.map((iss) => {
-    var _a2;
-    (_a2 = iss).path ?? (_a2.path = []);
+    var _a;
+    (_a = iss).path ?? (_a.path = []);
     iss.path.unshift(path);
     return iss;
   });
@@ -27844,14 +27821,17 @@ function unwrapMessage(message) {
   return typeof message === "string" ? message : message?.message;
 }
 function finalizeIssue(iss, ctx, config2) {
-  const message = iss.message ? iss.message : unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config2.customError?.(iss)) ?? unwrapMessage(config2.localeError?.(iss)) ?? "Invalid input";
-  const { inst: _inst, continue: _continue, input: _input, ...rest } = iss;
-  rest.path ?? (rest.path = []);
-  rest.message = message;
-  if (ctx?.reportInput) {
-    rest.input = _input;
+  const full = { ...iss, path: iss.path ?? [] };
+  if (!iss.message) {
+    const message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config2.customError?.(iss)) ?? unwrapMessage(config2.localeError?.(iss)) ?? "Invalid input";
+    full.message = message;
   }
-  return rest;
+  delete full.inst;
+  delete full.continue;
+  if (!ctx?.reportInput) {
+    delete full.input;
+  }
+  return full;
 }
 function getSizableOrigin(input) {
   if (input instanceof Set)
@@ -27983,33 +27963,30 @@ function flattenError(error, mapper = (issue2) => issue2.message) {
 }
 function formatError(error, mapper = (issue2) => issue2.message) {
   const fieldErrors = { _errors: [] };
-  const processError = (error2, path = []) => {
+  const processError = (error2) => {
     for (const issue2 of error2.issues) {
       if (issue2.code === "invalid_union" && issue2.errors.length) {
-        issue2.errors.map((issues) => processError({ issues }, [...path, ...issue2.path]));
+        issue2.errors.map((issues) => processError({ issues }));
       } else if (issue2.code === "invalid_key") {
-        processError({ issues: issue2.issues }, [...path, ...issue2.path]);
+        processError({ issues: issue2.issues });
       } else if (issue2.code === "invalid_element") {
-        processError({ issues: issue2.issues }, [...path, ...issue2.path]);
+        processError({ issues: issue2.issues });
+      } else if (issue2.path.length === 0) {
+        fieldErrors._errors.push(mapper(issue2));
       } else {
-        const fullpath = [...path, ...issue2.path];
-        if (fullpath.length === 0) {
-          fieldErrors._errors.push(mapper(issue2));
-        } else {
-          let curr = fieldErrors;
-          let i = 0;
-          while (i < fullpath.length) {
-            const el = fullpath[i];
-            const terminal = i === fullpath.length - 1;
-            if (!terminal) {
-              curr[el] = curr[el] || { _errors: [] };
-            } else {
-              curr[el] = curr[el] || { _errors: [] };
-              curr[el]._errors.push(mapper(issue2));
-            }
-            curr = curr[el];
-            i++;
+        let curr = fieldErrors;
+        let i = 0;
+        while (i < issue2.path.length) {
+          const el = issue2.path[i];
+          const terminal = i === issue2.path.length - 1;
+          if (!terminal) {
+            curr[el] = curr[el] || { _errors: [] };
+          } else {
+            curr[el] = curr[el] || { _errors: [] };
+            curr[el]._errors.push(mapper(issue2));
           }
+          curr = curr[el];
+          i++;
         }
       }
     }
@@ -28020,14 +27997,14 @@ function formatError(error, mapper = (issue2) => issue2.message) {
 function treeifyError(error, mapper = (issue2) => issue2.message) {
   const result = { errors: [] };
   const processError = (error2, path = []) => {
-    var _a2, _b;
+    var _a, _b;
     for (const issue2 of error2.issues) {
       if (issue2.code === "invalid_union" && issue2.errors.length) {
-        issue2.errors.map((issues) => processError({ issues }, [...path, ...issue2.path]));
+        issue2.errors.map((issues) => processError({ issues }, issue2.path));
       } else if (issue2.code === "invalid_key") {
-        processError({ issues: issue2.issues }, [...path, ...issue2.path]);
+        processError({ issues: issue2.issues }, issue2.path);
       } else if (issue2.code === "invalid_element") {
-        processError({ issues: issue2.issues }, [...path, ...issue2.path]);
+        processError({ issues: issue2.issues }, issue2.path);
       } else {
         const fullpath = [...path, ...issue2.path];
         if (fullpath.length === 0) {
@@ -28041,7 +28018,7 @@ function treeifyError(error, mapper = (issue2) => issue2.message) {
           const terminal = i === fullpath.length - 1;
           if (typeof el === "string") {
             curr.properties ?? (curr.properties = {});
-            (_a2 = curr.properties)[el] ?? (_a2[el] = { errors: [] });
+            (_a = curr.properties)[el] ?? (_a[el] = { errors: [] });
             curr = curr.properties[el];
           } else {
             curr.items ?? (curr.items = []);
@@ -28091,7 +28068,7 @@ function prettifyError(error) {
 
 // node_modules/zod/v4/core/parse.js
 var _parse = (_Err) => (schema, value, _ctx, _params) => {
-  const ctx = _ctx ? { ..._ctx, async: false } : { async: false };
+  const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
   const result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise) {
     throw new $ZodAsyncError;
@@ -28105,7 +28082,7 @@ var _parse = (_Err) => (schema, value, _ctx, _params) => {
 };
 var parse2 = /* @__PURE__ */ _parse($ZodRealError);
 var _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
-  const ctx = _ctx ? { ..._ctx, async: true } : { async: true };
+  const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
   let result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise)
     result = await result;
@@ -28130,7 +28107,7 @@ var _safeParse = (_Err) => (schema, value, _ctx) => {
 };
 var safeParse = /* @__PURE__ */ _safeParse($ZodRealError);
 var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
-  const ctx = _ctx ? { ..._ctx, async: true } : { async: true };
+  const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
   let result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise)
     result = await result;
@@ -28141,7 +28118,7 @@ var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 };
 var safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
 var _encode = (_Err) => (schema, value, _ctx) => {
-  const ctx = _ctx ? { ..._ctx, direction: "backward" } : { direction: "backward" };
+  const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _parse(_Err)(schema, value, ctx);
 };
 var encode = /* @__PURE__ */ _encode($ZodRealError);
@@ -28150,7 +28127,7 @@ var _decode = (_Err) => (schema, value, _ctx) => {
 };
 var decode = /* @__PURE__ */ _decode($ZodRealError);
 var _encodeAsync = (_Err) => async (schema, value, _ctx) => {
-  const ctx = _ctx ? { ..._ctx, direction: "backward" } : { direction: "backward" };
+  const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _parseAsync(_Err)(schema, value, ctx);
 };
 var encodeAsync = /* @__PURE__ */ _encodeAsync($ZodRealError);
@@ -28159,7 +28136,7 @@ var _decodeAsync = (_Err) => async (schema, value, _ctx) => {
 };
 var decodeAsync = /* @__PURE__ */ _decodeAsync($ZodRealError);
 var _safeEncode = (_Err) => (schema, value, _ctx) => {
-  const ctx = _ctx ? { ..._ctx, direction: "backward" } : { direction: "backward" };
+  const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _safeParse(_Err)(schema, value, ctx);
 };
 var safeEncode = /* @__PURE__ */ _safeEncode($ZodRealError);
@@ -28168,7 +28145,7 @@ var _safeDecode = (_Err) => (schema, value, _ctx) => {
 };
 var safeDecode = /* @__PURE__ */ _safeDecode($ZodRealError);
 var _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
-  const ctx = _ctx ? { ..._ctx, direction: "backward" } : { direction: "backward" };
+  const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
   return _safeParseAsync(_Err)(schema, value, ctx);
 };
 var safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync($ZodRealError);
@@ -28216,7 +28193,6 @@ __export(exports_regexes, {
   ipv4: () => ipv4,
   integer: () => integer,
   idnEmail: () => idnEmail,
-  httpProtocol: () => httpProtocol,
   html5Email: () => html5Email,
   hostname: () => hostname,
   hex: () => hex,
@@ -28239,7 +28215,7 @@ __export(exports_regexes, {
   base64url: () => base64url,
   base64: () => base64
 });
-var cuid = /^[cC][0-9a-z]{6,}$/;
+var cuid = /^[cC][^\s-]{8,}$/;
 var cuid2 = /^[0-9a-z]+$/;
 var ulid = /^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$/;
 var xid = /^[0-9a-vA-V]{20}$/;
@@ -28278,7 +28254,6 @@ var base64 = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/
 var base64url = /^[A-Za-z0-9_-]*$/;
 var hostname = /^(?=.{1,253}\.?$)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?)*\.?$/;
 var domain = /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
-var httpProtocol = /^https?$/;
 var e164 = /^\+[1-9]\d{6,14}$/;
 var dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
 var date = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
@@ -28337,10 +28312,10 @@ var sha512_base64url = /* @__PURE__ */ fixedBase64url(86);
 
 // node_modules/zod/v4/core/checks.js
 var $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
-  var _a2;
+  var _a;
   inst._zod ?? (inst._zod = {});
   inst._zod.def = def;
-  (_a2 = inst._zod).onattach ?? (_a2.onattach = []);
+  (_a = inst._zod).onattach ?? (_a.onattach = []);
 });
 var numericOriginMap = {
   number: "number",
@@ -28406,8 +28381,8 @@ var $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan", 
 var $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", (inst, def) => {
   $ZodCheck.init(inst, def);
   inst._zod.onattach.push((inst2) => {
-    var _a2;
-    (_a2 = inst2._zod.bag).multipleOf ?? (_a2.multipleOf = def.value);
+    var _a;
+    (_a = inst2._zod.bag).multipleOf ?? (_a.multipleOf = def.value);
   });
   inst._zod.check = (payload) => {
     if (typeof payload.value !== typeof def.value)
@@ -28540,9 +28515,9 @@ var $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntFormat"
   };
 });
 var $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== undefined;
   });
@@ -28568,9 +28543,9 @@ var $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, d
   };
 });
 var $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== undefined;
   });
@@ -28596,9 +28571,9 @@ var $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, d
   };
 });
 var $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== undefined;
   });
@@ -28626,9 +28601,9 @@ var $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (i
   };
 });
 var $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== undefined;
   });
@@ -28655,9 +28630,9 @@ var $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (ins
   };
 });
 var $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== undefined;
   });
@@ -28684,9 +28659,9 @@ var $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (ins
   };
 });
 var $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
-  var _a2;
+  var _a;
   $ZodCheck.init(inst, def);
-  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
+  (_a = inst._zod.def).when ?? (_a.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== undefined;
   });
@@ -28715,7 +28690,7 @@ var $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals"
   };
 });
 var $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
-  var _a2, _b;
+  var _a, _b;
   $ZodCheck.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     const bag = inst2._zod.bag;
@@ -28726,7 +28701,7 @@ var $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat"
     }
   });
   if (def.pattern)
-    (_a2 = inst._zod).check ?? (_a2.check = (payload) => {
+    (_a = inst._zod).check ?? (_a.check = (payload) => {
       def.pattern.lastIndex = 0;
       if (def.pattern.test(payload.value))
         return;
@@ -28923,13 +28898,13 @@ class Doc {
 // node_modules/zod/v4/core/versions.js
 var version = {
   major: 4,
-  minor: 4,
-  patch: 3
+  minor: 3,
+  patch: 6
 };
 
 // node_modules/zod/v4/core/schemas.js
 var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
-  var _a2;
+  var _a;
   inst ?? (inst = {});
   inst._zod.def = def;
   inst._zod.bag = inst._zod.bag || {};
@@ -28944,7 +28919,7 @@ var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
     }
   }
   if (checks.length === 0) {
-    (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
+    (_a = inst._zod).deferred ?? (_a.deferred = []);
     inst._zod.deferred?.push(() => {
       inst._zod.run = inst._zod.parse;
     });
@@ -28954,8 +28929,6 @@ var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
       let asyncResult;
       for (const ch of checks2) {
         if (ch._zod.def.when) {
-          if (explicitlyAborted(payload))
-            continue;
           const shouldRun = ch._zod.def.when(payload);
           if (!shouldRun)
             continue;
@@ -29095,19 +29068,6 @@ var $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
   inst._zod.check = (payload) => {
     try {
       const trimmed = payload.value.trim();
-      if (!def.normalize && def.protocol?.source === httpProtocol.source) {
-        if (!/^https?:\/\//i.test(trimmed)) {
-          payload.issues.push({
-            code: "invalid_format",
-            format: "url",
-            note: "Invalid URL format",
-            input: payload.value,
-            inst,
-            continue: !def.abort
-          });
-          return;
-        }
-      }
       const url = new URL(trimmed);
       if (def.hostname) {
         def.hostname.lastIndex = 0;
@@ -29261,8 +29221,6 @@ var $ZodCIDRv6 = /* @__PURE__ */ $constructor("$ZodCIDRv6", (inst, def) => {
 function isValidBase64(data) {
   if (data === "")
     return true;
-  if (/\s/.test(data))
-    return false;
   if (data.length % 4 !== 0)
     return false;
   try {
@@ -29452,6 +29410,8 @@ var $ZodUndefined = /* @__PURE__ */ $constructor("$ZodUndefined", (inst, def) =>
   $ZodType.init(inst, def);
   inst._zod.pattern = _undefined;
   inst._zod.values = new Set([undefined]);
+  inst._zod.optin = "optional";
+  inst._zod.optout = "optional";
   inst._zod.parse = (payload, _ctx) => {
     const input = payload.value;
     if (typeof input === "undefined")
@@ -29579,27 +29539,15 @@ var $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
     return payload;
   };
 });
-function handlePropertyResult(result, final, key, input, isOptionalIn, isOptionalOut) {
-  const isPresent = key in input;
+function handlePropertyResult(result, final, key, input, isOptionalOut) {
   if (result.issues.length) {
-    if (isOptionalIn && isOptionalOut && !isPresent) {
+    if (isOptionalOut && !(key in input)) {
       return;
     }
     final.issues.push(...prefixIssues(key, result.issues));
   }
-  if (!isPresent && !isOptionalIn) {
-    if (!result.issues.length) {
-      final.issues.push({
-        code: "invalid_type",
-        expected: "nonoptional",
-        input: undefined,
-        path: [key]
-      });
-    }
-    return;
-  }
   if (result.value === undefined) {
-    if (isPresent) {
+    if (key in input) {
       final.value[key] = undefined;
     }
   } else {
@@ -29627,11 +29575,8 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
   const keySet = def.keySet;
   const _catchall = def.catchall._zod;
   const t = _catchall.def.type;
-  const isOptionalIn = _catchall.optin === "optional";
   const isOptionalOut = _catchall.optout === "optional";
   for (const key in input) {
-    if (key === "__proto__")
-      continue;
     if (keySet.has(key))
       continue;
     if (t === "never") {
@@ -29640,9 +29585,9 @@ function handleCatchall(proms, input, payload, ctx, def, inst) {
     }
     const r = _catchall.run({ value: input[key], issues: [] }, ctx);
     if (r instanceof Promise) {
-      proms.push(r.then((r2) => handlePropertyResult(r2, payload, key, input, isOptionalIn, isOptionalOut)));
+      proms.push(r.then((r2) => handlePropertyResult(r2, payload, key, input, isOptionalOut)));
     } else {
-      handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
+      handlePropertyResult(r, payload, key, input, isOptionalOut);
     }
   }
   if (unrecognized.length) {
@@ -29708,13 +29653,12 @@ var $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
     const shape = value.shape;
     for (const key of value.keys) {
       const el = shape[key];
-      const isOptionalIn = el._zod.optin === "optional";
       const isOptionalOut = el._zod.optout === "optional";
       const r = el._zod.run({ value: input[key], issues: [] }, ctx);
       if (r instanceof Promise) {
-        proms.push(r.then((r2) => handlePropertyResult(r2, payload, key, input, isOptionalIn, isOptionalOut)));
+        proms.push(r.then((r2) => handlePropertyResult(r2, payload, key, input, isOptionalOut)));
       } else {
-        handlePropertyResult(r, payload, key, input, isOptionalIn, isOptionalOut);
+        handlePropertyResult(r, payload, key, input, isOptionalOut);
       }
     }
     if (!catchall) {
@@ -29745,10 +29689,9 @@ var $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) =>
       const id = ids[key];
       const k = esc(key);
       const schema = shape[key];
-      const isOptionalIn = schema?._zod?.optin === "optional";
       const isOptionalOut = schema?._zod?.optout === "optional";
       doc.write(`const ${id} = ${parseStr(key)};`);
-      if (isOptionalIn && isOptionalOut) {
+      if (isOptionalOut) {
         doc.write(`
         if (${id}.issues.length) {
           if (${k} in input) {
@@ -29767,33 +29710,6 @@ var $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) =>
           newResult[${k}] = ${id}.value;
         }
         
-      `);
-      } else if (!isOptionalIn) {
-        doc.write(`
-        const ${id}_present = ${k} in input;
-        if (${id}.issues.length) {
-          payload.issues = payload.issues.concat(${id}.issues.map(iss => ({
-            ...iss,
-            path: iss.path ? [${k}, ...iss.path] : [${k}]
-          })));
-        }
-        if (!${id}_present && !${id}.issues.length) {
-          payload.issues.push({
-            code: "invalid_type",
-            expected: "nonoptional",
-            input: undefined,
-            path: [${k}]
-          });
-        }
-
-        if (${id}_present) {
-          if (${id}.value === undefined) {
-            newResult[${k}] = undefined;
-          } else {
-            newResult[${k}] = ${id}.value;
-          }
-        }
-
       `);
       } else {
         doc.write(`
@@ -29887,9 +29803,10 @@ var $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
     }
     return;
   });
-  const first = def.options.length === 1 ? def.options[0]._zod.run : null;
+  const single = def.options.length === 1;
+  const first = def.options[0]._zod.run;
   inst._zod.parse = (payload, ctx) => {
-    if (first) {
+    if (single) {
       return first(payload, ctx);
     }
     let async = false;
@@ -29942,9 +29859,10 @@ function handleExclusiveUnionResults(results, final, inst, ctx) {
 var $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
   $ZodUnion.init(inst, def);
   def.inclusive = false;
-  const first = def.options.length === 1 ? def.options[0]._zod.run : null;
+  const single = def.options.length === 1;
+  const first = def.options[0]._zod.run;
   inst._zod.parse = (payload, ctx) => {
-    if (first) {
+    if (single) {
       return first(payload, ctx);
     }
     let async = false;
@@ -30019,7 +29937,7 @@ var $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUnio
     if (opt) {
       return opt._zod.run(payload, ctx);
     }
-    if (def.unionFallback || ctx.direction === "backward") {
+    if (def.unionFallback) {
       return _super(payload, ctx);
     }
     payload.issues.push({
@@ -30027,7 +29945,6 @@ var $ZodDiscriminatedUnion = /* @__PURE__ */ $constructor("$ZodDiscriminatedUnio
       errors: [],
       note: "No matching discriminator",
       discriminator: def.discriminator,
-      options: Array.from(disc.value.keys()),
       input,
       path: [def.discriminator],
       inst
@@ -30149,95 +30066,63 @@ var $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
     }
     payload.value = [];
     const proms = [];
-    const optinStart = getTupleOptStart(items, "optin");
-    const optoutStart = getTupleOptStart(items, "optout");
+    const reversedIndex = [...items].reverse().findIndex((item) => item._zod.optin !== "optional");
+    const optStart = reversedIndex === -1 ? 0 : items.length - reversedIndex;
     if (!def.rest) {
-      if (input.length < optinStart) {
+      const tooBig = input.length > items.length;
+      const tooSmall = input.length < optStart - 1;
+      if (tooBig || tooSmall) {
         payload.issues.push({
-          code: "too_small",
-          minimum: optinStart,
-          inclusive: true,
+          ...tooBig ? { code: "too_big", maximum: items.length, inclusive: true } : { code: "too_small", minimum: items.length },
           input,
           inst,
           origin: "array"
         });
         return payload;
       }
-      if (input.length > items.length) {
-        payload.issues.push({
-          code: "too_big",
-          maximum: items.length,
-          inclusive: true,
-          input,
-          inst,
-          origin: "array"
-        });
-      }
     }
-    const itemResults = new Array(items.length);
-    for (let i = 0;i < items.length; i++) {
-      const r = items[i]._zod.run({ value: input[i], issues: [] }, ctx);
-      if (r instanceof Promise) {
-        proms.push(r.then((rr) => {
-          itemResults[i] = rr;
-        }));
+    let i = -1;
+    for (const item of items) {
+      i++;
+      if (i >= input.length) {
+        if (i >= optStart)
+          continue;
+      }
+      const result = item._zod.run({
+        value: input[i],
+        issues: []
+      }, ctx);
+      if (result instanceof Promise) {
+        proms.push(result.then((result2) => handleTupleResult(result2, payload, i)));
       } else {
-        itemResults[i] = r;
+        handleTupleResult(result, payload, i);
       }
     }
     if (def.rest) {
-      let i = items.length - 1;
       const rest = input.slice(items.length);
       for (const el of rest) {
         i++;
-        const result = def.rest._zod.run({ value: el, issues: [] }, ctx);
+        const result = def.rest._zod.run({
+          value: el,
+          issues: []
+        }, ctx);
         if (result instanceof Promise) {
-          proms.push(result.then((r) => handleTupleResult(r, payload, i)));
+          proms.push(result.then((result2) => handleTupleResult(result2, payload, i)));
         } else {
           handleTupleResult(result, payload, i);
         }
       }
     }
-    if (proms.length) {
-      return Promise.all(proms).then(() => handleTupleResults(itemResults, payload, items, input, optoutStart));
-    }
-    return handleTupleResults(itemResults, payload, items, input, optoutStart);
+    if (proms.length)
+      return Promise.all(proms).then(() => payload);
+    return payload;
   };
 });
-function getTupleOptStart(items, key) {
-  for (let i = items.length - 1;i >= 0; i--) {
-    if (items[i]._zod[key] !== "optional")
-      return i + 1;
-  }
-  return 0;
-}
 function handleTupleResult(result, final, index) {
   if (result.issues.length) {
     final.issues.push(...prefixIssues(index, result.issues));
   }
   final.value[index] = result.value;
-}
-function handleTupleResults(itemResults, final, items, input, optoutStart) {
-  for (let i = 0;i < items.length; i++) {
-    const r = itemResults[i];
-    const isPresent = i < input.length;
-    if (r.issues.length) {
-      if (!isPresent && i >= optoutStart) {
-        final.value.length = i;
-        break;
-      }
-      final.issues.push(...prefixIssues(i, r.issues));
-    }
-    final.value[i] = r.value;
-  }
-  for (let i = final.value.length - 1;i >= input.length; i--) {
-    if (items[i]._zod.optout === "optional" && final.value[i] === undefined) {
-      final.value.length = i;
-    } else {
-      break;
-    }
-  }
-  return final;
 }
 var $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
   $ZodType.init(inst, def);
@@ -30260,35 +30145,19 @@ var $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
       for (const key of values) {
         if (typeof key === "string" || typeof key === "number" || typeof key === "symbol") {
           recordKeys.add(typeof key === "number" ? key.toString() : key);
-          const keyResult = def.keyType._zod.run({ value: key, issues: [] }, ctx);
-          if (keyResult instanceof Promise) {
-            throw new Error("Async schemas not supported in object keys currently");
-          }
-          if (keyResult.issues.length) {
-            payload.issues.push({
-              code: "invalid_key",
-              origin: "record",
-              issues: keyResult.issues.map((iss) => finalizeIssue(iss, ctx, config())),
-              input: key,
-              path: [key],
-              inst
-            });
-            continue;
-          }
-          const outKey = keyResult.value;
           const result = def.valueType._zod.run({ value: input[key], issues: [] }, ctx);
           if (result instanceof Promise) {
             proms.push(result.then((result2) => {
               if (result2.issues.length) {
                 payload.issues.push(...prefixIssues(key, result2.issues));
               }
-              payload.value[outKey] = result2.value;
+              payload.value[key] = result2.value;
             }));
           } else {
             if (result.issues.length) {
               payload.issues.push(...prefixIssues(key, result.issues));
             }
-            payload.value[outKey] = result.value;
+            payload.value[key] = result.value;
           }
         }
       }
@@ -30311,8 +30180,6 @@ var $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
       payload.value = {};
       for (const key of Reflect.ownKeys(input)) {
         if (key === "__proto__")
-          continue;
-        if (!Object.prototype.propertyIsEnumerable.call(input, key))
           continue;
         let keyResult = def.keyType._zod.run({ value: key, issues: [] }, ctx);
         if (keyResult instanceof Promise) {
@@ -30518,7 +30385,6 @@ var $ZodFile = /* @__PURE__ */ $constructor("$ZodFile", (inst, def) => {
 });
 var $ZodTransform = /* @__PURE__ */ $constructor("$ZodTransform", (inst, def) => {
   $ZodType.init(inst, def);
-  inst._zod.optin = "optional";
   inst._zod.parse = (payload, ctx) => {
     if (ctx.direction === "backward") {
       throw new $ZodEncodeError(inst.constructor.name);
@@ -30528,7 +30394,6 @@ var $ZodTransform = /* @__PURE__ */ $constructor("$ZodTransform", (inst, def) =>
       const output = _out instanceof Promise ? _out : Promise.resolve(_out);
       return output.then((output2) => {
         payload.value = output2;
-        payload.fallback = true;
         return payload;
       });
     }
@@ -30536,12 +30401,11 @@ var $ZodTransform = /* @__PURE__ */ $constructor("$ZodTransform", (inst, def) =>
       throw new $ZodAsyncError;
     }
     payload.value = _out;
-    payload.fallback = true;
     return payload;
   };
 });
 function handleOptionalResult(result, input) {
-  if (input === undefined && (result.issues.length || result.fallback)) {
+  if (result.issues.length && input === undefined) {
     return { issues: [], value: undefined };
   }
   return result;
@@ -30559,11 +30423,10 @@ var $ZodOptional = /* @__PURE__ */ $constructor("$ZodOptional", (inst, def) => {
   });
   inst._zod.parse = (payload, ctx) => {
     if (def.innerType._zod.optin === "optional") {
-      const input = payload.value;
       const result = def.innerType._zod.run(payload, ctx);
       if (result instanceof Promise)
-        return result.then((r) => handleOptionalResult(r, input));
-      return handleOptionalResult(result, input);
+        return result.then((r) => handleOptionalResult(r, payload.value));
+      return handleOptionalResult(result, payload.value);
     }
     if (payload.value === undefined) {
       return payload;
@@ -30679,7 +30542,7 @@ var $ZodSuccess = /* @__PURE__ */ $constructor("$ZodSuccess", (inst, def) => {
 });
 var $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
   $ZodType.init(inst, def);
-  inst._zod.optin = "optional";
+  defineLazy(inst._zod, "optin", () => def.innerType._zod.optin);
   defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
   defineLazy(inst._zod, "values", () => def.innerType._zod.values);
   inst._zod.parse = (payload, ctx) => {
@@ -30699,7 +30562,6 @@ var $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
             input: payload.value
           });
           payload.issues = [];
-          payload.fallback = true;
         }
         return payload;
       });
@@ -30714,7 +30576,6 @@ var $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
         input: payload.value
       });
       payload.issues = [];
-      payload.fallback = true;
     }
     return payload;
   };
@@ -30760,7 +30621,7 @@ function handlePipeResult(left, next, ctx) {
     left.aborted = true;
     return left;
   }
-  return next._zod.run({ value: left.value, issues: left.issues, fallback: left.fallback }, ctx);
+  return next._zod.run({ value: left.value, issues: left.issues }, ctx);
 }
 var $ZodCodec = /* @__PURE__ */ $constructor("$ZodCodec", (inst, def) => {
   $ZodType.init(inst, def);
@@ -30812,9 +30673,6 @@ function handleCodecTxResult(left, value, nextSchema, ctx) {
   }
   return nextSchema._zod.run({ value, issues: left.issues }, ctx);
 }
-var $ZodPreprocess = /* @__PURE__ */ $constructor("$ZodPreprocess", (inst, def) => {
-  $ZodPipe.init(inst, def);
-});
 var $ZodReadonly = /* @__PURE__ */ $constructor("$ZodReadonly", (inst, def) => {
   $ZodType.init(inst, def);
   defineLazy(inst._zod, "propValues", () => def.innerType._zod.propValues);
@@ -30966,12 +30824,7 @@ var $ZodPromise = /* @__PURE__ */ $constructor("$ZodPromise", (inst, def) => {
 });
 var $ZodLazy = /* @__PURE__ */ $constructor("$ZodLazy", (inst, def) => {
   $ZodType.init(inst, def);
-  defineLazy(inst._zod, "innerType", () => {
-    const d = def;
-    if (!d._cachedInner)
-      d._cachedInner = def.getter();
-    return d._cachedInner;
-  });
+  defineLazy(inst._zod, "innerType", () => def.getter());
   defineLazy(inst._zod, "pattern", () => inst._zod.innerType?._zod?.pattern);
   defineLazy(inst._zod, "propValues", () => inst._zod.innerType?._zod?.propValues);
   defineLazy(inst._zod, "optin", () => inst._zod.innerType?._zod?.optin ?? undefined);
@@ -31028,7 +30881,6 @@ __export(exports_locales, {
   sv: () => sv_default,
   sl: () => sl_default,
   ru: () => ru_default,
-  ro: () => ro_default,
   pt: () => pt_default,
   ps: () => ps_default,
   pl: () => pl_default,
@@ -31048,7 +30900,6 @@ __export(exports_locales, {
   id: () => id_default,
   hy: () => hy_default,
   hu: () => hu_default,
-  hr: () => hr_default,
   he: () => he_default,
   frCA: () => fr_CA_default,
   fr: () => fr_default,
@@ -31057,7 +30908,6 @@ __export(exports_locales, {
   es: () => es_default,
   eo: () => eo_default,
   en: () => en_default,
-  el: () => el_default,
   de: () => de_default,
   da: () => da_default,
   cs: () => cs_default,
@@ -31996,117 +31846,8 @@ function de_default() {
     localeError: error8()
   };
 }
-// node_modules/zod/v4/locales/el.js
-var error9 = () => {
-  const Sizable = {
-    string: { unit: "\u03C7\u03B1\u03C1\u03B1\u03BA\u03C4\u03AE\u03C1\u03B5\u03C2", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
-    file: { unit: "bytes", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
-    array: { unit: "\u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
-    set: { unit: "\u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" },
-    map: { unit: "\u03BA\u03B1\u03C4\u03B1\u03C7\u03C9\u03C1\u03AE\u03C3\u03B5\u03B9\u03C2", verb: "\u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9" }
-  };
-  function getSizing(origin) {
-    return Sizable[origin] ?? null;
-  }
-  const FormatDictionary = {
-    regex: "\u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2",
-    email: "\u03B4\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 email",
-    url: "URL",
-    emoji: "emoji",
-    uuid: "UUID",
-    uuidv4: "UUIDv4",
-    uuidv6: "UUIDv6",
-    nanoid: "nanoid",
-    guid: "GUID",
-    cuid: "cuid",
-    cuid2: "cuid2",
-    ulid: "ULID",
-    xid: "XID",
-    ksuid: "KSUID",
-    datetime: "ISO \u03B7\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1 \u03BA\u03B1\u03B9 \u03CE\u03C1\u03B1",
-    date: "ISO \u03B7\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1",
-    time: "ISO \u03CE\u03C1\u03B1",
-    duration: "ISO \u03B4\u03B9\u03AC\u03C1\u03BA\u03B5\u03B9\u03B1",
-    ipv4: "\u03B4\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 IPv4",
-    ipv6: "\u03B4\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 IPv6",
-    mac: "\u03B4\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 MAC",
-    cidrv4: "\u03B5\u03CD\u03C1\u03BF\u03C2 IPv4",
-    cidrv6: "\u03B5\u03CD\u03C1\u03BF\u03C2 IPv6",
-    base64: "\u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC \u03BA\u03C9\u03B4\u03B9\u03BA\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03B7 \u03C3\u03B5 base64",
-    base64url: "\u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC \u03BA\u03C9\u03B4\u03B9\u03BA\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03B7 \u03C3\u03B5 base64url",
-    json_string: "\u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC JSON",
-    e164: "\u03B1\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 E.164",
-    jwt: "JWT",
-    template_literal: "\u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2"
-  };
-  const TypeDictionary = {
-    nan: "NaN"
-  };
-  return (issue2) => {
-    switch (issue2.code) {
-      case "invalid_type": {
-        const expected = TypeDictionary[issue2.expected] ?? issue2.expected;
-        const receivedType = parsedType(issue2.input);
-        const received = TypeDictionary[receivedType] ?? receivedType;
-        if (typeof issue2.expected === "string" && /^[A-Z]/.test(issue2.expected)) {
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD instanceof ${issue2.expected}, \u03BB\u03AE\u03C6\u03B8\u03B7\u03BA\u03B5 ${received}`;
-        }
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${expected}, \u03BB\u03AE\u03C6\u03B8\u03B7\u03BA\u03B5 ${received}`;
-      }
-      case "invalid_value":
-        if (issue2.values.length === 1)
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${stringifyPrimitive(issue2.values[0])}`;
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03C0\u03B9\u03BB\u03BF\u03B3\u03AE: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD \u03AD\u03BD\u03B1 \u03B1\u03C0\u03CC ${joinValues(issue2.values, "|")}`;
-      case "too_big": {
-        const adj = issue2.inclusive ? "<=" : "<";
-        const sizing = getSizing(issue2.origin);
-        if (sizing)
-          return `\u03A0\u03BF\u03BB\u03CD \u03BC\u03B5\u03B3\u03AC\u03BB\u03BF: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${issue2.origin ?? "\u03C4\u03B9\u03BC\u03AE"} \u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9 ${adj}${issue2.maximum.toString()} ${sizing.unit ?? "\u03C3\u03C4\u03BF\u03B9\u03C7\u03B5\u03AF\u03B1"}`;
-        return `\u03A0\u03BF\u03BB\u03CD \u03BC\u03B5\u03B3\u03AC\u03BB\u03BF: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${issue2.origin ?? "\u03C4\u03B9\u03BC\u03AE"} \u03BD\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 ${adj}${issue2.maximum.toString()}`;
-      }
-      case "too_small": {
-        const adj = issue2.inclusive ? ">=" : ">";
-        const sizing = getSizing(issue2.origin);
-        if (sizing) {
-          return `\u03A0\u03BF\u03BB\u03CD \u03BC\u03B9\u03BA\u03C1\u03CC: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${issue2.origin} \u03BD\u03B1 \u03AD\u03C7\u03B5\u03B9 ${adj}${issue2.minimum.toString()} ${sizing.unit}`;
-        }
-        return `\u03A0\u03BF\u03BB\u03CD \u03BC\u03B9\u03BA\u03C1\u03CC: \u03B1\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03C4\u03B1\u03BD ${issue2.origin} \u03BD\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 ${adj}${issue2.minimum.toString()}`;
-      }
-      case "invalid_format": {
-        const _issue = issue2;
-        if (_issue.format === "starts_with") {
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC: \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03BE\u03B5\u03BA\u03B9\u03BD\u03AC \u03BC\u03B5 "${_issue.prefix}"`;
-        }
-        if (_issue.format === "ends_with")
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC: \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03C4\u03B5\u03BB\u03B5\u03B9\u03CE\u03BD\u03B5\u03B9 \u03BC\u03B5 "${_issue.suffix}"`;
-        if (_issue.format === "includes")
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC: \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03C0\u03B5\u03C1\u03B9\u03AD\u03C7\u03B5\u03B9 "${_issue.includes}"`;
-        if (_issue.format === "regex")
-          return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03C3\u03C5\u03BC\u03B2\u03BF\u03BB\u03BF\u03C3\u03B5\u03B9\u03C1\u03AC: \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03C4\u03B1\u03B9\u03C1\u03B9\u03AC\u03B6\u03B5\u03B9 \u03BC\u03B5 \u03C4\u03BF \u03BC\u03BF\u03C4\u03AF\u03B2\u03BF ${_issue.pattern}`;
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03BF: ${FormatDictionary[_issue.format] ?? issue2.format}`;
-      }
-      case "not_multiple_of":
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03BF\u03C2 \u03B1\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2: \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03C0\u03BF\u03BB\u03BB\u03B1\u03C0\u03BB\u03AC\u03C3\u03B9\u03BF \u03C4\u03BF\u03C5 ${issue2.divisor}`;
-      case "unrecognized_keys":
-        return `\u0386\u03B3\u03BD\u03C9\u03C3\u03C4${issue2.keys.length > 1 ? "\u03B1" : "\u03BF"} \u03BA\u03BB\u03B5\u03B9\u03B4${issue2.keys.length > 1 ? "\u03B9\u03AC" : "\u03AF"}: ${joinValues(issue2.keys, ", ")}`;
-      case "invalid_key":
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03BF \u03BA\u03BB\u03B5\u03B9\u03B4\u03AF \u03C3\u03C4\u03BF ${issue2.origin}`;
-      case "invalid_union":
-        return "\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2";
-      case "invalid_element":
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE \u03C3\u03C4\u03BF ${issue2.origin}`;
-      default:
-        return `\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B7 \u03B5\u03AF\u03C3\u03BF\u03B4\u03BF\u03C2`;
-    }
-  };
-};
-function el_default() {
-  return {
-    localeError: error9()
-  };
-}
 // node_modules/zod/v4/locales/en.js
-var error10 = () => {
+var error9 = () => {
   const Sizable = {
     string: { unit: "characters", verb: "to have" },
     file: { unit: "bytes", verb: "to have" },
@@ -32198,10 +31939,6 @@ var error10 = () => {
       case "invalid_key":
         return `Invalid key in ${issue2.origin}`;
       case "invalid_union":
-        if (issue2.options && Array.isArray(issue2.options) && issue2.options.length > 0) {
-          const opts = issue2.options.map((o) => `'${o}'`).join(" | ");
-          return `Invalid discriminator value. Expected ${opts}`;
-        }
         return "Invalid input";
       case "invalid_element":
         return `Invalid value in ${issue2.origin}`;
@@ -32212,11 +31949,11 @@ var error10 = () => {
 };
 function en_default() {
   return {
-    localeError: error10()
+    localeError: error9()
   };
 }
 // node_modules/zod/v4/locales/eo.js
-var error11 = () => {
+var error10 = () => {
   const Sizable = {
     string: { unit: "karaktrojn", verb: "havi" },
     file: { unit: "bajtojn", verb: "havi" },
@@ -32321,11 +32058,11 @@ var error11 = () => {
 };
 function eo_default() {
   return {
-    localeError: error11()
+    localeError: error10()
   };
 }
 // node_modules/zod/v4/locales/es.js
-var error12 = () => {
+var error11 = () => {
   const Sizable = {
     string: { unit: "caracteres", verb: "tener" },
     file: { unit: "bytes", verb: "tener" },
@@ -32453,11 +32190,11 @@ var error12 = () => {
 };
 function es_default() {
   return {
-    localeError: error12()
+    localeError: error11()
   };
 }
 // node_modules/zod/v4/locales/fa.js
-var error13 = () => {
+var error12 = () => {
   const Sizable = {
     string: { unit: "\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" },
     file: { unit: "\u0628\u0627\u06CC\u062A", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" },
@@ -32567,11 +32304,11 @@ var error13 = () => {
 };
 function fa_default() {
   return {
-    localeError: error13()
+    localeError: error12()
   };
 }
 // node_modules/zod/v4/locales/fi.js
-var error14 = () => {
+var error13 = () => {
   const Sizable = {
     string: { unit: "merkki\xE4", subject: "merkkijonon" },
     file: { unit: "tavua", subject: "tiedoston" },
@@ -32679,11 +32416,11 @@ var error14 = () => {
 };
 function fi_default() {
   return {
-    localeError: error14()
+    localeError: error13()
   };
 }
 // node_modules/zod/v4/locales/fr.js
-var error15 = () => {
+var error14 = () => {
   const Sizable = {
     string: { unit: "caract\xE8res", verb: "avoir" },
     file: { unit: "octets", verb: "avoir" },
@@ -32724,27 +32461,9 @@ var error15 = () => {
     template_literal: "entr\xE9e"
   };
   const TypeDictionary = {
-    string: "cha\xEEne",
-    number: "nombre",
-    int: "entier",
-    boolean: "bool\xE9en",
-    bigint: "grand entier",
-    symbol: "symbole",
-    undefined: "ind\xE9fini",
-    null: "null",
-    never: "jamais",
-    void: "vide",
-    date: "date",
-    array: "tableau",
-    object: "objet",
-    tuple: "tuple",
-    record: "enregistrement",
-    map: "carte",
-    set: "ensemble",
-    file: "fichier",
-    nonoptional: "non-optionnel",
     nan: "NaN",
-    function: "fonction"
+    number: "nombre",
+    array: "tableau"
   };
   return (issue2) => {
     switch (issue2.code) {
@@ -32765,15 +32484,16 @@ var error15 = () => {
         const adj = issue2.inclusive ? "<=" : "<";
         const sizing = getSizing(issue2.origin);
         if (sizing)
-          return `Trop grand : ${TypeDictionary[issue2.origin] ?? "valeur"} doit ${sizing.verb} ${adj}${issue2.maximum.toString()} ${sizing.unit ?? "\xE9l\xE9ment(s)"}`;
-        return `Trop grand : ${TypeDictionary[issue2.origin] ?? "valeur"} doit \xEAtre ${adj}${issue2.maximum.toString()}`;
+          return `Trop grand : ${issue2.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue2.maximum.toString()} ${sizing.unit ?? "\xE9l\xE9ment(s)"}`;
+        return `Trop grand : ${issue2.origin ?? "valeur"} doit \xEAtre ${adj}${issue2.maximum.toString()}`;
       }
       case "too_small": {
         const adj = issue2.inclusive ? ">=" : ">";
         const sizing = getSizing(issue2.origin);
-        if (sizing)
-          return `Trop petit : ${TypeDictionary[issue2.origin] ?? "valeur"} doit ${sizing.verb} ${adj}${issue2.minimum.toString()} ${sizing.unit}`;
-        return `Trop petit : ${TypeDictionary[issue2.origin] ?? "valeur"} doit \xEAtre ${adj}${issue2.minimum.toString()}`;
+        if (sizing) {
+          return `Trop petit : ${issue2.origin} doit ${sizing.verb} ${adj}${issue2.minimum.toString()} ${sizing.unit}`;
+        }
+        return `Trop petit : ${issue2.origin} doit \xEAtre ${adj}${issue2.minimum.toString()}`;
       }
       case "invalid_format": {
         const _issue = issue2;
@@ -32804,11 +32524,11 @@ var error15 = () => {
 };
 function fr_default() {
   return {
-    localeError: error15()
+    localeError: error14()
   };
 }
 // node_modules/zod/v4/locales/fr-CA.js
-var error16 = () => {
+var error15 = () => {
   const Sizable = {
     string: { unit: "caract\xE8res", verb: "avoir" },
     file: { unit: "octets", verb: "avoir" },
@@ -32911,11 +32631,11 @@ var error16 = () => {
 };
 function fr_CA_default() {
   return {
-    localeError: error16()
+    localeError: error15()
   };
 }
 // node_modules/zod/v4/locales/he.js
-var error17 = () => {
+var error16 = () => {
   const TypeNames = {
     string: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA", gender: "f" },
     number: { label: "\u05DE\u05E1\u05E4\u05E8", gender: "m" },
@@ -33104,133 +32824,11 @@ var error17 = () => {
 };
 function he_default() {
   return {
-    localeError: error17()
-  };
-}
-// node_modules/zod/v4/locales/hr.js
-var error18 = () => {
-  const Sizable = {
-    string: { unit: "znakova", verb: "imati" },
-    file: { unit: "bajtova", verb: "imati" },
-    array: { unit: "stavki", verb: "imati" },
-    set: { unit: "stavki", verb: "imati" }
-  };
-  function getSizing(origin) {
-    return Sizable[origin] ?? null;
-  }
-  const FormatDictionary = {
-    regex: "unos",
-    email: "email adresa",
-    url: "URL",
-    emoji: "emoji",
-    uuid: "UUID",
-    uuidv4: "UUIDv4",
-    uuidv6: "UUIDv6",
-    nanoid: "nanoid",
-    guid: "GUID",
-    cuid: "cuid",
-    cuid2: "cuid2",
-    ulid: "ULID",
-    xid: "XID",
-    ksuid: "KSUID",
-    datetime: "ISO datum i vrijeme",
-    date: "ISO datum",
-    time: "ISO vrijeme",
-    duration: "ISO trajanje",
-    ipv4: "IPv4 adresa",
-    ipv6: "IPv6 adresa",
-    cidrv4: "IPv4 raspon",
-    cidrv6: "IPv6 raspon",
-    base64: "base64 kodirani tekst",
-    base64url: "base64url kodirani tekst",
-    json_string: "JSON tekst",
-    e164: "E.164 broj",
-    jwt: "JWT",
-    template_literal: "unos"
-  };
-  const TypeDictionary = {
-    nan: "NaN",
-    string: "tekst",
-    number: "broj",
-    boolean: "boolean",
-    array: "niz",
-    object: "objekt",
-    set: "skup",
-    file: "datoteka",
-    date: "datum",
-    bigint: "bigint",
-    symbol: "simbol",
-    undefined: "undefined",
-    null: "null",
-    function: "funkcija",
-    map: "mapa"
-  };
-  return (issue2) => {
-    switch (issue2.code) {
-      case "invalid_type": {
-        const expected = TypeDictionary[issue2.expected] ?? issue2.expected;
-        const receivedType = parsedType(issue2.input);
-        const received = TypeDictionary[receivedType] ?? receivedType;
-        if (/^[A-Z]/.test(issue2.expected)) {
-          return `Neispravan unos: o\u010Dekuje se instanceof ${issue2.expected}, a primljeno je ${received}`;
-        }
-        return `Neispravan unos: o\u010Dekuje se ${expected}, a primljeno je ${received}`;
-      }
-      case "invalid_value":
-        if (issue2.values.length === 1)
-          return `Neispravna vrijednost: o\u010Dekivano ${stringifyPrimitive(issue2.values[0])}`;
-        return `Neispravna opcija: o\u010Dekivano jedno od ${joinValues(issue2.values, "|")}`;
-      case "too_big": {
-        const adj = issue2.inclusive ? "<=" : "<";
-        const sizing = getSizing(issue2.origin);
-        const origin = TypeDictionary[issue2.origin] ?? issue2.origin;
-        if (sizing)
-          return `Preveliko: o\u010Dekivano da ${origin ?? "vrijednost"} ima ${adj}${issue2.maximum.toString()} ${sizing.unit ?? "elemenata"}`;
-        return `Preveliko: o\u010Dekivano da ${origin ?? "vrijednost"} bude ${adj}${issue2.maximum.toString()}`;
-      }
-      case "too_small": {
-        const adj = issue2.inclusive ? ">=" : ">";
-        const sizing = getSizing(issue2.origin);
-        const origin = TypeDictionary[issue2.origin] ?? issue2.origin;
-        if (sizing) {
-          return `Premalo: o\u010Dekivano da ${origin} ima ${adj}${issue2.minimum.toString()} ${sizing.unit}`;
-        }
-        return `Premalo: o\u010Dekivano da ${origin} bude ${adj}${issue2.minimum.toString()}`;
-      }
-      case "invalid_format": {
-        const _issue = issue2;
-        if (_issue.format === "starts_with")
-          return `Neispravan tekst: mora zapo\u010Dinjati s "${_issue.prefix}"`;
-        if (_issue.format === "ends_with")
-          return `Neispravan tekst: mora zavr\u0161avati s "${_issue.suffix}"`;
-        if (_issue.format === "includes")
-          return `Neispravan tekst: mora sadr\u017Eavati "${_issue.includes}"`;
-        if (_issue.format === "regex")
-          return `Neispravan tekst: mora odgovarati uzorku ${_issue.pattern}`;
-        return `Neispravna ${FormatDictionary[_issue.format] ?? issue2.format}`;
-      }
-      case "not_multiple_of":
-        return `Neispravan broj: mora biti vi\u0161ekratnik od ${issue2.divisor}`;
-      case "unrecognized_keys":
-        return `Neprepoznat${issue2.keys.length > 1 ? "i klju\u010Devi" : " klju\u010D"}: ${joinValues(issue2.keys, ", ")}`;
-      case "invalid_key":
-        return `Neispravan klju\u010D u ${TypeDictionary[issue2.origin] ?? issue2.origin}`;
-      case "invalid_union":
-        return "Neispravan unos";
-      case "invalid_element":
-        return `Neispravna vrijednost u ${TypeDictionary[issue2.origin] ?? issue2.origin}`;
-      default:
-        return `Neispravan unos`;
-    }
-  };
-};
-function hr_default() {
-  return {
-    localeError: error18()
+    localeError: error16()
   };
 }
 // node_modules/zod/v4/locales/hu.js
-var error19 = () => {
+var error17 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "legyen" },
     file: { unit: "byte", verb: "legyen" },
@@ -33334,7 +32932,7 @@ var error19 = () => {
 };
 function hu_default() {
   return {
-    localeError: error19()
+    localeError: error17()
   };
 }
 // node_modules/zod/v4/locales/hy.js
@@ -33348,7 +32946,7 @@ function withDefiniteArticle(word) {
   const lastChar = word[word.length - 1];
   return word + (vowels.includes(lastChar) ? "\u0576" : "\u0568");
 }
-var error20 = () => {
+var error18 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -33481,11 +33079,11 @@ var error20 = () => {
 };
 function hy_default() {
   return {
-    localeError: error20()
+    localeError: error18()
   };
 }
 // node_modules/zod/v4/locales/id.js
-var error21 = () => {
+var error19 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "memiliki" },
     file: { unit: "byte", verb: "memiliki" },
@@ -33587,11 +33185,11 @@ var error21 = () => {
 };
 function id_default() {
   return {
-    localeError: error21()
+    localeError: error19()
   };
 }
 // node_modules/zod/v4/locales/is.js
-var error22 = () => {
+var error20 = () => {
   const Sizable = {
     string: { unit: "stafi", verb: "a\xF0 hafa" },
     file: { unit: "b\xE6ti", verb: "a\xF0 hafa" },
@@ -33696,11 +33294,11 @@ var error22 = () => {
 };
 function is_default() {
   return {
-    localeError: error22()
+    localeError: error20()
   };
 }
 // node_modules/zod/v4/locales/it.js
-var error23 = () => {
+var error21 = () => {
   const Sizable = {
     string: { unit: "caratteri", verb: "avere" },
     file: { unit: "byte", verb: "avere" },
@@ -33785,7 +33383,7 @@ var error23 = () => {
           return `Stringa non valida: deve includere "${_issue.includes}"`;
         if (_issue.format === "regex")
           return `Stringa non valida: deve corrispondere al pattern ${_issue.pattern}`;
-        return `Input non valido: ${FormatDictionary[_issue.format] ?? issue2.format}`;
+        return `Invalid ${FormatDictionary[_issue.format] ?? issue2.format}`;
       }
       case "not_multiple_of":
         return `Numero non valido: deve essere un multiplo di ${issue2.divisor}`;
@@ -33804,11 +33402,11 @@ var error23 = () => {
 };
 function it_default() {
   return {
-    localeError: error23()
+    localeError: error21()
   };
 }
 // node_modules/zod/v4/locales/ja.js
-var error24 = () => {
+var error22 = () => {
   const Sizable = {
     string: { unit: "\u6587\u5B57", verb: "\u3067\u3042\u308B" },
     file: { unit: "\u30D0\u30A4\u30C8", verb: "\u3067\u3042\u308B" },
@@ -33911,11 +33509,11 @@ var error24 = () => {
 };
 function ja_default() {
   return {
-    localeError: error24()
+    localeError: error22()
   };
 }
 // node_modules/zod/v4/locales/ka.js
-var error25 = () => {
+var error23 = () => {
   const Sizable = {
     string: { unit: "\u10E1\u10D8\u10DB\u10D1\u10DD\u10DA\u10DD", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" },
     file: { unit: "\u10D1\u10D0\u10D8\u10E2\u10D8", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" },
@@ -33948,9 +33546,9 @@ var error25 = () => {
     ipv6: "IPv6 \u10DB\u10D8\u10E1\u10D0\u10DB\u10D0\u10E0\u10D7\u10D8",
     cidrv4: "IPv4 \u10D3\u10D8\u10D0\u10DE\u10D0\u10D6\u10DD\u10DC\u10D8",
     cidrv6: "IPv6 \u10D3\u10D8\u10D0\u10DE\u10D0\u10D6\u10DD\u10DC\u10D8",
-    base64: "base64-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10D5\u10D4\u10DA\u10D8",
-    base64url: "base64url-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10D5\u10D4\u10DA\u10D8",
-    json_string: "JSON \u10D5\u10D4\u10DA\u10D8",
+    base64: "base64-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8",
+    base64url: "base64url-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8",
+    json_string: "JSON \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8",
     e164: "E.164 \u10DC\u10DD\u10DB\u10D4\u10E0\u10D8",
     jwt: "JWT",
     template_literal: "\u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0"
@@ -33958,7 +33556,7 @@ var error25 = () => {
   const TypeDictionary = {
     nan: "NaN",
     number: "\u10E0\u10D8\u10EA\u10EE\u10D5\u10D8",
-    string: "\u10D5\u10D4\u10DA\u10D8",
+    string: "\u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8",
     boolean: "\u10D1\u10E3\u10DA\u10D4\u10D0\u10DC\u10D8",
     function: "\u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D0",
     array: "\u10DB\u10D0\u10E1\u10D8\u10D5\u10D8"
@@ -33996,14 +33594,14 @@ var error25 = () => {
       case "invalid_format": {
         const _issue = issue2;
         if (_issue.format === "starts_with") {
-          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10D5\u10D4\u10DA\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10D8\u10EC\u10E7\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${_issue.prefix}"-\u10D8\u10D7`;
+          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10D8\u10EC\u10E7\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${_issue.prefix}"-\u10D8\u10D7`;
         }
         if (_issue.format === "ends_with")
-          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10D5\u10D4\u10DA\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10DB\u10D7\u10D0\u10D5\u10E0\u10D3\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${_issue.suffix}"-\u10D8\u10D7`;
+          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10DB\u10D7\u10D0\u10D5\u10E0\u10D3\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${_issue.suffix}"-\u10D8\u10D7`;
         if (_issue.format === "includes")
-          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10D5\u10D4\u10DA\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1 "${_issue.includes}"-\u10E1`;
+          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1 "${_issue.includes}"-\u10E1`;
         if (_issue.format === "regex")
-          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10D5\u10D4\u10DA\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D4\u10E1\u10D0\u10D1\u10D0\u10DB\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 \u10E8\u10D0\u10D1\u10DA\u10DD\u10DC\u10E1 ${_issue.pattern}`;
+          return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D4\u10E1\u10D0\u10D1\u10D0\u10DB\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 \u10E8\u10D0\u10D1\u10DA\u10DD\u10DC\u10E1 ${_issue.pattern}`;
         return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 ${FormatDictionary[_issue.format] ?? issue2.format}`;
       }
       case "not_multiple_of":
@@ -34023,11 +33621,11 @@ var error25 = () => {
 };
 function ka_default() {
   return {
-    localeError: error25()
+    localeError: error23()
   };
 }
 // node_modules/zod/v4/locales/km.js
-var error26 = () => {
+var error24 = () => {
   const Sizable = {
     string: { unit: "\u178F\u17BD\u17A2\u1780\u17D2\u179F\u179A", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" },
     file: { unit: "\u1794\u17C3", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" },
@@ -34133,7 +33731,7 @@ var error26 = () => {
 };
 function km_default() {
   return {
-    localeError: error26()
+    localeError: error24()
   };
 }
 
@@ -34142,7 +33740,7 @@ function kh_default() {
   return km_default();
 }
 // node_modules/zod/v4/locales/ko.js
-var error27 = () => {
+var error25 = () => {
   const Sizable = {
     string: { unit: "\uBB38\uC790", verb: "to have" },
     file: { unit: "\uBC14\uC774\uD2B8", verb: "to have" },
@@ -34249,7 +33847,7 @@ var error27 = () => {
 };
 function ko_default() {
   return {
-    localeError: error27()
+    localeError: error25()
   };
 }
 // node_modules/zod/v4/locales/lt.js
@@ -34266,7 +33864,7 @@ function getUnitTypeFromNumber(number2) {
     return "one";
   return "few";
 }
-var error28 = () => {
+var error26 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -34452,11 +34050,11 @@ var error28 = () => {
 };
 function lt_default() {
   return {
-    localeError: error28()
+    localeError: error26()
   };
 }
 // node_modules/zod/v4/locales/mk.js
-var error29 = () => {
+var error27 = () => {
   const Sizable = {
     string: { unit: "\u0437\u043D\u0430\u0446\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" },
     file: { unit: "\u0431\u0430\u0458\u0442\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" },
@@ -34561,11 +34159,11 @@ var error29 = () => {
 };
 function mk_default() {
   return {
-    localeError: error29()
+    localeError: error27()
   };
 }
 // node_modules/zod/v4/locales/ms.js
-var error30 = () => {
+var error28 = () => {
   const Sizable = {
     string: { unit: "aksara", verb: "mempunyai" },
     file: { unit: "bait", verb: "mempunyai" },
@@ -34668,11 +34266,11 @@ var error30 = () => {
 };
 function ms_default() {
   return {
-    localeError: error30()
+    localeError: error28()
   };
 }
 // node_modules/zod/v4/locales/nl.js
-var error31 = () => {
+var error29 = () => {
   const Sizable = {
     string: { unit: "tekens", verb: "heeft" },
     file: { unit: "bytes", verb: "heeft" },
@@ -34778,11 +34376,11 @@ var error31 = () => {
 };
 function nl_default() {
   return {
-    localeError: error31()
+    localeError: error29()
   };
 }
 // node_modules/zod/v4/locales/no.js
-var error32 = () => {
+var error30 = () => {
   const Sizable = {
     string: { unit: "tegn", verb: "\xE5 ha" },
     file: { unit: "bytes", verb: "\xE5 ha" },
@@ -34886,11 +34484,11 @@ var error32 = () => {
 };
 function no_default() {
   return {
-    localeError: error32()
+    localeError: error30()
   };
 }
 // node_modules/zod/v4/locales/ota.js
-var error33 = () => {
+var error31 = () => {
   const Sizable = {
     string: { unit: "harf", verb: "olmal\u0131d\u0131r" },
     file: { unit: "bayt", verb: "olmal\u0131d\u0131r" },
@@ -34995,11 +34593,11 @@ var error33 = () => {
 };
 function ota_default() {
   return {
-    localeError: error33()
+    localeError: error31()
   };
 }
 // node_modules/zod/v4/locales/ps.js
-var error34 = () => {
+var error32 = () => {
   const Sizable = {
     string: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" },
     file: { unit: "\u0628\u0627\u06CC\u067C\u0633", verb: "\u0648\u0644\u0631\u064A" },
@@ -35109,11 +34707,11 @@ var error34 = () => {
 };
 function ps_default() {
   return {
-    localeError: error34()
+    localeError: error32()
   };
 }
 // node_modules/zod/v4/locales/pl.js
-var error35 = () => {
+var error33 = () => {
   const Sizable = {
     string: { unit: "znak\xF3w", verb: "mie\u0107" },
     file: { unit: "bajt\xF3w", verb: "mie\u0107" },
@@ -35218,11 +34816,11 @@ var error35 = () => {
 };
 function pl_default() {
   return {
-    localeError: error35()
+    localeError: error33()
   };
 }
 // node_modules/zod/v4/locales/pt.js
-var error36 = () => {
+var error34 = () => {
   const Sizable = {
     string: { unit: "caracteres", verb: "ter" },
     file: { unit: "bytes", verb: "ter" },
@@ -35326,126 +34924,7 @@ var error36 = () => {
 };
 function pt_default() {
   return {
-    localeError: error36()
-  };
-}
-// node_modules/zod/v4/locales/ro.js
-var error37 = () => {
-  const Sizable = {
-    string: { unit: "caractere", verb: "s\u0103 aib\u0103" },
-    file: { unit: "octe\u021Bi", verb: "s\u0103 aib\u0103" },
-    array: { unit: "elemente", verb: "s\u0103 aib\u0103" },
-    set: { unit: "elemente", verb: "s\u0103 aib\u0103" },
-    map: { unit: "intr\u0103ri", verb: "s\u0103 aib\u0103" }
-  };
-  function getSizing(origin) {
-    return Sizable[origin] ?? null;
-  }
-  const FormatDictionary = {
-    regex: "intrare",
-    email: "adres\u0103 de email",
-    url: "URL",
-    emoji: "emoji",
-    uuid: "UUID",
-    uuidv4: "UUIDv4",
-    uuidv6: "UUIDv6",
-    nanoid: "nanoid",
-    guid: "GUID",
-    cuid: "cuid",
-    cuid2: "cuid2",
-    ulid: "ULID",
-    xid: "XID",
-    ksuid: "KSUID",
-    datetime: "dat\u0103 \u0219i or\u0103 ISO",
-    date: "dat\u0103 ISO",
-    time: "or\u0103 ISO",
-    duration: "durat\u0103 ISO",
-    ipv4: "adres\u0103 IPv4",
-    ipv6: "adres\u0103 IPv6",
-    mac: "adres\u0103 MAC",
-    cidrv4: "interval IPv4",
-    cidrv6: "interval IPv6",
-    base64: "\u0219ir codat base64",
-    base64url: "\u0219ir codat base64url",
-    json_string: "\u0219ir JSON",
-    e164: "num\u0103r E.164",
-    jwt: "JWT",
-    template_literal: "intrare"
-  };
-  const TypeDictionary = {
-    nan: "NaN",
-    string: "\u0219ir",
-    number: "num\u0103r",
-    boolean: "boolean",
-    function: "func\u021Bie",
-    array: "matrice",
-    object: "obiect",
-    undefined: "nedefinit",
-    symbol: "simbol",
-    bigint: "num\u0103r mare",
-    void: "void",
-    never: "never",
-    map: "hart\u0103",
-    set: "set"
-  };
-  return (issue2) => {
-    switch (issue2.code) {
-      case "invalid_type": {
-        const expected = TypeDictionary[issue2.expected] ?? issue2.expected;
-        const receivedType = parsedType(issue2.input);
-        const received = TypeDictionary[receivedType] ?? receivedType;
-        return `Intrare invalid\u0103: a\u0219teptat ${expected}, primit ${received}`;
-      }
-      case "invalid_value":
-        if (issue2.values.length === 1)
-          return `Intrare invalid\u0103: a\u0219teptat ${stringifyPrimitive(issue2.values[0])}`;
-        return `Op\u021Biune invalid\u0103: a\u0219teptat una dintre ${joinValues(issue2.values, "|")}`;
-      case "too_big": {
-        const adj = issue2.inclusive ? "<=" : "<";
-        const sizing = getSizing(issue2.origin);
-        if (sizing)
-          return `Prea mare: a\u0219teptat ca ${issue2.origin ?? "valoarea"} ${sizing.verb} ${adj}${issue2.maximum.toString()} ${sizing.unit ?? "elemente"}`;
-        return `Prea mare: a\u0219teptat ca ${issue2.origin ?? "valoarea"} s\u0103 fie ${adj}${issue2.maximum.toString()}`;
-      }
-      case "too_small": {
-        const adj = issue2.inclusive ? ">=" : ">";
-        const sizing = getSizing(issue2.origin);
-        if (sizing) {
-          return `Prea mic: a\u0219teptat ca ${issue2.origin} ${sizing.verb} ${adj}${issue2.minimum.toString()} ${sizing.unit}`;
-        }
-        return `Prea mic: a\u0219teptat ca ${issue2.origin} s\u0103 fie ${adj}${issue2.minimum.toString()}`;
-      }
-      case "invalid_format": {
-        const _issue = issue2;
-        if (_issue.format === "starts_with") {
-          return `\u0218ir invalid: trebuie s\u0103 \xEEnceap\u0103 cu "${_issue.prefix}"`;
-        }
-        if (_issue.format === "ends_with")
-          return `\u0218ir invalid: trebuie s\u0103 se termine cu "${_issue.suffix}"`;
-        if (_issue.format === "includes")
-          return `\u0218ir invalid: trebuie s\u0103 includ\u0103 "${_issue.includes}"`;
-        if (_issue.format === "regex")
-          return `\u0218ir invalid: trebuie s\u0103 se potriveasc\u0103 cu modelul ${_issue.pattern}`;
-        return `Format invalid: ${FormatDictionary[_issue.format] ?? issue2.format}`;
-      }
-      case "not_multiple_of":
-        return `Num\u0103r invalid: trebuie s\u0103 fie multiplu de ${issue2.divisor}`;
-      case "unrecognized_keys":
-        return `Chei nerecunoscute: ${joinValues(issue2.keys, ", ")}`;
-      case "invalid_key":
-        return `Cheie invalid\u0103 \xEEn ${issue2.origin}`;
-      case "invalid_union":
-        return "Intrare invalid\u0103";
-      case "invalid_element":
-        return `Valoare invalid\u0103 \xEEn ${issue2.origin}`;
-      default:
-        return `Intrare invalid\u0103`;
-    }
-  };
-};
-function ro_default() {
-  return {
-    localeError: error37()
+    localeError: error34()
   };
 }
 // node_modules/zod/v4/locales/ru.js
@@ -35464,7 +34943,7 @@ function getRussianPlural(count, one, few, many) {
   }
   return many;
 }
-var error38 = () => {
+var error35 = () => {
   const Sizable = {
     string: {
       unit: {
@@ -35601,11 +35080,11 @@ var error38 = () => {
 };
 function ru_default() {
   return {
-    localeError: error38()
+    localeError: error35()
   };
 }
 // node_modules/zod/v4/locales/sl.js
-var error39 = () => {
+var error36 = () => {
   const Sizable = {
     string: { unit: "znakov", verb: "imeti" },
     file: { unit: "bajtov", verb: "imeti" },
@@ -35710,11 +35189,11 @@ var error39 = () => {
 };
 function sl_default() {
   return {
-    localeError: error39()
+    localeError: error36()
   };
 }
 // node_modules/zod/v4/locales/sv.js
-var error40 = () => {
+var error37 = () => {
   const Sizable = {
     string: { unit: "tecken", verb: "att ha" },
     file: { unit: "bytes", verb: "att ha" },
@@ -35820,11 +35299,11 @@ var error40 = () => {
 };
 function sv_default() {
   return {
-    localeError: error40()
+    localeError: error37()
   };
 }
 // node_modules/zod/v4/locales/ta.js
-var error41 = () => {
+var error38 = () => {
   const Sizable = {
     string: { unit: "\u0B8E\u0BB4\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1\u0B95\u0BCD\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" },
     file: { unit: "\u0BAA\u0BC8\u0B9F\u0BCD\u0B9F\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" },
@@ -35930,11 +35409,11 @@ var error41 = () => {
 };
 function ta_default() {
   return {
-    localeError: error41()
+    localeError: error38()
   };
 }
 // node_modules/zod/v4/locales/th.js
-var error42 = () => {
+var error39 = () => {
   const Sizable = {
     string: { unit: "\u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" },
     file: { unit: "\u0E44\u0E1A\u0E15\u0E4C", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" },
@@ -36040,11 +35519,11 @@ var error42 = () => {
 };
 function th_default() {
   return {
-    localeError: error42()
+    localeError: error39()
   };
 }
 // node_modules/zod/v4/locales/tr.js
-var error43 = () => {
+var error40 = () => {
   const Sizable = {
     string: { unit: "karakter", verb: "olmal\u0131" },
     file: { unit: "bayt", verb: "olmal\u0131" },
@@ -36145,11 +35624,11 @@ var error43 = () => {
 };
 function tr_default() {
   return {
-    localeError: error43()
+    localeError: error40()
   };
 }
 // node_modules/zod/v4/locales/uk.js
-var error44 = () => {
+var error41 = () => {
   const Sizable = {
     string: { unit: "\u0441\u0438\u043C\u0432\u043E\u043B\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" },
     file: { unit: "\u0431\u0430\u0439\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" },
@@ -36253,7 +35732,7 @@ var error44 = () => {
 };
 function uk_default() {
   return {
-    localeError: error44()
+    localeError: error41()
   };
 }
 
@@ -36262,7 +35741,7 @@ function ua_default() {
   return uk_default();
 }
 // node_modules/zod/v4/locales/ur.js
-var error45 = () => {
+var error42 = () => {
   const Sizable = {
     string: { unit: "\u062D\u0631\u0648\u0641", verb: "\u06C1\u0648\u0646\u0627" },
     file: { unit: "\u0628\u0627\u0626\u0679\u0633", verb: "\u06C1\u0648\u0646\u0627" },
@@ -36368,17 +35847,16 @@ var error45 = () => {
 };
 function ur_default() {
   return {
-    localeError: error45()
+    localeError: error42()
   };
 }
 // node_modules/zod/v4/locales/uz.js
-var error46 = () => {
+var error43 = () => {
   const Sizable = {
     string: { unit: "belgi", verb: "bo\u2018lishi kerak" },
     file: { unit: "bayt", verb: "bo\u2018lishi kerak" },
     array: { unit: "element", verb: "bo\u2018lishi kerak" },
-    set: { unit: "element", verb: "bo\u2018lishi kerak" },
-    map: { unit: "yozuv", verb: "bo\u2018lishi kerak" }
+    set: { unit: "element", verb: "bo\u2018lishi kerak" }
   };
   function getSizing(origin) {
     return Sizable[origin] ?? null;
@@ -36478,11 +35956,11 @@ var error46 = () => {
 };
 function uz_default() {
   return {
-    localeError: error46()
+    localeError: error43()
   };
 }
 // node_modules/zod/v4/locales/vi.js
-var error47 = () => {
+var error44 = () => {
   const Sizable = {
     string: { unit: "k\xFD t\u1EF1", verb: "c\xF3" },
     file: { unit: "byte", verb: "c\xF3" },
@@ -36586,11 +36064,11 @@ var error47 = () => {
 };
 function vi_default() {
   return {
-    localeError: error47()
+    localeError: error44()
   };
 }
 // node_modules/zod/v4/locales/zh-CN.js
-var error48 = () => {
+var error45 = () => {
   const Sizable = {
     string: { unit: "\u5B57\u7B26", verb: "\u5305\u542B" },
     file: { unit: "\u5B57\u8282", verb: "\u5305\u542B" },
@@ -36695,11 +36173,11 @@ var error48 = () => {
 };
 function zh_CN_default() {
   return {
-    localeError: error48()
+    localeError: error45()
   };
 }
 // node_modules/zod/v4/locales/zh-TW.js
-var error49 = () => {
+var error46 = () => {
   const Sizable = {
     string: { unit: "\u5B57\u5143", verb: "\u64C1\u6709" },
     file: { unit: "\u4F4D\u5143\u7D44", verb: "\u64C1\u6709" },
@@ -36802,11 +36280,11 @@ var error49 = () => {
 };
 function zh_TW_default() {
   return {
-    localeError: error49()
+    localeError: error46()
   };
 }
 // node_modules/zod/v4/locales/yo.js
-var error50 = () => {
+var error47 = () => {
   const Sizable = {
     string: { unit: "\xE0mi", verb: "n\xED" },
     file: { unit: "bytes", verb: "n\xED" },
@@ -36909,11 +36387,11 @@ var error50 = () => {
 };
 function yo_default() {
   return {
-    localeError: error50()
+    localeError: error47()
   };
 }
 // node_modules/zod/v4/core/registries.js
-var _a2;
+var _a;
 var $output = Symbol("ZodOutput");
 var $input = Symbol("ZodInput");
 
@@ -36960,7 +36438,7 @@ class $ZodRegistry {
 function registry() {
   return new $ZodRegistry;
 }
-(_a2 = globalThis).__zod_globalRegistry ?? (_a2.__zod_globalRegistry = registry());
+(_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
 var globalRegistry = globalThis.__zod_globalRegistry;
 // node_modules/zod/v4/core/api.js
 function _string(Class2, params) {
@@ -37766,7 +37244,7 @@ function _refine(Class2, fn, _params) {
   });
   return schema;
 }
-function _superRefine(fn, params) {
+function _superRefine(fn) {
   const ch = _check((payload) => {
     payload.addIssue = (issue2) => {
       if (typeof issue2 === "string") {
@@ -37783,7 +37261,7 @@ function _superRefine(fn, params) {
       }
     };
     return fn(payload.value, payload);
-  }, params);
+  });
   return ch;
 }
 function _check(fn, params) {
@@ -37904,7 +37382,7 @@ function initializeContext(params) {
   };
 }
 function process2(schema, ctx, _params = { path: [], schemaPath: [] }) {
-  var _a3;
+  var _a2;
   const def = schema._zod.def;
   const seen = ctx.seen.get(schema);
   if (seen) {
@@ -37951,8 +37429,8 @@ function process2(schema, ctx, _params = { path: [], schemaPath: [] }) {
     delete result.schema.examples;
     delete result.schema.default;
   }
-  if (ctx.io === "input" && "_prefault" in result.schema)
-    (_a3 = result.schema).default ?? (_a3.default = result.schema._prefault);
+  if (ctx.io === "input" && result.schema._prefault)
+    (_a2 = result.schema).default ?? (_a2.default = result.schema._prefault);
   delete result.schema._prefault;
   const _result = ctx.seen.get(schema);
   return _result.schema;
@@ -38129,15 +37607,10 @@ function finalize(ctx, schema) {
     result.$id = ctx.external.uri(id);
   }
   Object.assign(result, root.def ?? root.schema);
-  const rootMetaId = ctx.metadataRegistry.get(schema)?.id;
-  if (rootMetaId !== undefined && result.id === rootMetaId)
-    delete result.id;
   const defs = ctx.external?.defs ?? {};
   for (const entry of ctx.seen.entries()) {
     const seen = entry[1];
     if (seen.def && seen.defId) {
-      if (seen.def.id === seen.defId)
-        delete seen.def.id;
       defs[seen.defId] = seen.def;
     }
   }
@@ -38192,8 +37665,6 @@ function isTransforming(_schema, _ctx) {
     return isTransforming(def.keyType, ctx) || isTransforming(def.valueType, ctx);
   }
   if (def.type === "pipe") {
-    if (_schema._zod.traits.has("$ZodCodec"))
-      return true;
     return isTransforming(def.in, ctx) || isTransforming(def.out, ctx);
   }
   if (def.type === "object") {
@@ -38281,28 +37752,39 @@ var numberProcessor = (schema, ctx, _json, _params) => {
     json.type = "integer";
   else
     json.type = "number";
-  const exMin = typeof exclusiveMinimum === "number" && exclusiveMinimum >= (minimum ?? Number.NEGATIVE_INFINITY);
-  const exMax = typeof exclusiveMaximum === "number" && exclusiveMaximum <= (maximum ?? Number.POSITIVE_INFINITY);
-  const legacy = ctx.target === "draft-04" || ctx.target === "openapi-3.0";
-  if (exMin) {
-    if (legacy) {
+  if (typeof exclusiveMinimum === "number") {
+    if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
       json.minimum = exclusiveMinimum;
       json.exclusiveMinimum = true;
     } else {
       json.exclusiveMinimum = exclusiveMinimum;
     }
-  } else if (typeof minimum === "number") {
-    json.minimum = minimum;
   }
-  if (exMax) {
-    if (legacy) {
+  if (typeof minimum === "number") {
+    json.minimum = minimum;
+    if (typeof exclusiveMinimum === "number" && ctx.target !== "draft-04") {
+      if (exclusiveMinimum >= minimum)
+        delete json.minimum;
+      else
+        delete json.exclusiveMinimum;
+    }
+  }
+  if (typeof exclusiveMaximum === "number") {
+    if (ctx.target === "draft-04" || ctx.target === "openapi-3.0") {
       json.maximum = exclusiveMaximum;
       json.exclusiveMaximum = true;
     } else {
       json.exclusiveMaximum = exclusiveMaximum;
     }
-  } else if (typeof maximum === "number") {
+  }
+  if (typeof maximum === "number") {
     json.maximum = maximum;
+    if (typeof exclusiveMaximum === "number" && ctx.target !== "draft-04") {
+      if (exclusiveMaximum <= maximum)
+        delete json.maximum;
+      else
+        delete json.exclusiveMaximum;
+    }
   }
   if (typeof multipleOf === "number")
     json.multipleOf = multipleOf;
@@ -38470,10 +37952,7 @@ var arrayProcessor = (schema, ctx, _json, params) => {
   if (typeof maximum === "number")
     json.maxItems = maximum;
   json.type = "array";
-  json.items = process2(def.element, ctx, {
-    ...params,
-    path: [...params.path, "items"]
-  });
+  json.items = process2(def.element, ctx, { ...params, path: [...params.path, "items"] });
 };
 var objectProcessor = (schema, ctx, _json, params) => {
   const json = _json;
@@ -38666,8 +38145,7 @@ var catchProcessor = (schema, ctx, json, params) => {
 };
 var pipeProcessor = (schema, ctx, _json, params) => {
   const def = schema._zod.def;
-  const inIsTransform = def.in._zod.traits.has("$ZodTransform");
-  const innerType = ctx.io === "input" ? inIsTransform ? def.out : def.in : def.out;
+  const innerType = ctx.io === "input" ? def.in._zod.def.type === "transform" ? def.out : def.in : def.out;
   process2(innerType, ctx, params);
   const seen = ctx.seen.get(schema);
   seen.ref = innerType;
@@ -38998,7 +38476,6 @@ __export(exports_external, {
   iso: () => exports_iso,
   ipv6: () => ipv62,
   ipv4: () => ipv42,
-  invertCodec: () => invertCodec,
   intersection: () => intersection,
   int64: () => int64,
   int32: () => int32,
@@ -39077,7 +38554,6 @@ __export(exports_external, {
   ZodRealError: () => ZodRealError,
   ZodReadonly: () => ZodReadonly,
   ZodPromise: () => ZodPromise,
-  ZodPreprocess: () => ZodPreprocess,
   ZodPrefault: () => ZodPrefault,
   ZodPipe: () => ZodPipe,
   ZodOptional: () => ZodOptional,
@@ -39199,7 +38675,6 @@ __export(exports_schemas2, {
   json: () => json,
   ipv6: () => ipv62,
   ipv4: () => ipv42,
-  invertCodec: () => invertCodec,
   intersection: () => intersection,
   int64: () => int64,
   int32: () => int32,
@@ -39260,7 +38735,6 @@ __export(exports_schemas2, {
   ZodRecord: () => ZodRecord,
   ZodReadonly: () => ZodReadonly,
   ZodPromise: () => ZodPromise,
-  ZodPreprocess: () => ZodPreprocess,
   ZodPrefault: () => ZodPrefault,
   ZodPipe: () => ZodPipe,
   ZodOptional: () => ZodOptional,
@@ -39415,8 +38889,8 @@ var initializer2 = (inst, issues) => {
     }
   });
 };
-var ZodError = /* @__PURE__ */ $constructor("ZodError", initializer2);
-var ZodRealError = /* @__PURE__ */ $constructor("ZodError", initializer2, {
+var ZodError = $constructor("ZodError", initializer2);
+var ZodRealError = $constructor("ZodError", initializer2, {
   Parent: Error
 });
 
@@ -39435,43 +38909,6 @@ var safeEncodeAsync2 = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 var safeDecodeAsync2 = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
 
 // node_modules/zod/v4/classic/schemas.js
-var _installedGroups = /* @__PURE__ */ new WeakMap;
-function _installLazyMethods(inst, group, methods) {
-  const proto = Object.getPrototypeOf(inst);
-  let installed = _installedGroups.get(proto);
-  if (!installed) {
-    installed = new Set;
-    _installedGroups.set(proto, installed);
-  }
-  if (installed.has(group))
-    return;
-  installed.add(group);
-  for (const key in methods) {
-    const fn = methods[key];
-    Object.defineProperty(proto, key, {
-      configurable: true,
-      enumerable: false,
-      get() {
-        const bound = fn.bind(this);
-        Object.defineProperty(this, key, {
-          configurable: true,
-          writable: true,
-          enumerable: true,
-          value: bound
-        });
-        return bound;
-      },
-      set(v) {
-        Object.defineProperty(this, key, {
-          configurable: true,
-          writable: true,
-          enumerable: true,
-          value: v
-        });
-      }
-    });
-  }
-}
 var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
   $ZodType.init(inst, def);
   Object.assign(inst["~standard"], {
@@ -39484,6 +38921,23 @@ var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
   inst.def = def;
   inst.type = def.type;
   Object.defineProperty(inst, "_def", { value: def });
+  inst.check = (...checks2) => {
+    return inst.clone(exports_util.mergeDefs(def, {
+      checks: [
+        ...def.checks ?? [],
+        ...checks2.map((ch) => typeof ch === "function" ? { _zod: { check: ch, def: { check: "custom" }, onattach: [] } } : ch)
+      ]
+    }), {
+      parent: true
+    });
+  };
+  inst.with = inst.check;
+  inst.clone = (def2, params) => clone(inst, def2, params);
+  inst.brand = () => inst;
+  inst.register = (reg, meta2) => {
+    reg.add(inst, meta2);
+    return inst;
+  };
   inst.parse = (data, params) => parse4(inst, data, params, { callee: inst.parse });
   inst.safeParse = (data, params) => safeParse3(inst, data, params);
   inst.parseAsync = async (data, params) => parseAsync2(inst, data, params, { callee: inst.parseAsync });
@@ -39497,108 +38951,45 @@ var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
   inst.safeDecode = (data, params) => safeDecode2(inst, data, params);
   inst.safeEncodeAsync = async (data, params) => safeEncodeAsync2(inst, data, params);
   inst.safeDecodeAsync = async (data, params) => safeDecodeAsync2(inst, data, params);
-  _installLazyMethods(inst, "ZodType", {
-    check(...chks) {
-      const def2 = this.def;
-      return this.clone(exports_util.mergeDefs(def2, {
-        checks: [
-          ...def2.checks ?? [],
-          ...chks.map((ch) => typeof ch === "function" ? { _zod: { check: ch, def: { check: "custom" }, onattach: [] } } : ch)
-        ]
-      }), { parent: true });
-    },
-    with(...chks) {
-      return this.check(...chks);
-    },
-    clone(def2, params) {
-      return clone(this, def2, params);
-    },
-    brand() {
-      return this;
-    },
-    register(reg, meta2) {
-      reg.add(this, meta2);
-      return this;
-    },
-    refine(check, params) {
-      return this.check(refine(check, params));
-    },
-    superRefine(refinement, params) {
-      return this.check(superRefine(refinement, params));
-    },
-    overwrite(fn) {
-      return this.check(_overwrite(fn));
-    },
-    optional() {
-      return optional(this);
-    },
-    exactOptional() {
-      return exactOptional(this);
-    },
-    nullable() {
-      return nullable(this);
-    },
-    nullish() {
-      return optional(nullable(this));
-    },
-    nonoptional(params) {
-      return nonoptional(this, params);
-    },
-    array() {
-      return array(this);
-    },
-    or(arg) {
-      return union([this, arg]);
-    },
-    and(arg) {
-      return intersection(this, arg);
-    },
-    transform(tx) {
-      return pipe(this, transform(tx));
-    },
-    default(d) {
-      return _default2(this, d);
-    },
-    prefault(d) {
-      return prefault(this, d);
-    },
-    catch(params) {
-      return _catch2(this, params);
-    },
-    pipe(target) {
-      return pipe(this, target);
-    },
-    readonly() {
-      return readonly(this);
-    },
-    describe(description) {
-      const cl = this.clone();
-      globalRegistry.add(cl, { description });
-      return cl;
-    },
-    meta(...args) {
-      if (args.length === 0)
-        return globalRegistry.get(this);
-      const cl = this.clone();
-      globalRegistry.add(cl, args[0]);
-      return cl;
-    },
-    isOptional() {
-      return this.safeParse(undefined).success;
-    },
-    isNullable() {
-      return this.safeParse(null).success;
-    },
-    apply(fn) {
-      return fn(this);
-    }
-  });
+  inst.refine = (check, params) => inst.check(refine(check, params));
+  inst.superRefine = (refinement) => inst.check(superRefine(refinement));
+  inst.overwrite = (fn) => inst.check(_overwrite(fn));
+  inst.optional = () => optional(inst);
+  inst.exactOptional = () => exactOptional(inst);
+  inst.nullable = () => nullable(inst);
+  inst.nullish = () => optional(nullable(inst));
+  inst.nonoptional = (params) => nonoptional(inst, params);
+  inst.array = () => array(inst);
+  inst.or = (arg) => union([inst, arg]);
+  inst.and = (arg) => intersection(inst, arg);
+  inst.transform = (tx) => pipe(inst, transform(tx));
+  inst.default = (def2) => _default2(inst, def2);
+  inst.prefault = (def2) => prefault(inst, def2);
+  inst.catch = (params) => _catch2(inst, params);
+  inst.pipe = (target) => pipe(inst, target);
+  inst.readonly = () => readonly(inst);
+  inst.describe = (description) => {
+    const cl = inst.clone();
+    globalRegistry.add(cl, { description });
+    return cl;
+  };
   Object.defineProperty(inst, "description", {
     get() {
       return globalRegistry.get(inst)?.description;
     },
     configurable: true
   });
+  inst.meta = (...args) => {
+    if (args.length === 0) {
+      return globalRegistry.get(inst);
+    }
+    const cl = inst.clone();
+    globalRegistry.add(cl, args[0]);
+    return cl;
+  };
+  inst.isOptional = () => inst.safeParse(undefined).success;
+  inst.isNullable = () => inst.safeParse(null).success;
+  inst.apply = (fn) => fn(inst);
   return inst;
 });
 var _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
@@ -39609,53 +39000,21 @@ var _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
   inst.format = bag.format ?? null;
   inst.minLength = bag.minimum ?? null;
   inst.maxLength = bag.maximum ?? null;
-  _installLazyMethods(inst, "_ZodString", {
-    regex(...args) {
-      return this.check(_regex(...args));
-    },
-    includes(...args) {
-      return this.check(_includes(...args));
-    },
-    startsWith(...args) {
-      return this.check(_startsWith(...args));
-    },
-    endsWith(...args) {
-      return this.check(_endsWith(...args));
-    },
-    min(...args) {
-      return this.check(_minLength(...args));
-    },
-    max(...args) {
-      return this.check(_maxLength(...args));
-    },
-    length(...args) {
-      return this.check(_length(...args));
-    },
-    nonempty(...args) {
-      return this.check(_minLength(1, ...args));
-    },
-    lowercase(params) {
-      return this.check(_lowercase(params));
-    },
-    uppercase(params) {
-      return this.check(_uppercase(params));
-    },
-    trim() {
-      return this.check(_trim());
-    },
-    normalize(...args) {
-      return this.check(_normalize(...args));
-    },
-    toLowerCase() {
-      return this.check(_toLowerCase());
-    },
-    toUpperCase() {
-      return this.check(_toUpperCase());
-    },
-    slugify() {
-      return this.check(_slugify());
-    }
-  });
+  inst.regex = (...args) => inst.check(_regex(...args));
+  inst.includes = (...args) => inst.check(_includes(...args));
+  inst.startsWith = (...args) => inst.check(_startsWith(...args));
+  inst.endsWith = (...args) => inst.check(_endsWith(...args));
+  inst.min = (...args) => inst.check(_minLength(...args));
+  inst.max = (...args) => inst.check(_maxLength(...args));
+  inst.length = (...args) => inst.check(_length(...args));
+  inst.nonempty = (...args) => inst.check(_minLength(1, ...args));
+  inst.lowercase = (params) => inst.check(_lowercase(params));
+  inst.uppercase = (params) => inst.check(_uppercase(params));
+  inst.trim = () => inst.check(_trim());
+  inst.normalize = (...args) => inst.check(_normalize(...args));
+  inst.toLowerCase = () => inst.check(_toLowerCase());
+  inst.toUpperCase = () => inst.check(_toUpperCase());
+  inst.slugify = () => inst.check(_slugify());
 });
 var ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
   $ZodString.init(inst, def);
@@ -39734,7 +39093,7 @@ function url(params) {
 }
 function httpUrl(params) {
   return _url(ZodURL, {
-    protocol: exports_regexes.httpProtocol,
+    protocol: /^https?$/,
     hostname: exports_regexes.domain,
     ...exports_util.normalizeParams(params)
   });
@@ -39876,53 +39235,21 @@ var ZodNumber = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
   $ZodNumber.init(inst, def);
   ZodType.init(inst, def);
   inst._zod.processJSONSchema = (ctx, json, params) => numberProcessor(inst, ctx, json, params);
-  _installLazyMethods(inst, "ZodNumber", {
-    gt(value, params) {
-      return this.check(_gt(value, params));
-    },
-    gte(value, params) {
-      return this.check(_gte(value, params));
-    },
-    min(value, params) {
-      return this.check(_gte(value, params));
-    },
-    lt(value, params) {
-      return this.check(_lt(value, params));
-    },
-    lte(value, params) {
-      return this.check(_lte(value, params));
-    },
-    max(value, params) {
-      return this.check(_lte(value, params));
-    },
-    int(params) {
-      return this.check(int(params));
-    },
-    safe(params) {
-      return this.check(int(params));
-    },
-    positive(params) {
-      return this.check(_gt(0, params));
-    },
-    nonnegative(params) {
-      return this.check(_gte(0, params));
-    },
-    negative(params) {
-      return this.check(_lt(0, params));
-    },
-    nonpositive(params) {
-      return this.check(_lte(0, params));
-    },
-    multipleOf(value, params) {
-      return this.check(_multipleOf(value, params));
-    },
-    step(value, params) {
-      return this.check(_multipleOf(value, params));
-    },
-    finite() {
-      return this;
-    }
-  });
+  inst.gt = (value, params) => inst.check(_gt(value, params));
+  inst.gte = (value, params) => inst.check(_gte(value, params));
+  inst.min = (value, params) => inst.check(_gte(value, params));
+  inst.lt = (value, params) => inst.check(_lt(value, params));
+  inst.lte = (value, params) => inst.check(_lte(value, params));
+  inst.max = (value, params) => inst.check(_lte(value, params));
+  inst.int = (params) => inst.check(int(params));
+  inst.safe = (params) => inst.check(int(params));
+  inst.positive = (params) => inst.check(_gt(0, params));
+  inst.nonnegative = (params) => inst.check(_gte(0, params));
+  inst.negative = (params) => inst.check(_lt(0, params));
+  inst.nonpositive = (params) => inst.check(_lte(0, params));
+  inst.multipleOf = (value, params) => inst.check(_multipleOf(value, params));
+  inst.step = (value, params) => inst.check(_multipleOf(value, params));
+  inst.finite = () => inst;
   const bag = inst._zod.bag;
   inst.minValue = Math.max(bag.minimum ?? Number.NEGATIVE_INFINITY, bag.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null;
   inst.maxValue = Math.min(bag.maximum ?? Number.POSITIVE_INFINITY, bag.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null;
@@ -40069,23 +39396,11 @@ var ZodArray = /* @__PURE__ */ $constructor("ZodArray", (inst, def) => {
   ZodType.init(inst, def);
   inst._zod.processJSONSchema = (ctx, json, params) => arrayProcessor(inst, ctx, json, params);
   inst.element = def.element;
-  _installLazyMethods(inst, "ZodArray", {
-    min(n, params) {
-      return this.check(_minLength(n, params));
-    },
-    nonempty(params) {
-      return this.check(_minLength(1, params));
-    },
-    max(n, params) {
-      return this.check(_maxLength(n, params));
-    },
-    length(n, params) {
-      return this.check(_length(n, params));
-    },
-    unwrap() {
-      return this.element;
-    }
-  });
+  inst.min = (minLength, params) => inst.check(_minLength(minLength, params));
+  inst.nonempty = (params) => inst.check(_minLength(1, params));
+  inst.max = (maxLength, params) => inst.check(_maxLength(maxLength, params));
+  inst.length = (len, params) => inst.check(_length(len, params));
+  inst.unwrap = () => inst.element;
 });
 function array(element, params) {
   return _array(ZodArray, element, params);
@@ -40101,47 +39416,23 @@ var ZodObject = /* @__PURE__ */ $constructor("ZodObject", (inst, def) => {
   exports_util.defineLazy(inst, "shape", () => {
     return def.shape;
   });
-  _installLazyMethods(inst, "ZodObject", {
-    keyof() {
-      return _enum2(Object.keys(this._zod.def.shape));
-    },
-    catchall(catchall) {
-      return this.clone({ ...this._zod.def, catchall });
-    },
-    passthrough() {
-      return this.clone({ ...this._zod.def, catchall: unknown() });
-    },
-    loose() {
-      return this.clone({ ...this._zod.def, catchall: unknown() });
-    },
-    strict() {
-      return this.clone({ ...this._zod.def, catchall: never() });
-    },
-    strip() {
-      return this.clone({ ...this._zod.def, catchall: undefined });
-    },
-    extend(incoming) {
-      return exports_util.extend(this, incoming);
-    },
-    safeExtend(incoming) {
-      return exports_util.safeExtend(this, incoming);
-    },
-    merge(other) {
-      return exports_util.merge(this, other);
-    },
-    pick(mask) {
-      return exports_util.pick(this, mask);
-    },
-    omit(mask) {
-      return exports_util.omit(this, mask);
-    },
-    partial(...args) {
-      return exports_util.partial(ZodOptional, this, args[0]);
-    },
-    required(...args) {
-      return exports_util.required(ZodNonOptional, this, args[0]);
-    }
-  });
+  inst.keyof = () => _enum2(Object.keys(inst._zod.def.shape));
+  inst.catchall = (catchall) => inst.clone({ ...inst._zod.def, catchall });
+  inst.passthrough = () => inst.clone({ ...inst._zod.def, catchall: unknown() });
+  inst.loose = () => inst.clone({ ...inst._zod.def, catchall: unknown() });
+  inst.strict = () => inst.clone({ ...inst._zod.def, catchall: never() });
+  inst.strip = () => inst.clone({ ...inst._zod.def, catchall: undefined });
+  inst.extend = (incoming) => {
+    return exports_util.extend(inst, incoming);
+  };
+  inst.safeExtend = (incoming) => {
+    return exports_util.safeExtend(inst, incoming);
+  };
+  inst.merge = (other) => exports_util.merge(inst, other);
+  inst.pick = (mask) => exports_util.pick(inst, mask);
+  inst.omit = (mask) => exports_util.omit(inst, mask);
+  inst.partial = (...args) => exports_util.partial(ZodOptional, inst, args[0]);
+  inst.required = (...args) => exports_util.required(ZodNonOptional, inst, args[0]);
 });
 function object2(shape, params) {
   const def = {
@@ -40246,14 +39537,6 @@ var ZodRecord = /* @__PURE__ */ $constructor("ZodRecord", (inst, def) => {
   inst.valueType = def.valueType;
 });
 function record(keyType, valueType, params) {
-  if (!valueType || !valueType._zod) {
-    return new ZodRecord({
-      type: "record",
-      keyType: string2(),
-      valueType: keyType,
-      ...exports_util.normalizeParams(valueType)
-    });
-  }
   return new ZodRecord({
     type: "record",
     keyType,
@@ -40425,12 +39708,10 @@ var ZodTransform = /* @__PURE__ */ $constructor("ZodTransform", (inst, def) => {
     if (output instanceof Promise) {
       return output.then((output2) => {
         payload.value = output2;
-        payload.fallback = true;
         return payload;
       });
     }
     payload.value = output;
-    payload.fallback = true;
     return payload;
   };
 });
@@ -40584,20 +39865,6 @@ function codec(in_, out, params) {
     reverseTransform: params.encode
   });
 }
-function invertCodec(codec2) {
-  const def = codec2._zod.def;
-  return new ZodCodec({
-    type: "pipe",
-    in: def.out,
-    out: def.in,
-    transform: def.reverseTransform,
-    reverseTransform: def.transform
-  });
-}
-var ZodPreprocess = /* @__PURE__ */ $constructor("ZodPreprocess", (inst, def) => {
-  ZodPipe.init(inst, def);
-  $ZodPreprocess.init(inst, def);
-});
 var ZodReadonly = /* @__PURE__ */ $constructor("ZodReadonly", (inst, def) => {
   $ZodReadonly.init(inst, def);
   ZodType.init(inst, def);
@@ -40676,8 +39943,8 @@ function custom(fn, _params) {
 function refine(fn, _params = {}) {
   return _refine(ZodCustom, fn, _params);
 }
-function superRefine(fn, params) {
-  return _superRefine(fn, params);
+function superRefine(fn) {
+  return _superRefine(fn);
 }
 var describe2 = describe;
 var meta2 = meta;
@@ -40715,11 +39982,7 @@ function json(params) {
   return jsonSchema;
 }
 function preprocess(fn, schema) {
-  return new ZodPreprocess({
-    type: "pipe",
-    in: transform(fn),
-    out: schema
-  });
+  return pipe(transform(fn), schema);
 }
 // node_modules/zod/v4/classic/compat.js
 var ZodIssueCode = {
@@ -40751,7 +40014,7 @@ var z = {
   ...exports_checks2,
   iso: exports_iso
 };
-var RECOGNIZED_KEYS = /* @__PURE__ */ new Set([
+var RECOGNIZED_KEYS = new Set([
   "$schema",
   "$ref",
   "$defs",
@@ -41125,6 +40388,12 @@ function convertBaseSchema(schema, ctx) {
     default:
       throw new Error(`Unsupported type: ${type}`);
   }
+  if (schema.description) {
+    zodSchema = zodSchema.describe(schema.description);
+  }
+  if (schema.default !== undefined) {
+    zodSchema = zodSchema.default(schema.default);
+  }
   return zodSchema;
 }
 function convertSchema(schema, ctx) {
@@ -41161,9 +40430,6 @@ function convertSchema(schema, ctx) {
   if (schema.readOnly === true) {
     baseSchema = z.readonly(baseSchema);
   }
-  if (schema.default !== undefined) {
-    baseSchema = baseSchema.default(schema.default);
-  }
   const extraMeta = {};
   const coreMetadataKeys = ["$id", "id", "$comment", "$anchor", "$vocabulary", "$dynamicRef", "$dynamicAnchor"];
   for (const key of coreMetadataKeys) {
@@ -41185,32 +40451,23 @@ function convertSchema(schema, ctx) {
   if (Object.keys(extraMeta).length > 0) {
     ctx.registry.add(baseSchema, extraMeta);
   }
-  if (schema.description) {
-    baseSchema = baseSchema.describe(schema.description);
-  }
   return baseSchema;
 }
 function fromJSONSchema(schema, params) {
   if (typeof schema === "boolean") {
     return schema ? z.any() : z.never();
   }
-  let normalized;
-  try {
-    normalized = JSON.parse(JSON.stringify(schema));
-  } catch {
-    throw new Error("fromJSONSchema input is not valid JSON (possibly cyclic); use $defs/$ref for recursive schemas");
-  }
-  const version2 = detectVersion(normalized, params?.defaultTarget);
-  const defs = normalized.$defs || normalized.definitions || {};
+  const version2 = detectVersion(schema, params?.defaultTarget);
+  const defs = schema.$defs || schema.definitions || {};
   const ctx = {
     version: version2,
     defs,
     refs: new Map,
     processing: new Set,
-    rootSchema: normalized,
+    rootSchema: schema,
     registry: params?.registry ?? globalRegistry
   };
-  return convertSchema(normalized, ctx);
+  return convertSchema(schema, ctx);
 }
 // node_modules/zod/v4/classic/coerce.js
 var exports_coerce = {};
@@ -42156,8 +41413,8 @@ class Protocol {
                     resolver(message);
                   } else {
                     const errorMessage = message;
-                    const error51 = new McpError(errorMessage.error.code, errorMessage.error.message, errorMessage.error.data);
-                    resolver(error51);
+                    const error48 = new McpError(errorMessage.error.code, errorMessage.error.message, errorMessage.error.data);
+                    resolver(error48);
                   }
                 } else {
                   const messageType = queuedMessage.type === "response" ? "Response" : "Error";
@@ -42201,8 +41458,8 @@ class Protocol {
             nextCursor,
             _meta: {}
           };
-        } catch (error51) {
-          throw new McpError(ErrorCode.InvalidParams, `Failed to list tasks: ${error51 instanceof Error ? error51.message : String(error51)}`);
+        } catch (error48) {
+          throw new McpError(ErrorCode.InvalidParams, `Failed to list tasks: ${error48 instanceof Error ? error48.message : String(error48)}`);
         }
       });
       this.setRequestHandler(CancelTaskRequestSchema, async (request, extra) => {
@@ -42224,11 +41481,11 @@ class Protocol {
             _meta: {},
             ...cancelledTask
           };
-        } catch (error51) {
-          if (error51 instanceof McpError) {
-            throw error51;
+        } catch (error48) {
+          if (error48 instanceof McpError) {
+            throw error48;
           }
-          throw new McpError(ErrorCode.InvalidRequest, `Failed to cancel task: ${error51 instanceof Error ? error51.message : String(error51)}`);
+          throw new McpError(ErrorCode.InvalidRequest, `Failed to cancel task: ${error48 instanceof Error ? error48.message : String(error48)}`);
         }
       });
     }
@@ -42284,9 +41541,9 @@ class Protocol {
       this._onclose();
     };
     const _onerror = this.transport?.onerror;
-    this._transport.onerror = (error51) => {
-      _onerror?.(error51);
-      this._onerror(error51);
+    this._transport.onerror = (error48) => {
+      _onerror?.(error48);
+      this._onerror(error48);
     };
     const _onmessage = this._transport?.onmessage;
     this._transport.onmessage = (message, extra) => {
@@ -42317,22 +41574,22 @@ class Protocol {
       controller.abort();
     }
     this._requestHandlerAbortControllers.clear();
-    const error51 = McpError.fromError(ErrorCode.ConnectionClosed, "Connection closed");
+    const error48 = McpError.fromError(ErrorCode.ConnectionClosed, "Connection closed");
     this._transport = undefined;
     this.onclose?.();
     for (const handler of responseHandlers.values()) {
-      handler(error51);
+      handler(error48);
     }
   }
-  _onerror(error51) {
-    this.onerror?.(error51);
+  _onerror(error48) {
+    this.onerror?.(error48);
   }
   _onnotification(notification) {
     const handler = this._notificationHandlers.get(notification.method) ?? this.fallbackNotificationHandler;
     if (handler === undefined) {
       return;
     }
-    Promise.resolve().then(() => handler(notification)).catch((error51) => this._onerror(new Error(`Uncaught error in notification handler: ${error51}`)));
+    Promise.resolve().then(() => handler(notification)).catch((error48) => this._onerror(new Error(`Uncaught error in notification handler: ${error48}`)));
   }
   _onrequest(request, extra) {
     const handler = this._requestHandlers.get(request.method) ?? this.fallbackRequestHandler;
@@ -42352,9 +41609,9 @@ class Protocol {
           type: "error",
           message: errorResponse,
           timestamp: Date.now()
-        }, capturedTransport?.sessionId).catch((error51) => this._onerror(new Error(`Failed to enqueue error response: ${error51}`)));
+        }, capturedTransport?.sessionId).catch((error48) => this._onerror(new Error(`Failed to enqueue error response: ${error48}`)));
       } else {
-        capturedTransport?.send(errorResponse).catch((error51) => this._onerror(new Error(`Failed to send an error response: ${error51}`)));
+        capturedTransport?.send(errorResponse).catch((error48) => this._onerror(new Error(`Failed to send an error response: ${error48}`)));
       }
       return;
     }
@@ -42420,7 +41677,7 @@ class Protocol {
       } else {
         await capturedTransport?.send(response);
       }
-    }, async (error51) => {
+    }, async (error48) => {
       if (abortController.signal.aborted) {
         return;
       }
@@ -42428,9 +41685,9 @@ class Protocol {
         jsonrpc: "2.0",
         id: request.id,
         error: {
-          code: Number.isSafeInteger(error51["code"]) ? error51["code"] : ErrorCode.InternalError,
-          message: error51.message ?? "Internal error",
-          ...error51["data"] !== undefined && { data: error51["data"] }
+          code: Number.isSafeInteger(error48["code"]) ? error48["code"] : ErrorCode.InternalError,
+          message: error48.message ?? "Internal error",
+          ...error48["data"] !== undefined && { data: error48["data"] }
         }
       };
       if (relatedTaskId && this._taskMessageQueue) {
@@ -42442,7 +41699,7 @@ class Protocol {
       } else {
         await capturedTransport?.send(errorResponse);
       }
-    }).catch((error51) => this._onerror(new Error(`Failed to send response: ${error51}`))).finally(() => {
+    }).catch((error48) => this._onerror(new Error(`Failed to send response: ${error48}`))).finally(() => {
       if (this._requestHandlerAbortControllers.get(request.id) === abortController) {
         this._requestHandlerAbortControllers.delete(request.id);
       }
@@ -42461,11 +41718,11 @@ class Protocol {
     if (timeoutInfo && responseHandler && timeoutInfo.resetTimeoutOnProgress) {
       try {
         this._resetTimeout(messageId);
-      } catch (error51) {
+      } catch (error48) {
         this._responseHandlers.delete(messageId);
         this._progressHandlers.delete(messageId);
         this._cleanupTimeout(messageId);
-        responseHandler(error51);
+        responseHandler(error48);
         return;
       }
     }
@@ -42479,8 +41736,8 @@ class Protocol {
       if (isJSONRPCResultResponse(response)) {
         resolver(response);
       } else {
-        const error51 = new McpError(response.error.code, response.error.message, response.error.data);
-        resolver(error51);
+        const error48 = new McpError(response.error.code, response.error.message, response.error.data);
+        resolver(error48);
       }
       return;
     }
@@ -42508,8 +41765,8 @@ class Protocol {
     if (isJSONRPCResultResponse(response)) {
       handler(response);
     } else {
-      const error51 = McpError.fromError(response.error.code, response.error.message, response.error.data);
-      handler(error51);
+      const error48 = McpError.fromError(response.error.code, response.error.message, response.error.data);
+      handler(error48);
     }
   }
   get transport() {
@@ -42524,10 +41781,10 @@ class Protocol {
       try {
         const result = await this.request(request, resultSchema, options2);
         yield { type: "result", result };
-      } catch (error51) {
+      } catch (error48) {
         yield {
           type: "error",
-          error: error51 instanceof McpError ? error51 : new McpError(ErrorCode.InternalError, String(error51))
+          error: error48 instanceof McpError ? error48 : new McpError(ErrorCode.InternalError, String(error48))
         };
       }
       return;
@@ -42570,18 +41827,18 @@ class Protocol {
         await new Promise((resolve) => setTimeout(resolve, pollInterval));
         options2?.signal?.throwIfAborted();
       }
-    } catch (error51) {
+    } catch (error48) {
       yield {
         type: "error",
-        error: error51 instanceof McpError ? error51 : new McpError(ErrorCode.InternalError, String(error51))
+        error: error48 instanceof McpError ? error48 : new McpError(ErrorCode.InternalError, String(error48))
       };
     }
   }
   request(request, resultSchema, options2) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options2 ?? {};
     return new Promise((resolve, reject) => {
-      const earlyReject = (error51) => {
-        reject(error51);
+      const earlyReject = (error48) => {
+        reject(error48);
       };
       if (!this._transport) {
         earlyReject(new Error("Not connected"));
@@ -42641,9 +41898,9 @@ class Protocol {
             requestId: messageId,
             reason: String(reason)
           }
-        }, { relatedRequestId, resumptionToken, onresumptiontoken }).catch((error52) => this._onerror(new Error(`Failed to send cancellation: ${error52}`)));
-        const error51 = reason instanceof McpError ? reason : new McpError(ErrorCode.RequestTimeout, String(reason));
-        reject(error51);
+        }, { relatedRequestId, resumptionToken, onresumptiontoken }).catch((error49) => this._onerror(new Error(`Failed to send cancellation: ${error49}`)));
+        const error48 = reason instanceof McpError ? reason : new McpError(ErrorCode.RequestTimeout, String(reason));
+        reject(error48);
       };
       this._responseHandlers.set(messageId, (response) => {
         if (options2?.signal?.aborted) {
@@ -42659,8 +41916,8 @@ class Protocol {
           } else {
             resolve(parseResult.data);
           }
-        } catch (error51) {
-          reject(error51);
+        } catch (error48) {
+          reject(error48);
         }
       });
       options2?.signal?.addEventListener("abort", () => {
@@ -42684,14 +41941,14 @@ class Protocol {
           type: "request",
           message: jsonrpcRequest,
           timestamp: Date.now()
-        }).catch((error51) => {
+        }).catch((error48) => {
           this._cleanupTimeout(messageId);
-          reject(error51);
+          reject(error48);
         });
       } else {
-        this._transport.send(jsonrpcRequest, { relatedRequestId, resumptionToken, onresumptiontoken }).catch((error51) => {
+        this._transport.send(jsonrpcRequest, { relatedRequestId, resumptionToken, onresumptiontoken }).catch((error48) => {
           this._cleanupTimeout(messageId);
-          reject(error51);
+          reject(error48);
         });
       }
     });
@@ -42761,7 +42018,7 @@ class Protocol {
             }
           };
         }
-        this._transport?.send(jsonrpcNotification2, options2).catch((error51) => this._onerror(error51));
+        this._transport?.send(jsonrpcNotification2, options2).catch((error48) => this._onerror(error48));
       });
       return;
     }
@@ -43147,7 +42404,16 @@ class Server extends Protocol {
     if (!methodSchema) {
       throw new Error("Schema is missing a method literal");
     }
-    const methodValue = getLiteralValue(methodSchema);
+    let methodValue;
+    if (isZ4Schema(methodSchema)) {
+      const v4Schema = methodSchema;
+      const v4Def = v4Schema._zod?.def;
+      methodValue = v4Def?.value ?? v4Schema.value;
+    } else {
+      const v3Schema = methodSchema;
+      const legacyDef = v3Schema._def;
+      methodValue = legacyDef?.value ?? v3Schema.value;
+    }
     if (typeof methodValue !== "string") {
       throw new Error("Schema method literal must be a string");
     }
@@ -43372,11 +42638,11 @@ class Server extends Protocol {
             if (!validationResult.valid) {
               throw new McpError(ErrorCode.InvalidParams, `Elicitation response content does not match requested schema: ${validationResult.errorMessage}`);
             }
-          } catch (error51) {
-            if (error51 instanceof McpError) {
-              throw error51;
+          } catch (error48) {
+            if (error48 instanceof McpError) {
+              throw error48;
             }
-            throw new McpError(ErrorCode.InternalError, `Error validating elicitation response: ${error51 instanceof Error ? error51.message : String(error51)}`);
+            throw new McpError(ErrorCode.InternalError, `Error validating elicitation response: ${error48 instanceof Error ? error48.message : String(error48)}`);
           }
         }
         return result;
@@ -43427,18 +42693,8 @@ class Server extends Protocol {
 import process3 from "process";
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/shared/stdio.js
-var STDIO_DEFAULT_MAX_BUFFER_SIZE = 10 * 1024 * 1024;
-
 class ReadBuffer {
-  constructor(options2) {
-    this._maxBufferSize = options2?.maxBufferSize ?? STDIO_DEFAULT_MAX_BUFFER_SIZE;
-  }
   append(chunk) {
-    const newSize = (this._buffer?.length ?? 0) + chunk.length;
-    if (newSize > this._maxBufferSize) {
-      this.clear();
-      throw new Error(`ReadBuffer exceeded maximum size of ${this._maxBufferSize} bytes`);
-    }
     this._buffer = this._buffer ? Buffer.concat([this._buffer, chunk]) : chunk;
   }
   readMessage() {
@@ -43468,23 +42724,18 @@ function serializeMessage(message) {
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/server/stdio.js
 class StdioServerTransport {
-  constructor(_stdin = process3.stdin, _stdout = process3.stdout, options2) {
+  constructor(_stdin = process3.stdin, _stdout = process3.stdout) {
     this._stdin = _stdin;
     this._stdout = _stdout;
+    this._readBuffer = new ReadBuffer;
     this._started = false;
     this._ondata = (chunk) => {
-      try {
-        this._readBuffer.append(chunk);
-        this.processReadBuffer();
-      } catch (error51) {
-        this.onerror?.(error51);
-        this.close().catch(() => {});
-      }
+      this._readBuffer.append(chunk);
+      this.processReadBuffer();
     };
-    this._onerror = (error51) => {
-      this.onerror?.(error51);
+    this._onerror = (error48) => {
+      this.onerror?.(error48);
     };
-    this._readBuffer = new ReadBuffer({ maxBufferSize: options2?.maxBufferSize });
   }
   async start() {
     if (this._started) {
@@ -43502,8 +42753,8 @@ class StdioServerTransport {
           break;
         }
         this.onmessage?.(message);
-      } catch (error51) {
-        this.onerror?.(error51);
+      } catch (error48) {
+        this.onerror?.(error48);
       }
     }
   }
@@ -43689,6 +42940,7 @@ var SolrDocumentSchema = exports_external.object({
   parent_artifact: exports_external.string().optional(),
   embed_provider: exports_external.string().optional(),
   index_root: exports_external.string().optional(),
+  index_commit: exports_external.string().optional(),
   tenant_id: exports_external.string().optional(),
   tenant_scope: exports_external.enum(["personal", "org"]).optional(),
   partition: PartitionSchema.optional(),
@@ -43750,7 +43002,9 @@ var ToolInputSchemas = {
   compass_index_artifacts: exports_external.object({
     name: exports_external.string().optional(),
     all: exports_external.boolean().optional(),
-    chunked: exports_external.boolean().default(false)
+    chunked: exports_external.boolean().default(false),
+    contentRoot: exports_external.string().optional(),
+    project: exports_external.string().optional()
   }),
   compass_search: exports_external.object({
     query: exports_external.string(),
@@ -43763,10 +43017,14 @@ var ToolInputSchemas = {
     hybridWeight: exports_external.number().min(0).max(1).default(0.5),
     snippetLength: exports_external.number().int().positive().default(200),
     minScore: exports_external.number().min(0).max(1).optional(),
-    includeContent: exports_external.boolean().default(false)
+    includeContent: exports_external.boolean().default(false),
+    contentRoot: exports_external.string().optional(),
+    project: exports_external.string().optional()
   }),
   compass_reindex: exports_external.object({
-    force: exports_external.boolean().default(false)
+    force: exports_external.boolean().default(false),
+    contentRoot: exports_external.string().optional(),
+    project: exports_external.string().optional()
   }),
   compass_index_document: exports_external.object({
     id: exports_external.string(),
@@ -44277,15 +43535,22 @@ class SoukVectorClient {
     });
     return await response.json();
   }
-  async findByContentHash(contentHash2, embedProvider) {
+  async findByContentHash(contentHash2, embedProvider, indexRoot) {
     try {
       const params = new URLSearchParams({
         q: `content_hash:"${contentHash2}"`,
         rows: "1",
         wt: "json"
       });
+      const filters = [];
       if (embedProvider) {
-        params.set("fq", `embed_provider:"${embedProvider}"`);
+        filters.push(`embed_provider:"${embedProvider}"`);
+      }
+      if (indexRoot) {
+        filters.push(`index_root:"${indexRoot.replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}"`);
+      }
+      if (filters.length > 0) {
+        params.set("fq", filters.join(" AND "));
       }
       const url2 = `${this.baseUrl}/solr/${this.collection}/select?${params.toString()}`;
       const response = await this.solrFetch(url2);
@@ -44348,6 +43613,15 @@ class SoukVectorClient {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ delete: { id: docId } })
+    });
+  }
+  async deleteByQuery(query, options2) {
+    const commit = options2?.commit ?? true;
+    const url2 = `${this.baseUrl}/solr/${this.collection}/update${commit ? "?commit=true" : ""}`;
+    await this.solrFetch(url2, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ delete: { query } })
     });
   }
   async commit() {
@@ -44848,10 +44122,12 @@ function awsCli(args, target, options2 = {}) {
     } catch {}
   }
   const full = [...args];
-  if (target.s3?.region)
+  if (target.s3?.region && /^[a-z0-9-]+$/.test(target.s3.region)) {
     full.push("--region", target.s3.region);
-  if (target.s3?.endpoint)
+  }
+  if (target.s3?.endpoint && /^https?:\/\/.+$/.test(target.s3.endpoint)) {
     full.push("--endpoint-url", target.s3.endpoint);
+  }
   try {
     const result = spawnSync("aws", full, {
       encoding: "utf-8",
@@ -45148,8 +44424,8 @@ async function readBody(response) {
 function describe3(body) {
   if (body == null)
     return "no response body";
-  const error51 = body.error;
-  return error51?.msg ?? JSON.stringify(body);
+  const error48 = body.error;
+  return error48?.msg ?? JSON.stringify(body);
 }
 
 // src/tools/compass-backup.ts
@@ -46097,19 +45373,69 @@ async function checkCollectionExists(solrUrl, collectionName) {
 
 // src/catalog-reader.ts
 init_schemas3();
+init_errors();
 var import_gray_matter = __toESM(require_gray_matter(), 1);
+import { readFile as readFile2 } from "fs/promises";
+import { join as join5, resolve as resolve3 } from "path";
+
+// src/project-registry.ts
 import { readFile } from "fs/promises";
-import { join as join4 } from "path";
+import { homedir as homedir3 } from "os";
+import { join as join4, resolve as resolve2 } from "path";
+var ProjectRegistrySchema = exports_external.object({
+  projects: exports_external.record(exports_external.string().min(1), exports_external.string().min(1)).default({})
+});
+function registryDir(env = process.env) {
+  return env.SOUK_COMPASS_REGISTRY_DIR ? resolve2(env.SOUK_COMPASS_REGISTRY_DIR) : join4(homedir3(), ".solrcompass");
+}
+function registryPath(env = process.env) {
+  return join4(registryDir(env), "projects.json");
+}
+async function loadProjectRegistry(path = registryPath()) {
+  let raw;
+  try {
+    raw = await readFile(path, "utf-8");
+  } catch {
+    return { projects: {} };
+  }
+  const parsed = JSON.parse(raw);
+  return ProjectRegistrySchema.parse(parsed);
+}
+function resolveProjectRoot(registry3, projectName) {
+  const root = registry3.projects[projectName];
+  return root ? resolve2(root) : undefined;
+}
+
+// src/catalog-reader.ts
+async function resolveRequestContentRoot(selector, fallback, registry3) {
+  if (selector.contentRoot)
+    return resolve3(selector.contentRoot);
+  if (selector.project) {
+    const reg = registry3 ?? await loadProjectRegistry();
+    const root = resolveProjectRoot(reg, selector.project);
+    if (!root) {
+      const known = Object.keys(reg.projects);
+      throw new SoukCompassError(`Unknown project "${selector.project}". ${known.length > 0 ? `Registered projects: ${known.join(", ")}.` : "The registry at ~/.solrcompass/projects.json has no registered projects."}`, ErrorCodes.CONTENT_ROOT_INVALID);
+    }
+    return root;
+  }
+  return fallback;
+}
 async function loadCatalog(contentRoot) {
-  const catalogPath = join4(contentRoot, "catalog.json");
-  const raw = await readFile(catalogPath, "utf-8");
+  const catalogPath = join5(contentRoot, "catalog.json");
+  let raw;
+  try {
+    raw = await readFile2(catalogPath, "utf-8");
+  } catch (err) {
+    throw new SoukCompassError(`No catalog.json found at content root "${contentRoot}". ` + "Point the content root at a Kanon directory (containing catalog.json and knowledge/) " + "via the tool's contentRoot/project argument, a ~/.solrcompass/projects.json entry, " + "or the SOUK_COMPASS_CONTENT_ROOT environment variable.", ErrorCodes.CONTENT_ROOT_INVALID, { cause: err });
+  }
   const parsed = JSON.parse(raw);
   return CatalogSchema.parse(parsed);
 }
 async function readArtifactContent(contentRoot, entry) {
-  const relativePath = entry.path ?? join4("knowledge", entry.name);
-  const filePath = join4(contentRoot, relativePath, "knowledge.md");
-  const raw = await readFile(filePath, "utf-8");
+  const relativePath = entry.path ?? join5("knowledge", entry.name);
+  const filePath = join5(contentRoot, relativePath, "knowledge.md");
+  const raw = await readFile2(filePath, "utf-8");
   const parsed = import_gray_matter.default(raw);
   return { frontmatter: parsed.data, body: parsed.content };
 }
@@ -46284,13 +45610,14 @@ function toMemoryDocument(note, embedding, category, tags, sessionId, embedProvi
 
 // src/tools/compass-index.ts
 async function handleCompassIndexArtifacts(input, ctx) {
-  const catalog = await loadCatalog(ctx.contentRoot);
+  const contentRoot = await resolveRequestContentRoot(input, ctx.contentRoot);
+  const catalog = await loadCatalog(contentRoot);
   const chunked = input.chunked ?? false;
   if (input.name) {
-    return indexSingle(input.name, catalog, ctx, chunked);
+    return indexSingle(input.name, catalog, ctx, chunked, contentRoot);
   }
   if (input.all) {
-    return indexAll(catalog, ctx, chunked);
+    return indexAll(catalog, ctx, chunked, contentRoot);
   }
   return jsonResult3({
     indexed: 0,
@@ -46299,7 +45626,7 @@ async function handleCompassIndexArtifacts(input, ctx) {
     message: 'Provide either "name" for a single artifact or "all": true to index everything.'
   });
 }
-async function indexSingle(name, catalog, ctx, chunked) {
+async function indexSingle(name, catalog, ctx, chunked, contentRoot) {
   const entry = catalog.find((e) => e.name === name);
   if (!entry) {
     return jsonResult3({
@@ -46309,7 +45636,8 @@ async function indexSingle(name, catalog, ctx, chunked) {
     });
   }
   try {
-    const { body } = await readArtifactContent(ctx.contentRoot, entry);
+    await deleteArtifactDocs(ctx, entry.name);
+    const { body } = await readArtifactContent(contentRoot, entry);
     if (chunked) {
       const chunks = chunkMarkdown(body, { pack: true });
       const chunkTexts = chunks.map((c) => c.text);
@@ -46341,13 +45669,14 @@ async function indexSingle(name, catalog, ctx, chunked) {
     return handleIndexError(name, err);
   }
 }
-async function indexAll(catalog, ctx, chunked) {
+async function indexAll(catalog, ctx, chunked, contentRoot) {
   let indexed = 0;
   let errors5 = 0;
   const details = [];
   for (const entry of catalog) {
     try {
-      const { body } = await readArtifactContent(ctx.contentRoot, entry);
+      await deleteArtifactDocs(ctx, entry.name);
+      const { body } = await readArtifactContent(contentRoot, entry);
       if (chunked) {
         const chunks = chunkMarkdown(body, { pack: true });
         const chunkTexts = chunks.map((c) => c.text);
@@ -46392,6 +45721,14 @@ async function indexAll(catalog, ctx, chunked) {
     }
   }
   return jsonResult3({ indexed, errors: errors5, details });
+}
+async function deleteArtifactDocs(ctx, artifactName) {
+  const v = artifactName.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+  try {
+    await ctx.solrClient.deleteByQuery(`id:"${v}" OR parent_artifact:"${v}"`, {
+      commit: false
+    });
+  } catch {}
 }
 function extractArtifactMetadata(entry) {
   const meta5 = {};
@@ -46510,12 +45847,128 @@ function jsonResult4(data) {
 }
 
 // src/tools/compass-index-folder.ts
-import { readdir, readFile as readFile2, stat } from "fs/promises";
-import { basename as basename3, extname, join as join5, relative, resolve as resolve2 } from "path";
+import { readFile as readFile4, stat as stat3 } from "fs/promises";
+import { extname as extname2, resolve as resolve4 } from "path";
 
 // src/codebase-docs.ts
 import { createHash as createHash3 } from "crypto";
 import { basename as basename2 } from "path";
+
+// src/elixir-chunker.ts
+var ELIXIR_BOUNDARY = /^ {0,2}(?:defmodule|defmacrop|defmacro|defp|def)\b/;
+var ELIXIR_FILE_EXTENSION = /\.exs?$/i;
+function isElixirFile(relativePath) {
+  return ELIXIR_FILE_EXTENSION.test(relativePath);
+}
+function chunkElixir(content, chunkMaxLength) {
+  if (!Number.isSafeInteger(chunkMaxLength) || chunkMaxLength <= 0) {
+    throw new RangeError("chunkMaxLength must be a positive safe integer");
+  }
+  const lines = splitSourceLines(content);
+  const boundaryIndices = lines.flatMap((line, index) => ELIXIR_BOUNDARY.test(withoutLineEnding(line.text)) ? [index] : []);
+  if (boundaryIndices.length === 0) {
+    return null;
+  }
+  const boundaryChunks = splitAtBoundaries(lines, boundaryIndices);
+  const chunks = boundaryChunks.flatMap((chunk) => splitOversizedChunk(chunk, chunkMaxLength));
+  return chunks.map((chunk, index) => ({ ...chunk, index }));
+}
+function splitSourceLines(content) {
+  const lineTexts = content.match(/[^\r\n]*(?:\r\n|\r|\n|$)/g) ?? [];
+  const lines = [];
+  for (const text of lineTexts) {
+    if (text.length === 0) {
+      continue;
+    }
+    const lineNumber = lines.length + 1;
+    lines.push({ endLine: lineNumber, startLine: lineNumber, text });
+  }
+  return lines;
+}
+function splitAtBoundaries(lines, boundaryIndices) {
+  const chunks = [];
+  let chunkStart = 0;
+  for (const boundaryIndex of boundaryIndices) {
+    if (boundaryIndex > chunkStart) {
+      chunks.push(createChunk(lines, chunkStart, boundaryIndex));
+    }
+    chunkStart = boundaryIndex;
+  }
+  if (chunkStart < lines.length) {
+    chunks.push(createChunk(lines, chunkStart, lines.length));
+  }
+  return chunks;
+}
+function createChunk(lines, startIndex, endIndex) {
+  const firstLine = lines[startIndex];
+  const lastLine = lines[endIndex - 1];
+  return {
+    index: 0,
+    text: lines.slice(startIndex, endIndex).map((line) => line.text).join(""),
+    startLine: firstLine.startLine,
+    endLine: lastLine.endLine
+  };
+}
+function splitOversizedChunk(chunk, maxLength) {
+  if (chunk.text.length <= maxLength) {
+    return [chunk];
+  }
+  const lines = splitSourceLines(chunk.text).map((line) => ({
+    ...line,
+    startLine: line.startLine + chunk.startLine - 1,
+    endLine: line.endLine + chunk.startLine - 1
+  }));
+  const chunks = [];
+  let currentLines = [];
+  let currentLength = 0;
+  for (const line of lines) {
+    if (line.text.length > maxLength) {
+      if (currentLines.length > 0) {
+        chunks.push(createChunkFromLines(currentLines));
+        currentLines = [];
+        currentLength = 0;
+      }
+      chunks.push(...splitLongLine(line, maxLength));
+      continue;
+    }
+    if (currentLength + line.text.length > maxLength && currentLines.length > 0) {
+      chunks.push(createChunkFromLines(currentLines));
+      currentLines = [];
+      currentLength = 0;
+    }
+    currentLines.push(line);
+    currentLength += line.text.length;
+  }
+  if (currentLines.length > 0) {
+    chunks.push(createChunkFromLines(currentLines));
+  }
+  return chunks;
+}
+function createChunkFromLines(lines) {
+  return {
+    index: 0,
+    text: lines.map((line) => line.text).join(""),
+    startLine: lines[0].startLine,
+    endLine: lines.at(-1)?.endLine ?? lines[0].endLine
+  };
+}
+function splitLongLine(line, maxLength) {
+  const chunks = [];
+  for (let offset = 0;offset < line.text.length; offset += maxLength) {
+    chunks.push({
+      index: 0,
+      text: line.text.slice(offset, offset + maxLength),
+      startLine: line.startLine,
+      endLine: line.endLine
+    });
+  }
+  return chunks;
+}
+function withoutLineEnding(line) {
+  return line.replace(/\r\n|\r|\n/g, "");
+}
+
+// src/codebase-docs.ts
 function rootKey(absoluteRoot) {
   const slug = basename2(absoluteRoot).toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "root";
   const digest = createHash3("sha256").update(absoluteRoot, "utf-8").digest("hex").slice(0, 8);
@@ -46571,7 +46024,7 @@ function buildCodebaseDocs(options2) {
   const { root, relativePath, content, chunkMaxLength, chunked } = options2;
   const key = rootKey(root);
   const base = `codebase::${key}::${relativePath}`;
-  const chunks = chunked ? chunkCode(content, chunkMaxLength) : [
+  const chunks = !chunked ? [
     {
       index: 0,
       text: content,
@@ -46579,7 +46032,7 @@ function buildCodebaseDocs(options2) {
       endLine: content.split(`
 `).length
     }
-  ];
+  ] : isElixirFile(relativePath) ? chunkElixir(content, chunkMaxLength) ?? chunkCode(content, chunkMaxLength) : chunkCode(content, chunkMaxLength);
   if (chunks.length === 1) {
     return [
       {
@@ -46602,6 +46055,131 @@ ${chunk.text}`,
 
 // src/tools/compass-index-folder.ts
 init_errors();
+
+// src/file-scanner.ts
+import { readdir, stat } from "fs/promises";
+import { basename as basename3, extname, join as join7, relative } from "path";
+
+// src/ignore-parser.ts
+import { readFile as readFile3 } from "fs/promises";
+import { join as join6 } from "path";
+function parseIgnoreFile(content) {
+  const rules = [];
+  for (const [lineIndex, rawLine] of content.split(`
+`).entries()) {
+    const line = rawLine.trimEnd();
+    if (line === "" || line.startsWith("#")) {
+      continue;
+    }
+    let pattern = line;
+    let negated = false;
+    let directoryOnly = false;
+    if (pattern.startsWith("!")) {
+      negated = true;
+      pattern = pattern.slice(1);
+    }
+    if (pattern.endsWith("/")) {
+      directoryOnly = true;
+      pattern = pattern.slice(0, -1);
+    }
+    if (pattern === "") {
+      console.warn(`[souk-compass] Warning: invalid ignore pattern on line ${lineIndex + 1}; skipping it.`);
+      continue;
+    }
+    rules.push({ pattern, negated, directoryOnly });
+  }
+  return rules;
+}
+function patternToRegex(pattern) {
+  const isPathPattern = pattern.includes("/");
+  let regexStr = "^";
+  let i = 0;
+  let processedPattern = pattern;
+  if (processedPattern.startsWith("/")) {
+    processedPattern = processedPattern.slice(1);
+  }
+  while (i < processedPattern.length) {
+    const char = processedPattern[i];
+    if (char === "*") {
+      if (processedPattern[i + 1] === "*") {
+        if (processedPattern[i + 2] === "/") {
+          regexStr += "(?:.*/)?";
+          i += 3;
+        } else if (i === 0 || processedPattern[i - 1] === "/") {
+          regexStr += ".*";
+          i += 2;
+        } else {
+          regexStr += "[^/]*[^/]*";
+          i += 2;
+        }
+      } else {
+        regexStr += "[^/]*";
+        i++;
+      }
+    } else if (char === "?") {
+      regexStr += "[^/]";
+      i++;
+    } else if (char === "[") {
+      const closeIdx = processedPattern.indexOf("]", i + 1);
+      if (closeIdx !== -1) {
+        regexStr += processedPattern.slice(i, closeIdx + 1);
+        i = closeIdx + 1;
+      } else {
+        regexStr += "\\[";
+        i++;
+      }
+    } else if (".+^${}()|\\".includes(char)) {
+      regexStr += `\\${char}`;
+      i++;
+    } else {
+      regexStr += char;
+      i++;
+    }
+  }
+  regexStr += "$";
+  if (!isPathPattern) {
+    return new RegExp(`(?:^|/)${regexStr.slice(1)}`, "");
+  }
+  return new RegExp(regexStr);
+}
+function createIgnoreMatcher(rules) {
+  const compiled = rules.map((rule) => ({
+    regex: patternToRegex(rule.pattern),
+    negated: rule.negated,
+    directoryOnly: rule.directoryOnly
+  }));
+  return (relativePath, isDirectory) => {
+    const normalizedPath = relativePath.replace(/\\/g, "/");
+    let excluded = false;
+    for (const rule of compiled) {
+      if (rule.directoryOnly && !isDirectory) {
+        continue;
+      }
+      if (rule.regex.test(normalizedPath)) {
+        excluded = !rule.negated;
+      }
+    }
+    return excluded;
+  };
+}
+async function loadIgnoreFile(rootPath) {
+  const filePath = join6(rootPath, ".solrcompass-ignore");
+  try {
+    const content = await readFile3(filePath, "utf-8");
+    return parseIgnoreFile(content);
+  } catch (err) {
+    if (isNodeError(err) && err.code === "ENOENT") {
+      return [];
+    }
+    console.warn(`[souk-compass] Warning: could not read ${filePath}: ${err instanceof Error ? err.message : String(err)}`);
+    return [];
+  }
+}
+function isNodeError(err) {
+  return err instanceof Error && "code" in err;
+}
+
+// src/file-scanner.ts
 var TEXT_EXTENSIONS = new Set([
   ".ts",
   ".tsx",
@@ -46689,10 +46267,10 @@ var TEXT_EXTENSIONS = new Set([
   ".sbt"
 ]);
 function isTextFile(filePath) {
-  const ext = extname(filePath).toLowerCase();
-  if (TEXT_EXTENSIONS.has(ext))
+  const extension = extname(filePath).toLowerCase();
+  if (TEXT_EXTENSIONS.has(extension))
     return true;
-  const name = basename3(filePath).toLowerCase();
+  const filename = basename3(filePath).toLowerCase();
   return [
     "makefile",
     "dockerfile",
@@ -46702,57 +46280,59 @@ function isTextFile(filePath) {
     "gemfile",
     "procfile",
     "brewfile"
-  ].includes(name);
+  ].includes(filename);
 }
 function matchGlob(pattern, filePath) {
   const normalizedPath = filePath.replace(/\\/g, "/");
   const normalizedPattern = pattern.replace(/\\/g, "/");
   let regex = "^";
-  let i = 0;
-  while (i < normalizedPattern.length) {
-    const char = normalizedPattern[i];
-    if (char === "*") {
-      if (normalizedPattern[i + 1] === "*") {
-        if (normalizedPattern[i + 2] === "/") {
+  let index = 0;
+  while (index < normalizedPattern.length) {
+    const character = normalizedPattern[index];
+    if (character === "*") {
+      if (normalizedPattern[index + 1] === "*") {
+        if (normalizedPattern[index + 2] === "/") {
           regex += "(?:.*/)?";
-          i += 3;
+          index += 3;
         } else {
           regex += ".*";
-          i += 2;
+          index += 2;
         }
       } else {
         regex += "[^/]*";
-        i++;
+        index++;
       }
-    } else if (char === "?") {
+    } else if (character === "?") {
       regex += "[^/]";
-      i++;
-    } else if (char === ".") {
+      index++;
+    } else if (character === ".") {
       regex += "\\.";
-      i++;
+      index++;
     } else {
-      regex += char;
-      i++;
+      regex += character;
+      index++;
     }
   }
   regex += "$";
   return new RegExp(regex).test(normalizedPath);
 }
 function matchesAny(patterns, filePath) {
-  return patterns.some((p) => matchGlob(p, filePath));
+  return patterns.some((pattern) => matchGlob(pattern, filePath));
 }
-async function walkDirectory(dir, include, exclude, maxFileSize, rootDir) {
+async function scanDirectory(options2) {
   const results = [];
-  async function walk(currentDir) {
+  const exclusions = options2.exclude ?? options2.presetExclusions ?? [];
+  const isIgnored = createIgnoreMatcher(options2.ignoreRules ?? []);
+  async function walk(currentDirectory) {
     let entries;
     try {
-      entries = await readdir(currentDir);
+      entries = await readdir(currentDirectory);
     } catch {
       return;
     }
     for (const name of entries) {
-      const absolutePath = join5(currentDir, name);
-      const relativePath = relative(rootDir, absolutePath);
+      const absolutePath = join7(currentDirectory, name);
+      const relativePath = relative(options2.rootPath, absolutePath);
       let fileStat;
       try {
         fileStat = await stat(absolutePath);
@@ -46760,33 +46340,195 @@ async function walkDirectory(dir, include, exclude, maxFileSize, rootDir) {
         continue;
       }
       if (fileStat.isDirectory()) {
-        const dirRelative = `${relativePath}/`;
-        if (matchesAny(exclude, dirRelative) || matchesAny(exclude, relativePath)) {
+        const directoryPath = `${relativePath}/`;
+        if (matchesAny(exclusions, directoryPath) || matchesAny(exclusions, relativePath) || isIgnored(relativePath, true)) {
           continue;
         }
         await walk(absolutePath);
-      } else if (fileStat.isFile()) {
-        if (matchesAny(exclude, relativePath)) {
-          continue;
-        }
-        if (!matchesAny(include, relativePath)) {
-          continue;
-        }
-        if (!isTextFile(absolutePath)) {
-          continue;
-        }
-        if (fileStat.size > maxFileSize || fileStat.size === 0) {
-          continue;
-        }
-        results.push({ absolutePath, relativePath });
+        continue;
       }
+      if (!fileStat.isFile())
+        continue;
+      if (matchesAny(exclusions, relativePath))
+        continue;
+      if (isIgnored(relativePath, false))
+        continue;
+      if (!matchesAny(options2.include, relativePath))
+        continue;
+      if (!isTextFile(absolutePath))
+        continue;
+      if (fileStat.size > options2.maxFileSize || fileStat.size === 0) {
+        continue;
+      }
+      results.push({ absolutePath, relativePath });
     }
   }
-  await walk(dir);
+  await walk(options2.rootPath);
   return results;
 }
+
+// src/git-diff.ts
+import { execFile } from "child_process";
+import { stat as stat2 } from "fs/promises";
+import { join as join8 } from "path";
+import { promisify } from "util";
+var execFileAsync = promisify(execFile);
+var GIT_TIMEOUT_MS = 30000;
+var MAX_CHANGED_FILES = 1000;
+async function isGitRepository(rootPath) {
+  try {
+    await stat2(join8(rootPath, ".git"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+async function getCurrentSha(rootPath) {
+  try {
+    const { stdout } = await execFileAsync("git", ["rev-parse", "HEAD"], {
+      cwd: rootPath,
+      timeout: GIT_TIMEOUT_MS
+    });
+    const sha = stdout.trim();
+    return sha.length > 0 ? sha : null;
+  } catch {
+    return null;
+  }
+}
+async function getChangedFiles(rootPath, storedSha) {
+  if (!await isGitRepository(rootPath)) {
+    return { success: false, reason: "not a git repository" };
+  }
+  let stdout;
+  try {
+    const result = await execFileAsync("git", ["diff", "--name-status", "-z", `${storedSha}..HEAD`], {
+      cwd: rootPath,
+      timeout: GIT_TIMEOUT_MS,
+      maxBuffer: 10 * 1024 * 1024
+    });
+    stdout = result.stdout;
+  } catch (err) {
+    if (didGitProcessTimeOut(err)) {
+      return { success: false, reason: "git diff timed out" };
+    }
+    return { success: false, reason: "stored SHA unreachable" };
+  }
+  const changed = parseChangedFiles(stdout);
+  if (changed.total > MAX_CHANGED_FILES) {
+    return { success: false, reason: "diff exceeds 1000 files" };
+  }
+  const currentSha = await getCurrentSha(rootPath);
+  if (!currentSha) {
+    return { success: false, reason: "stored SHA unreachable" };
+  }
+  return {
+    success: true,
+    added: changed.added,
+    modified: changed.modified,
+    deleted: changed.deleted,
+    currentSha
+  };
+}
+function parseChangedFiles(output) {
+  const added = new Set;
+  const modified = new Set;
+  const deleted = new Set;
+  const records = output.split("\x00");
+  let index = 0;
+  while (index < records.length) {
+    const status = records[index++];
+    if (!status)
+      continue;
+    if (status.startsWith("R") || status.startsWith("C")) {
+      const source = records[index++];
+      const destination = records[index++];
+      if (!source || !destination)
+        continue;
+      if (status.startsWith("R"))
+        deleted.add(source);
+      added.add(destination);
+      continue;
+    }
+    const filePath = records[index++];
+    if (!filePath)
+      continue;
+    switch (status[0]) {
+      case "A":
+        added.add(filePath);
+        break;
+      case "D":
+        deleted.add(filePath);
+        break;
+      default:
+        modified.add(filePath);
+    }
+  }
+  return {
+    added: [...added],
+    modified: [...modified],
+    deleted: [...deleted],
+    total: new Set([...added, ...modified, ...deleted]).size
+  };
+}
+function didGitProcessTimeOut(err) {
+  if (!(err instanceof Error))
+    return false;
+  const processError = err;
+  return processError.killed === true || processError.signal === "SIGTERM";
+}
+
+// src/project-detector.ts
+import { access } from "fs/promises";
+import { join as join9 } from "path";
+var LANGUAGE_PRESETS = {
+  elixir: ["**/_build/**", "**/deps/**", "**/cover/**"],
+  java: ["**/target/**", "**/build/**", "**/.gradle/**", "**/*.class"],
+  node: [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/*.lock",
+    "**/package-lock.json"
+  ],
+  python: [
+    "**/__pycache__/**",
+    "**/.venv/**",
+    "**/venv/**",
+    "**/*.egg-info/**",
+    "**/dist/**",
+    "**/.tox/**"
+  ],
+  rust: ["**/target/**"],
+  unknown: []
+};
+var MARKER_FILES = [
+  { files: ["mix.exs"], type: "elixir" },
+  { files: ["package.json"], type: "node" },
+  { files: ["Cargo.toml"], type: "rust" },
+  { files: ["pyproject.toml", "requirements.txt"], type: "python" },
+  { files: ["pom.xml", "build.gradle", "build.gradle.kts"], type: "java" }
+];
+async function detectProjectType(rootPath) {
+  for (const marker of MARKER_FILES) {
+    for (const file3 of marker.files) {
+      try {
+        await access(join9(rootPath, file3));
+        return marker.type;
+      } catch {}
+    }
+  }
+  return "unknown";
+}
+function getLanguagePreset(type) {
+  return {
+    type,
+    exclude: LANGUAGE_PRESETS[type]
+  };
+}
+
+// src/tools/compass-index-folder.ts
 async function handleCompassIndexFolder(input, ctx) {
-  const folderPath = resolve2(input.path);
+  const folderPath = resolve4(input.path);
   const collectionName = input.collection ?? ctx.config.codebaseCollection;
   if (input.collection) {
     try {
@@ -46801,20 +46543,12 @@ async function handleCompassIndexFolder(input, ctx) {
   }
   const codebaseClient = input.collection ? new SoukVectorClient(ctx.config.solrUrl, input.collection) : ctx.codebaseSolrClient;
   const include = input.include ?? ["**/*"];
-  const exclude = input.exclude ?? [
-    "**/node_modules/**",
-    "**/.git/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/*.lock",
-    "**/package-lock.json"
-  ];
   const maxFileSize = input.maxFileSize ?? 1e5;
   const chunked = input.chunked ?? true;
   const chunkMaxLength = input.chunkMaxLength ?? 2000;
   const clear = input.clear ?? false;
   try {
-    const folderStat = await stat(folderPath);
+    const folderStat = await stat3(folderPath);
     if (!folderStat.isDirectory()) {
       return jsonResult5({
         indexed: 0,
@@ -46849,18 +46583,34 @@ async function handleCompassIndexFolder(input, ctx) {
       }
     }
   }
-  const files = await walkDirectory(folderPath, include, exclude, maxFileSize, folderPath);
+  const [projectType, ignoreRules] = await Promise.all([
+    detectProjectType(folderPath),
+    loadIgnoreFile(folderPath)
+  ]);
+  const presetExclusions = input.exclude === undefined ? getLanguagePreset(projectType).exclude : undefined;
+  const files = await scanDirectory({
+    rootPath: folderPath,
+    include,
+    exclude: input.exclude,
+    maxFileSize,
+    ignoreRules,
+    presetExclusions
+  });
   if (files.length === 0) {
     return jsonResult5({
       indexed: 0,
+      deduplicated: 0,
       errors: 0,
       filesScanned: 0,
       message: "No matching text files found in the specified directory."
     });
   }
+  const indexCommit = await isGitRepository(folderPath) ? await getCurrentSha(folderPath) : null;
   let indexed = 0;
   let errors5 = 0;
   let chunksIndexed = 0;
+  let deduplicated = 0;
+  const indexedContentHashes = new Set;
   const errorDetails = [];
   const BATCH_SIZE = 20;
   for (let i = 0;i < files.length; i += BATCH_SIZE) {
@@ -46868,7 +46618,7 @@ async function handleCompassIndexFolder(input, ctx) {
     const batchDocs = [];
     for (const file3 of batch) {
       try {
-        const content = await readFile2(file3.absolutePath, "utf-8");
+        const content = await readFile4(file3.absolutePath, "utf-8");
         batchDocs.push(...buildCodebaseDocs({
           root: folderPath,
           relativePath: file3.relativePath,
@@ -46886,20 +46636,39 @@ async function handleCompassIndexFolder(input, ctx) {
     }
     if (batchDocs.length === 0)
       continue;
+    const docsToEmbed = [];
+    for (const doc3 of batchDocs) {
+      const hash3 = contentHash(doc3.text);
+      if (indexedContentHashes.has(hash3)) {
+        deduplicated++;
+        continue;
+      }
+      const existingDocument = await codebaseClient.findByContentHash(hash3, undefined, folderPath);
+      if (existingDocument) {
+        indexedContentHashes.add(hash3);
+        deduplicated++;
+        continue;
+      }
+      indexedContentHashes.add(hash3);
+      docsToEmbed.push({ doc: doc3, contentHash: hash3 });
+    }
+    if (docsToEmbed.length === 0)
+      continue;
     try {
-      const texts = batchDocs.map((d) => d.text);
+      const texts = docsToEmbed.map(({ doc: doc3 }) => doc3.text);
       const embeddings = await ctx.embeddingProvider.batchEmbed(texts);
-      for (let j = 0;j < batchDocs.length; j++) {
-        const doc3 = batchDocs[j];
+      for (let j = 0;j < docsToEmbed.length; j++) {
+        const { doc: doc3, contentHash: hash3 } = docsToEmbed[j];
         const embedding = embeddings[j];
         try {
           await codebaseClient.upsert(doc3.id, doc3.text, embedding, {
             doc_source: "codebase",
             metadata_path: doc3.relativePath,
-            metadata_extension: extname(doc3.relativePath).toLowerCase(),
-            content_hash: contentHash(doc3.text),
+            metadata_extension: extname2(doc3.relativePath).toLowerCase(),
+            content_hash: hash3,
             embed_provider: modelIdentity(ctx.embeddingProvider),
-            index_root: folderPath
+            index_root: folderPath,
+            ...indexCommit === null ? {} : { index_commit: indexCommit }
           }, { commit: false });
           indexed++;
           if (doc3.id.includes("::chunk_")) {
@@ -46914,8 +46683,8 @@ async function handleCompassIndexFolder(input, ctx) {
         }
       }
     } catch (err) {
-      errors5 += batchDocs.length;
-      for (const doc3 of batchDocs) {
+      errors5 += docsToEmbed.length;
+      for (const { doc: doc3 } of docsToEmbed) {
         errorDetails.push({
           file: doc3.relativePath,
           error: `Embedding failed: ${err instanceof Error ? err.message : String(err)}`
@@ -46928,6 +46697,7 @@ async function handleCompassIndexFolder(input, ctx) {
   } catch (err) {
     return jsonResult5({
       indexed,
+      deduplicated,
       errors: errors5 + 1,
       filesScanned: files.length,
       chunksIndexed,
@@ -46937,6 +46707,7 @@ async function handleCompassIndexFolder(input, ctx) {
   }
   const result = {
     indexed,
+    deduplicated,
     errors: errors5,
     filesScanned: files.length,
     chunksIndexed,
@@ -47299,7 +47070,8 @@ init_errors();
 async function handleCompassReindex(input, ctx) {
   try {
     const force = input.force ?? false;
-    const catalog = await loadCatalog(ctx.contentRoot);
+    const contentRoot = await resolveRequestContentRoot(input, ctx.contentRoot);
+    const catalog = await loadCatalog(contentRoot);
     const existingDocs = await fetchExistingArtifactDocs(ctx);
     const solrMap = new Map;
     for (const doc3 of existingDocs) {
@@ -47332,7 +47104,7 @@ async function handleCompassReindex(input, ctx) {
         solrMap.delete(entry.name);
         continue;
       }
-      const { body } = await readArtifactContent(ctx.contentRoot, entry);
+      const { body } = await readArtifactContent(contentRoot, entry);
       const embeddingText = buildEmbeddingText(entry.displayName, entry.description, body);
       const hash3 = contentHash(embeddingText);
       if (solrDoc.contentHash !== hash3) {
@@ -47348,11 +47120,18 @@ async function handleCompassReindex(input, ctx) {
     const removed = removedIds.length;
     for (const id of removedIds) {
       try {
-        await ctx.solrClient.delete(id);
+        await ctx.solrClient.deleteByQuery(artifactDocsQuery(id), {
+          commit: false
+        });
       } catch {}
     }
     for (const { entry } of toIndex) {
-      const { body } = await readArtifactContent(ctx.contentRoot, entry);
+      try {
+        await ctx.solrClient.deleteByQuery(artifactDocsQuery(entry.name), {
+          commit: false
+        });
+      } catch {}
+      const { body } = await readArtifactContent(contentRoot, entry);
       const embeddingText = buildEmbeddingText(entry.displayName, entry.description, body);
       const embedding = await ctx.embeddingProvider.embed(embeddingText);
       const doc3 = toSolrDocument(entry, embeddingText, embedding, modelIdentity(ctx.embeddingProvider));
@@ -47372,6 +47151,15 @@ async function handleCompassReindex(input, ctx) {
         error: `Solr is unreachable. Ensure Solr is running at the configured URL. ${err.message}`
       });
     }
+    if (err instanceof SoukCompassError && err.code === ErrorCodes.CONTENT_ROOT_INVALID) {
+      return jsonResult9({
+        added: 0,
+        updated: 0,
+        unchanged: 0,
+        removed: 0,
+        error: err.message
+      });
+    }
     throw err;
   }
 }
@@ -47389,6 +47177,13 @@ async function fetchExistingArtifactDocs(ctx) {
   }
   const body = await response.json();
   return body.response?.docs ?? [];
+}
+function artifactDocsQuery(artifactName) {
+  const v = escapeSolrPhrase(artifactName);
+  return `id:"${v}" OR parent_artifact:"${v}"`;
+}
+function escapeSolrPhrase(value) {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 }
 function extractMetadata3(doc3) {
   const meta5 = {};
@@ -47423,189 +47218,12 @@ function jsonResult9(data) {
 }
 
 // src/tools/compass-reindex-folder.ts
-import { readdir as readdir2, readFile as readFile3, stat as stat2 } from "fs/promises";
-import { basename as basename4, extname as extname2, join as join6, relative as relative2, resolve as resolve3 } from "path";
+import { readFile as readFile5, stat as stat4 } from "fs/promises";
+import { extname as extname3, resolve as resolve5 } from "path";
 init_errors();
-var TEXT_EXTENSIONS2 = new Set([
-  ".ts",
-  ".tsx",
-  ".js",
-  ".jsx",
-  ".mjs",
-  ".cjs",
-  ".py",
-  ".rb",
-  ".go",
-  ".rs",
-  ".java",
-  ".kt",
-  ".kts",
-  ".scala",
-  ".c",
-  ".h",
-  ".cpp",
-  ".hpp",
-  ".cs",
-  ".swift",
-  ".m",
-  ".mm",
-  ".php",
-  ".lua",
-  ".sh",
-  ".bash",
-  ".zsh",
-  ".fish",
-  ".ps1",
-  ".bat",
-  ".cmd",
-  ".sql",
-  ".graphql",
-  ".gql",
-  ".proto",
-  ".tf",
-  ".hcl",
-  ".yaml",
-  ".yml",
-  ".toml",
-  ".json",
-  ".xml",
-  ".html",
-  ".htm",
-  ".css",
-  ".scss",
-  ".sass",
-  ".less",
-  ".md",
-  ".mdx",
-  ".rst",
-  ".txt",
-  ".env.example",
-  ".gitignore",
-  ".dockerignore",
-  ".editorconfig",
-  ".njk",
-  ".hbs",
-  ".ejs",
-  ".vue",
-  ".svelte",
-  ".astro",
-  ".r",
-  ".R",
-  ".jl",
-  ".ex",
-  ".exs",
-  ".erl",
-  ".hrl",
-  ".hs",
-  ".elm",
-  ".clj",
-  ".cljs",
-  ".cljc",
-  ".dart",
-  ".zig",
-  ".nim",
-  ".v",
-  ".sv",
-  ".vhdl",
-  ".makefile",
-  ".cmake",
-  ".gradle",
-  ".sbt"
-]);
-function isTextFile2(filePath) {
-  const ext = extname2(filePath).toLowerCase();
-  if (TEXT_EXTENSIONS2.has(ext))
-    return true;
-  const name = basename4(filePath).toLowerCase();
-  return [
-    "makefile",
-    "dockerfile",
-    "jenkinsfile",
-    "vagrantfile",
-    "rakefile",
-    "gemfile",
-    "procfile",
-    "brewfile"
-  ].includes(name);
-}
-function matchGlob2(pattern, filePath) {
-  const normalizedPath = filePath.replace(/\\/g, "/");
-  const normalizedPattern = pattern.replace(/\\/g, "/");
-  let regex = "^";
-  let i = 0;
-  while (i < normalizedPattern.length) {
-    const char = normalizedPattern[i];
-    if (char === "*") {
-      if (normalizedPattern[i + 1] === "*") {
-        if (normalizedPattern[i + 2] === "/") {
-          regex += "(?:.*/)?";
-          i += 3;
-        } else {
-          regex += ".*";
-          i += 2;
-        }
-      } else {
-        regex += "[^/]*";
-        i++;
-      }
-    } else if (char === "?") {
-      regex += "[^/]";
-      i++;
-    } else if (char === ".") {
-      regex += "\\.";
-      i++;
-    } else {
-      regex += char;
-      i++;
-    }
-  }
-  regex += "$";
-  return new RegExp(regex).test(normalizedPath);
-}
-function matchesAny2(patterns, filePath) {
-  return patterns.some((p) => matchGlob2(p, filePath));
-}
-async function walkDirectory2(dir, include, exclude, maxFileSize, rootDir) {
-  const results = [];
-  async function walk(currentDir) {
-    let entries;
-    try {
-      entries = await readdir2(currentDir);
-    } catch {
-      return;
-    }
-    for (const name of entries) {
-      const absolutePath = join6(currentDir, name);
-      const relativePath = relative2(rootDir, absolutePath);
-      let fileStat;
-      try {
-        fileStat = await stat2(absolutePath);
-      } catch {
-        continue;
-      }
-      if (fileStat.isDirectory()) {
-        const dirRelative = `${relativePath}/`;
-        if (matchesAny2(exclude, dirRelative) || matchesAny2(exclude, relativePath))
-          continue;
-        await walk(absolutePath);
-      } else if (fileStat.isFile()) {
-        if (matchesAny2(exclude, relativePath))
-          continue;
-        if (!matchesAny2(include, relativePath))
-          continue;
-        if (!isTextFile2(absolutePath))
-          continue;
-        if (fileStat.size > maxFileSize || fileStat.size === 0)
-          continue;
-        results.push({ absolutePath, relativePath });
-      }
-    }
-  }
-  await walk(dir);
-  return results;
-}
+var INDEX_COMMIT_UPDATE_BATCH_SIZE = 100;
 async function handleCompassReindexFolder(input, ctx) {
-  const folderPath = resolve3(input.path);
+  const folderPath = resolve5(input.path);
   const collectionName = input.collection ?? ctx.config.codebaseCollection;
   if (input.collection) {
     try {
@@ -47620,18 +47238,10 @@ async function handleCompassReindexFolder(input, ctx) {
   }
   const codebaseClient = input.collection ? new SoukVectorClient(ctx.config.solrUrl, input.collection) : ctx.codebaseSolrClient;
   const include = input.include ?? ["**/*"];
-  const exclude = input.exclude ?? [
-    "**/node_modules/**",
-    "**/.git/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/*.lock",
-    "**/package-lock.json"
-  ];
   const maxFileSize = input.maxFileSize ?? 1e5;
   const chunkMaxLength = input.chunkMaxLength ?? 2000;
   try {
-    const folderStat = await stat2(folderPath);
+    const folderStat = await stat4(folderPath);
     if (!folderStat.isDirectory()) {
       return jsonResult10({ error: `Path "${input.path}" is not a directory.` });
     }
@@ -47640,7 +47250,57 @@ async function handleCompassReindexFolder(input, ctx) {
       error: `Directory "${input.path}" does not exist or is not accessible.`
     });
   }
-  const files = await walkDirectory2(folderPath, include, exclude, maxFileSize, folderPath);
+  const gitRepository = await isGitRepository(folderPath);
+  let changedFilePaths;
+  let affectedGitPaths;
+  let fallbackReason;
+  let indexCommit = null;
+  if (gitRepository) {
+    try {
+      const storedCommit = await fetchStoredIndexCommit(ctx, collectionName, folderPath);
+      if (storedCommit) {
+        const diff = await getChangedFiles(folderPath, storedCommit);
+        if (diff.success) {
+          changedFilePaths = new Set([...diff.added, ...diff.modified]);
+          affectedGitPaths = new Set([
+            ...diff.added,
+            ...diff.modified,
+            ...diff.deleted
+          ]);
+          indexCommit = diff.currentSha;
+        } else {
+          fallbackReason = diff.reason;
+          indexCommit = await getCurrentSha(folderPath);
+        }
+      } else {
+        fallbackReason = "no stored index commit";
+        indexCommit = await getCurrentSha(folderPath);
+      }
+    } catch (err) {
+      if (err instanceof SoukCompassError && err.code === ErrorCodes.SOLR_CONNECTION) {
+        return jsonResult10({
+          error: `Solr is unreachable. Ensure Solr is running at ${ctx.config.solrUrl}.`
+        });
+      }
+      throw err;
+    }
+  } else {
+    fallbackReason = "not a git repository";
+  }
+  const [projectType, ignoreRules] = await Promise.all([
+    detectProjectType(folderPath),
+    loadIgnoreFile(folderPath)
+  ]);
+  const presetExclusions = getLanguagePreset(projectType).exclude;
+  const scanInclude = changedFilePaths ? [...changedFilePaths].filter((relativePath) => matchesAny(include, relativePath)) : include;
+  const files = await scanDirectory({
+    rootPath: folderPath,
+    include: scanInclude,
+    exclude: input.exclude,
+    maxFileSize,
+    ignoreRules,
+    presetExclusions
+  });
   let existingDocs;
   try {
     existingDocs = await fetchExistingHashes(ctx, collectionName);
@@ -47658,7 +47318,7 @@ async function handleCompassReindexFolder(input, ctx) {
   const currentIds = new Set;
   for (const file3 of files) {
     try {
-      const content = await readFile3(file3.absolutePath, "utf-8");
+      const content = await readFile5(file3.absolutePath, "utf-8");
       const docs = buildCodebaseDocs({
         root: folderPath,
         relativePath: file3.relativePath,
@@ -47691,6 +47351,12 @@ async function handleCompassReindexFolder(input, ctx) {
   const removedIds = [];
   let skippedRemovals = 0;
   for (const [existingId, existing] of existingDocs) {
+    if (affectedGitPaths) {
+      if (existing.indexRoot === folderPath && existing.metadataPath && affectedGitPaths.has(existing.metadataPath) && !currentIds.has(existingId)) {
+        removedIds.push(existingId);
+      }
+      continue;
+    }
     if (currentIds.has(existingId))
       continue;
     if (existing.indexRoot === folderPath) {
@@ -47699,21 +47365,29 @@ async function handleCompassReindexFolder(input, ctx) {
       skippedRemovals++;
     }
   }
+  const existingHashesForRoot = new Set;
+  for (const existing of existingDocs.values()) {
+    if (existing.indexRoot === folderPath && existing.hash) {
+      existingHashesForRoot.add(existing.hash);
+    }
+  }
   let indexed = 0;
   let errors5 = 0;
-  const BATCH_SIZE = 20;
+  let deduplicated = 0;
+  const deduplicatedExistingIds = new Set;
+  const batchSize = 20;
   const toProcess = [
-    ...new Set([...added, ...updated].map((f) => f.relativePath))
+    ...new Set([...added, ...updated].map((file3) => file3.relativePath))
   ];
-  for (let i = 0;i < toProcess.length; i += BATCH_SIZE) {
-    const batch = toProcess.slice(i, i + BATCH_SIZE);
+  for (let index = 0;index < toProcess.length; index += batchSize) {
+    const batch = toProcess.slice(index, index + batchSize);
     const batchDocs = [];
     for (const relativePath of batch) {
-      const file3 = files.find((f) => f.relativePath === relativePath);
+      const file3 = files.find((candidate) => candidate.relativePath === relativePath);
       if (!file3)
         continue;
       try {
-        const content = await readFile3(file3.absolutePath, "utf-8");
+        const content = await readFile5(file3.absolutePath, "utf-8");
         batchDocs.push(...buildCodebaseDocs({
           root: folderPath,
           relativePath: file3.relativePath,
@@ -47725,29 +47399,53 @@ async function handleCompassReindexFolder(input, ctx) {
         errors5++;
       }
     }
-    if (batchDocs.length === 0)
+    const batchHashes = new Set;
+    const docsToEmbed = batchDocs.filter((doc3) => {
+      const hash3 = contentHash(doc3.text);
+      if (existingHashesForRoot.has(hash3) || batchHashes.has(hash3)) {
+        deduplicated++;
+        const existing = existingDocs.get(doc3.id);
+        if (existing?.indexRoot === folderPath) {
+          deduplicatedExistingIds.add(doc3.id);
+        }
+        return false;
+      }
+      batchHashes.add(hash3);
+      return true;
+    });
+    if (docsToEmbed.length === 0)
       continue;
     try {
-      const texts = batchDocs.map((d) => d.text);
+      const texts = docsToEmbed.map((doc3) => doc3.text);
       const embeddings = await ctx.embeddingProvider.batchEmbed(texts);
-      for (let j = 0;j < batchDocs.length; j++) {
-        const doc3 = batchDocs[j];
+      for (let documentIndex = 0;documentIndex < docsToEmbed.length; documentIndex++) {
+        const doc3 = docsToEmbed[documentIndex];
+        const hash3 = contentHash(doc3.text);
         try {
-          await codebaseClient.upsert(doc3.id, doc3.text, embeddings[j], {
+          await codebaseClient.upsert(doc3.id, doc3.text, embeddings[documentIndex], {
             doc_source: "codebase",
             metadata_path: doc3.relativePath,
-            metadata_extension: extname2(doc3.relativePath).toLowerCase(),
-            content_hash: contentHash(doc3.text),
+            metadata_extension: extname3(doc3.relativePath).toLowerCase(),
+            content_hash: hash3,
             embed_provider: modelIdentity(ctx.embeddingProvider),
-            index_root: folderPath
+            index_root: folderPath,
+            ...indexCommit === null ? {} : { index_commit: indexCommit }
           }, { commit: false });
+          existingHashesForRoot.add(hash3);
           indexed++;
         } catch {
           errors5++;
         }
       }
     } catch {
-      errors5 += batchDocs.length;
+      errors5 += docsToEmbed.length;
+    }
+  }
+  for (const docId of deduplicatedExistingIds) {
+    try {
+      await codebaseClient.delete(docId);
+    } catch {
+      errors5++;
     }
   }
   let deleted = 0;
@@ -47755,6 +47453,18 @@ async function handleCompassReindexFolder(input, ctx) {
     try {
       await codebaseClient.delete(docId);
       deleted++;
+    } catch {
+      errors5++;
+    }
+  }
+  if (indexCommit !== null) {
+    const removedOrDeduplicatedIds = new Set([
+      ...removedIds,
+      ...deduplicatedExistingIds
+    ]);
+    const retainedExistingIds = [...existingDocs].filter(([documentId, document]) => document.indexRoot === folderPath && !removedOrDeduplicatedIds.has(documentId)).map(([documentId]) => documentId);
+    try {
+      await updateIndexCommits(ctx, collectionName, retainedExistingIds, indexCommit);
     } catch {
       errors5++;
     }
@@ -47770,21 +47480,49 @@ async function handleCompassReindexFolder(input, ctx) {
       removed: deleted,
       skippedRemovals,
       indexed,
-      errors: errors5
+      deduplicated,
+      errors: errors5,
+      filesScanned: files.length,
+      ...fallbackReason === undefined ? {} : { fallback_reason: fallbackReason }
     });
   }
+  const addedCount = new Set(added.map((file3) => file3.relativePath)).size;
+  const updatedCount = new Set(updated.map((file3) => file3.relativePath)).size;
   return jsonResult10({
-    added: new Set(added.map((a) => a.relativePath)).size,
-    updated: new Set(updated.map((u) => u.relativePath)).size,
+    added: addedCount,
+    updated: updatedCount,
     unchanged,
     removed: deleted,
     skippedRemovals,
     indexed,
+    deduplicated,
     errors: errors5,
+    filesScanned: files.length,
     collection: collectionName,
     path: folderPath,
-    message: `Reindex complete. Added: ${new Set(added.map((a) => a.relativePath)).size}, Updated: ${new Set(updated.map((u) => u.relativePath)).size}, Unchanged: ${unchanged}, Removed: ${deleted}.${skippedRemovals > 0 ? ` Left alone (other or unrecorded index root): ${skippedRemovals}.` : ""}`
+    ...fallbackReason === undefined ? {} : { fallback_reason: fallbackReason },
+    message: `Reindex complete. Added: ${addedCount}, Updated: ${updatedCount}, Unchanged: ${unchanged}, Deduplicated: ${deduplicated}, Removed: ${deleted}.${skippedRemovals > 0 ? ` Left alone (other or unrecorded index root): ${skippedRemovals}.` : ""}`
   });
+}
+async function fetchStoredIndexCommit(ctx, collectionName, folderPath) {
+  const params = new URLSearchParams({
+    q: `index_root:"${escapeSolrPhrase2(folderPath)}"`,
+    fl: "index_commit",
+    rows: "1",
+    sort: "id asc",
+    wt: "json"
+  });
+  const url3 = `${ctx.config.solrUrl}/solr/${encodeURIComponent(collectionName)}/select?${params.toString()}`;
+  const response = await fetch(url3);
+  if (!response.ok) {
+    if (response.status === 404)
+      return null;
+    throw new SoukCompassError(`Solr HTTP ${response.status} while fetching stored index commit`, ErrorCodes.SOLR_HTTP, { httpStatus: response.status });
+  }
+  const body = await response.json();
+  const value = body.response.docs[0]?.index_commit;
+  const indexCommit = Array.isArray(value) ? value[0] : value;
+  return indexCommit && indexCommit.length > 0 ? indexCommit : null;
 }
 async function fetchExistingHashes(ctx, collectionName) {
   const docs = new Map;
@@ -47793,7 +47531,7 @@ async function fetchExistingHashes(ctx, collectionName) {
   while (true) {
     const params = new URLSearchParams({
       q: 'doc_source:"codebase"',
-      fl: "id,content_hash,index_root",
+      fl: "id,content_hash,index_root,metadata_path",
       rows: String(batchSize),
       sort: "id asc",
       cursorMark,
@@ -47808,10 +47546,10 @@ async function fetchExistingHashes(ctx, collectionName) {
     }
     const body = await response.json();
     for (const doc3 of body.response.docs) {
-      const first = (v) => Array.isArray(v) ? v[0] : v;
       docs.set(doc3.id, {
-        hash: first(doc3.content_hash) ?? "",
-        indexRoot: first(doc3.index_root)
+        hash: firstSolrValue(doc3.content_hash) ?? "",
+        indexRoot: firstSolrValue(doc3.index_root),
+        metadataPath: firstSolrValue(doc3.metadata_path)
       });
     }
     if (!body.nextCursorMark || body.nextCursorMark === cursorMark) {
@@ -47820,6 +47558,31 @@ async function fetchExistingHashes(ctx, collectionName) {
     cursorMark = body.nextCursorMark;
   }
   return docs;
+}
+async function updateIndexCommits(ctx, collectionName, documentIds, indexCommit) {
+  for (let index = 0;index < documentIds.length; index += INDEX_COMMIT_UPDATE_BATCH_SIZE) {
+    const batch = documentIds.slice(index, index + INDEX_COMMIT_UPDATE_BATCH_SIZE);
+    if (batch.length === 0)
+      continue;
+    const url3 = `${ctx.config.solrUrl}/solr/${encodeURIComponent(collectionName)}/update/json/docs`;
+    const response = await fetch(url3, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(batch.map((id) => ({
+        id,
+        index_commit: { set: indexCommit }
+      })))
+    });
+    if (!response.ok) {
+      throw new SoukCompassError(`Solr HTTP ${response.status} while updating index commit`, ErrorCodes.SOLR_HTTP, { httpStatus: response.status });
+    }
+  }
+}
+function firstSolrValue(value) {
+  return Array.isArray(value) ? value[0] : value;
+}
+function escapeSolrPhrase2(value) {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 }
 function jsonResult10(data) {
   return {
@@ -48049,12 +47812,13 @@ async function handleCompassSearch(input, ctx) {
     const results = parseResults(responses, snippetLength, mode);
     if (input.includeContent && results.length > 0) {
       try {
-        const catalog = await loadCatalog(ctx.contentRoot);
+        const contentRoot = await resolveRequestContentRoot(input, ctx.contentRoot);
+        const catalog = await loadCatalog(contentRoot);
         for (const result of results) {
           const entry = catalog.find((e) => e.name === result.artifactName);
           if (entry) {
             try {
-              const { body } = await readArtifactContent(ctx.contentRoot, entry);
+              const { body } = await readArtifactContent(contentRoot, entry);
               if (results.length <= 3) {
                 result.content = body;
               } else {
@@ -48184,7 +47948,77 @@ function jsonResult12(data) {
 }
 
 // src/tools/compass-search-codebase.ts
-import { resolve as resolve4 } from "path";
+import { resolve as resolve6 } from "path";
+
+// src/boost-map.ts
+function patternSpecificity(pattern) {
+  return [...pattern].filter((character) => character !== "*" && character !== "?").length;
+}
+function applyBoostMap(results, boostMap) {
+  const boostedResults = results.map((result, originalIndex) => {
+    let selectedBoost = 1;
+    let highestSpecificity = -1;
+    boostMap.forEach((entry) => {
+      if (!matchGlob(entry.pattern, result.path))
+        return;
+      const specificity = patternSpecificity(entry.pattern);
+      if (specificity >= highestSpecificity) {
+        highestSpecificity = specificity;
+        selectedBoost = entry.boost;
+      }
+    });
+    return {
+      originalIndex,
+      result: {
+        ...result,
+        score: result.score * selectedBoost
+      }
+    };
+  });
+  return boostedResults.sort((left, right) => right.result.score - left.result.score || left.originalIndex - right.originalIndex).map(({ result }) => result);
+}
+
+// src/root-config.ts
+import { readFile as readFile6 } from "fs/promises";
+import { join as join10 } from "path";
+var BoostEntrySchema = exports_external.object({
+  pattern: exports_external.string().min(1),
+  boost: exports_external.number().positive().max(10)
+});
+var RootConfigSchema = exports_external.object({
+  boost: exports_external.array(BoostEntrySchema).max(50).optional()
+});
+async function loadRootConfig(rootPath) {
+  const filePath = join10(rootPath, ".solrcompass.json");
+  let raw;
+  try {
+    raw = await readFile6(filePath, "utf-8");
+  } catch (err) {
+    if (isNodeError2(err) && err.code === "ENOENT") {
+      return null;
+    }
+    console.warn(`[souk-compass] Warning: could not read ${filePath}: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    console.warn(`[souk-compass] Warning: invalid JSON in ${filePath}: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
+  }
+  const result = RootConfigSchema.safeParse(parsed);
+  if (!result.success) {
+    console.warn(`[souk-compass] Warning: invalid config in ${filePath}: ${result.error.message}`);
+    return null;
+  }
+  return result.data;
+}
+function isNodeError2(err) {
+  return err instanceof Error && "code" in err;
+}
+
+// src/tools/compass-search-codebase.ts
 async function handleCompassSearchCodebase(input, ctx) {
   try {
     const mode = input.mode ?? "hybrid";
@@ -48201,7 +48035,7 @@ async function handleCompassSearchCodebase(input, ctx) {
     }
     const filters = [];
     if (input.root) {
-      filters.push(`index_root:"${resolve4(input.root)}"`);
+      filters.push(`index_root:"${resolve6(input.root)}"`);
     }
     if (input.path) {
       filters.push(`metadata_path:${escapeForSolr(input.path)}*`);
@@ -48228,7 +48062,8 @@ async function handleCompassSearchCodebase(input, ctx) {
       });
     }
     const results = parseCodebaseResults(response, snippetLength, mode);
-    const filtered = effectiveMinScore != null && mode !== "vector" ? results.filter((r) => r.score >= effectiveMinScore) : results;
+    const boostedResults = await applyRootBoostMaps(results, input.root);
+    const filtered = effectiveMinScore != null && mode !== "vector" ? boostedResults.filter((result) => result.score >= effectiveMinScore) : boostedResults;
     if (filtered.length === 0) {
       return jsonResult13({
         query: input.query,
@@ -48317,12 +48152,47 @@ function jsonResult13(data) {
     content: [{ type: "text", text: JSON.stringify(data, null, 2) }]
   };
 }
+async function applyRootBoostMaps(results, queriedRoot) {
+  const resolvedQueriedRoot = queriedRoot ? resolve6(queriedRoot) : undefined;
+  const resultsByRoot = new Map;
+  results.forEach((result, originalIndex) => {
+    const root = result.root ?? resolvedQueriedRoot;
+    if (!root)
+      return;
+    const rootResults = resultsByRoot.get(root) ?? [];
+    rootResults.push({ result, originalIndex });
+    resultsByRoot.set(root, rootResults);
+  });
+  const boostedByOriginalIndex = new Map;
+  await Promise.all([...resultsByRoot.entries()].map(async ([root, rootResults]) => {
+    const config3 = await loadRootConfig(root);
+    if (!config3?.boost?.length)
+      return;
+    const boostableResults = rootResults.map(({ result, originalIndex }) => ({
+      ...result,
+      originalIndex
+    }));
+    const boosted = applyBoostMap(boostableResults, config3.boost);
+    boosted.forEach(({
+      originalIndex,
+      ...result
+    }) => {
+      boostedByOriginalIndex.set(originalIndex, result);
+    });
+  }));
+  if (boostedByOriginalIndex.size === 0)
+    return results;
+  return results.map((result, originalIndex) => ({
+    result: boostedByOriginalIndex.get(originalIndex) ?? result,
+    originalIndex
+  })).sort((left, right) => right.result.score - left.result.score || left.originalIndex - right.originalIndex).map(({ result }) => result);
+}
 
 // src/tools/compass-setup.ts
 import { exec } from "child_process";
 import { chmodSync, mkdirSync as mkdirSync4, writeFileSync as writeFileSync2 } from "fs";
 import { dirname as dirname4 } from "path";
-import { promisify } from "util";
+import { promisify as promisify2 } from "util";
 
 // src/solr-xml.ts
 function backupRepositories(registry3, options2 = {}) {
@@ -48438,7 +48308,7 @@ function requiredSolrModules(registry3) {
 }
 
 // src/tools/compass-setup.ts
-var execAsync = promisify(exec);
+var execAsync = promisify2(exec);
 var ALL_PARTITIONS2 = ["artifacts", "memory", "codebase"];
 function composeDirectory(ctx) {
   return ctx.packageRoot;
@@ -48688,10 +48558,10 @@ async function uploadConfigset() {
   try {
     await execAsync("docker exec souk-compass-solr solr zk upconfig -n souk-compass -d /opt/solr/server/solr/configsets/souk-compass/conf -z zoo:2181", { timeout: 15000 });
     return { configsetUploaded: true };
-  } catch (error101) {
+  } catch (error98) {
     return {
       configsetUploaded: false,
-      warning: `Configset upload was not confirmed: ${error101 instanceof Error ? error101.message : String(error101)}`
+      warning: `Configset upload was not confirmed: ${error98 instanceof Error ? error98.message : String(error98)}`
     };
   }
 }
@@ -48991,6 +48861,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           chunked: {
             type: "boolean",
             description: "Split artifact content into chunks before indexing (default: false)."
+          },
+          contentRoot: {
+            type: "string",
+            description: "Absolute path to the Kanon content directory (containing catalog.json and knowledge/) to index. Overrides the server's startup default for this call."
+          },
+          project: {
+            type: "string",
+            description: "Name of a project registered in ~/.solrcompass/projects.json, resolved to its content root. Ignored when contentRoot is given."
           }
         }
       }
@@ -49047,6 +48925,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           includeContent: {
             type: "boolean",
             description: "When true, inline knowledge.md content in results (default: false)."
+          },
+          contentRoot: {
+            type: "string",
+            description: "Absolute path to the Kanon content directory used only when includeContent is true, to read full artifact bodies. Overrides the server's startup default for this call."
+          },
+          project: {
+            type: "string",
+            description: "Name of a project registered in ~/.solrcompass/projects.json, resolved to its content root for includeContent. Ignored when contentRoot is given."
           }
         }
       }
@@ -49103,6 +48989,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           force: {
             type: "boolean",
             description: "Force re-index all artifacts regardless of changes (default: false)."
+          },
+          contentRoot: {
+            type: "string",
+            description: "Absolute path to the Kanon content directory (containing catalog.json and knowledge/) to reindex. Overrides the server's startup default for this call."
+          },
+          project: {
+            type: "string",
+            description: "Name of a project registered in ~/.solrcompass/projects.json, resolved to its content root. Ignored when contentRoot is given."
           }
         }
       }
