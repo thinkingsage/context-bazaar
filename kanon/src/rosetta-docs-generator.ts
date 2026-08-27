@@ -333,7 +333,11 @@ export function generateProfileFieldReference(): string {
 		"|---|---|---|---|---|",
 	];
 
-	const acquisitionFields = extractZodFields(AcquisitionProfileSchema);
+	const acquisitionFields = extractZodFields(
+		AcquisitionProfileSchema as unknown as {
+			shape: Record<string, unknown>;
+		},
+	);
 	for (const field of acquisitionFields) {
 		const required = !field.optional && field.default === "—" ? "yes" : "no";
 		lines.push(
@@ -347,7 +351,11 @@ export function generateProfileFieldReference(): string {
 	lines.push("| Field | Type | Default | Required | Description |");
 	lines.push("|---|---|---|---|---|");
 
-	const translationFields = extractZodFields(TranslationProfileSchema);
+	const translationFields = extractZodFields(
+		TranslationProfileSchema as unknown as {
+			shape: Record<string, unknown>;
+		},
+	);
 	for (const field of translationFields) {
 		const required = !field.optional && field.default === "—" ? "yes" : "no";
 		lines.push(
