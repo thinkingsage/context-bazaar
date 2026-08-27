@@ -1,1 +1,0 @@
-Make the committed MCP bridge build reproducible across CI and local environments by resolving its runtime root from the launched entrypoint instead of embedding the build machine's source path, and pin the generated-artifact check to the matching Bun compiler version.
