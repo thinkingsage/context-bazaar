@@ -1356,19 +1356,17 @@ export const AcquisitionProfileSchema = z.object({
 });
 export type AcquisitionProfile = z.infer<typeof AcquisitionProfileSchema>;
 
-export const TranslationProfileSchema = z
-	.object({
-		sourceFormat: FormatIdentifierSchema.optional(),
-		sourceSubpath: z.string().optional(),
-		targetFormat: FormatIdentifierSchema.optional(),
-		targetVariant: FormatIdentifierSchema.optional(),
-		canonicalDestination: z.string().optional(),
-		collections: z.array(z.string()).default([]),
-		strict: z.boolean().default(false),
-		canonicalSchemaVersion: CanonicalSchemaVersionSchema.optional(),
-		options: z.record(z.string(), JsonValueSchema).default({}),
-	})
-	.strict();
+export const TranslationProfileSchema = z.object({
+	sourceFormat: FormatIdentifierSchema.optional(),
+	sourceSubpath: z.string().optional(),
+	targetFormat: FormatIdentifierSchema.optional(),
+	targetVariant: FormatIdentifierSchema.optional(),
+	canonicalDestination: z.string().optional(),
+	collections: z.array(z.string()).default([]),
+	strict: z.boolean().default(false),
+	canonicalSchemaVersion: CanonicalSchemaVersionSchema.optional(),
+	options: z.record(z.string(), JsonValueSchema).default({}),
+});
 export type TranslationProfile = z.infer<typeof TranslationProfileSchema>;
 
 // --- Machine-Output Envelopes ---
