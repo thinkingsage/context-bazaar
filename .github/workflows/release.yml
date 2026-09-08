@@ -239,6 +239,8 @@ jobs:
         continue-on-error: true
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        with:
           base: main
           branch: chore/changelog-${{ github.ref_name }}
           add-paths: |
