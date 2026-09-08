@@ -10,7 +10,7 @@ Kanon is a CLI tool that lets you author **knowledge artifacts** (skills, powers
 
 ## Installation
 
-Kanon runs on [Bun](https://bun.sh) (≥ 1.4.2). Pick one:
+Kanon runs on [Bun]( (≥ 1.0.0). Pick one:
 
 ```bash
 # Run without installing (scoped package name)
