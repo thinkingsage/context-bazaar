@@ -170,7 +170,8 @@ def main():
         for i in LEAVES: print('%3d  %s' % (i, PATHS[i]))
         return
     if not (a.content and a.out): ap.error('content.json and out.docx are required (or --list)')
-    c = json.load(open(a.content, encoding='utf-8'))
+    with open(a.content, encoding='utf-8') as f:
+        c = json.load(f)
     shade = bool(c.get('shade', True)) and not a.no_shade
     legend = dict(LEGEND, **c.get('legend', {}))
     doc = Document(a.template)

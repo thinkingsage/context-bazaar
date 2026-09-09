@@ -156,9 +156,11 @@ def main():
     args = ap.parse_args()
 
     if args.text:
-        cites = [l.strip() for l in open(args.text, encoding='utf-8') if l.strip()]
+        with open(args.text, encoding='utf-8') as f:
+            cites = [l.strip() for l in f if l.strip()]
     elif args.citations:
-        cites = json.load(open(args.citations, encoding='utf-8'))
+        with open(args.citations, encoding='utf-8') as f:
+            cites = json.load(f)
     else:
         cites = [l.strip() for l in sys.stdin if l.strip()]
 
