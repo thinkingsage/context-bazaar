@@ -184,6 +184,8 @@ def main():
         while pi < len(paras) and paras[pi].text.strip() != title.strip(): pi += 1
         if pi >= len(paras): raise SystemExit('fill_template.py: heading not found in template: %s' % title)
         if idx not in LEAVES: continue
+        if pi + 1 >= len(paras):
+            raise SystemExit('fill_template.py: expected NONE after %r in the template, but it is the last paragraph' % title)
         none_p = paras[pi + 1]
         if none_p.text != 'NONE':
             raise SystemExit('fill_template.py: expected NONE after %r in the template, found %r' % (title, none_p.text))
