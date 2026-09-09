@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from taxonomy import TAXONOMY
 from docx import Document
 from docx.shared import Pt, Inches
-from docx.enum.text import WD_TAB_ALIGNMENT
+from docx.shared import Pt, Inches
 
 FONT='Times New Roman'; SZ=Pt(11)
 doc=Document()
