@@ -1,4 +1,4 @@
-# ADR-0066: Byte-Preserving Binary Workflow Assets
+# ADR-0070: Byte-Preserving Binary Workflow Assets
 
 ## Status
 
