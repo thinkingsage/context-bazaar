@@ -229,7 +229,7 @@ jobs:
       # PR must not red the release.
       - name: Open changelog-sync PR
         continue-on-error: true
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           base: main
           branch: chore/changelog-${{ github.ref_name }}
